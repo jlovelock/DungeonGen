@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <spells.h>
 #include <math.h>
+#include <vector>
 
 using namespace std;
 
@@ -18,6 +19,7 @@ Character::Character(){
     level = 1;
     prof = 2;
     xp = 0;
+
     cout << "New character: default or custom? ";
     string input;
     cin >> input;
@@ -37,141 +39,140 @@ Character::Character(){
     printCharacterSheet();
 }
 
+
+bool Character::train(string skill){
+
+    ///TODO be less hack-y for two word skills
+    if(skill == "ANIMAL"){
+        cin >> skill;
+        skill = "ANIMAL HANDLING";
+    } else if(!is_skill(skill)) {
+        cout << "\"" << skill << "\" is not a skill!" << endl;
+        return false;
+    } else if(is_trained(skill)){
+        cout << "Already trained in this skill!" << endl;
+        return false;
+    }
+
+    ///TODO verify that it's in the skill list for your class, and if not, return false
+
+    //If you reach here, you're good =]
+    skill_mods[skill] += prof;
+    return true;
+}
+
 void Character::fighter_skills(){
     string input;
 
-    //skills
     int skills = 2;
     cout << "3) SKILLS: ";
-    cout << "Select from acrobatics, animal handling, athletics, history, insight, intimidation, perception, or survival. " << endl;
+    cout << "Select from ACROBATICS, ANIMAL HANDLING, ATHLETICS, HISTORY, INSIGHT, INTIMIDATION, PERCEPTION, or SURVIVAL (all-caps only). " << endl;
     while(skills > 0){
         cout << "\tChoose " << skills << " more: ";
         cin >> input;
-        if(input == "acrobatics"){
-            if (acrobatics_mod == dex_mod){
-                acrobatics_mod += prof;
-                skills--;
-            } else cout << "Already trained in this skill!" << endl;
-        } else if(input == "animal"){
-            cin >> input;
-            if(input == "handling"){
-                if (animal_handling_mod == wis_mod){
-                    animal_handling_mod += prof;
-                    skills--;
-                } else cout << "Already trained in this skill!" << endl;
-            } else cout << "Skill not recognized. Enter again? " << endl;
-        } else if(input == "athletics"){
-            if(athletics_mod == str_mod){
-                athletics_mod += prof;
-                skills--;
-            } else cout << "Already trained in this skill!" << endl;
-        } else if(input == "history"){
-            if(history_mod == int_mod){
-                history_mod += prof;
-                skills--;
-            } else cout << "Already trained in this skill!" << endl;
-        } else if(input == "insight"){
-            if(insight_mod == wis_mod){
-                insight_mod += prof;
-                skills--;
-            } else cout << "Already trained in this skill!" << endl;
-        } else if(input == "intimidation"){
-            if(intimidation_mod == cha_mod){
-                intimidation_mod += prof;
-                skills--;
-            } else cout << "Already trained in this skill!" << endl;
-        } else if(input == "perception"){
-            if(perception_mod == wis_mod){
-                perception_mod += prof;
-                skills--;
-            } else cout << "Already trained in this skill!" << endl;
-        } else if(input == "survival"){
-            if(survival_mod == wis_mod){
-                survival_mod += prof;
-                skills--;
-            } else cout << "Already trained in this skill!" << endl;
-        } else {
-            cout << "Skill not recognized. Enter again? " << endl;
-        }
+        if(train(input)) skills--;
     }
-
 }
 
 void Character::default_attributes(){
     race = "Human";
-    str_score = 16;
-    dex_score = 14;
-    con_score = 14;
-    int_score = 10;
-    wis_score = 14;
-    cha_score = 9;
+    attribute_scores["STR"] = 16;
+    attribute_scores["DEX"] = 14;
+    attribute_scores["CON"] = 14;
+    attribute_scores["INT"] = 10;
+    attribute_scores["WIS"] = 14;
+    attribute_scores["CHA"] = 9;
     set_attribute_mods();
 }
 
 void Character::set_attribute_mods(){
-    str_mod = (str_score-10)/2;
-    dex_mod = (dex_score-10)/2;
-    con_mod = (con_score-10)/2;
-    int_mod = (int_score-10)/2;
-    wis_mod = (wis_score-10)/2;
-    cha_mod = (cha_score-10)/2;
+    attribute_mods["STR"] = (attribute_scores["STR"]-10)/2;
+    attribute_mods["DEX"] = (attribute_scores["DEX"]-10)/2;
+    attribute_mods["CON"] = (attribute_scores["CON"]-10)/2;
+    attribute_mods["INT"] = (attribute_scores["INT"]-10)/2;
+    attribute_mods["WIS"] = (attribute_scores["WIS"]-10)/2;
+    attribute_mods["CHA"] = (attribute_scores["CHA"]-10)/2;
 }
 
 void Character::set_attributes(int str, int dex, int con, int intel, int wis, int cha){
-    str_score = str;
-    dex_score = dex;
-    con_score = con;
-    int_score = intel;
-    wis_score = wis;
-    cha_score = cha;
+    attribute_scores["STR"] = str;
+    attribute_scores["DEX"] = dex;
+    attribute_scores["CON"] = con;
+    attribute_scores["INT"] = intel;
+    attribute_scores["WIS"] = wis;
+    attribute_scores["CHA"] = cha;
 
-    str_mod = (str_score-10)/2;
-    dex_mod = (dex_score-10)/2;
-    con_mod = (con_score-10)/2;
-    int_mod = (int_score-10)/2;
-    wis_mod = (wis_score-10)/2;
-    cha_mod = (cha_score-10)/2;
-
+    set_attribute_mods();
     set_base_skill_mods();
 }
 
+
+
+string Character::base_attribute(string skill){
+    if(
+      skill == "ATHLETICS"
+    )
+        return "STR";
+
+    else if(
+      skill == "ACROBATICS" ||
+      skill == "SLEIGHT OF HAND" ||
+      skill == "THIEVES TOOLS"
+    )
+        return "DEX";
+
+    else if(
+      skill == "ARCANA" ||
+      skill == "HISTORY" ||
+      skill == "INVESTIGATION" ||
+      skill == "NATURE" ||
+      skill == "RELIGION"
+    )
+        return "INT";
+
+    else if(
+      skill == "ANIMAL HANDLING" ||
+      skill == "INSIGHT" ||
+      skill == "MEDICINE" ||
+      skill == "PERCEPTION" ||
+      skill == "SURVIVAL"
+    )
+        return "WIS";
+
+    else if(
+      skill == "DECEPTION" ||
+      skill == "INTIMIDATION" ||
+      skill == "PERFORMANCE" ||
+      skill == "PERSUASION"
+    )
+        return "CHA";
+
+    else {
+        cout << "Looks like there's a typo somewhere. You're trying to deal with the \"" << skill << "\" skill, which doesn't exist. Exiting program!" << endl;
+        exit(EXIT_FAILURE);
+    }
+
+}
+
 void Character::set_base_skill_mods(){
-
-    athletics_mod = str_mod;
-    acrobatics_mod = dex_mod;
-    sleight_of_hand_mod = dex_mod;
-    stealth_mod = dex_mod;
-    arcana_mod = int_mod;
-    history_mod = int_mod;
-    investigation_mod = int_mod;
-    nature_mod = int_mod;
-    religion_mod = int_mod;
-    animal_handling_mod = wis_mod;
-    insight_mod = wis_mod;
-    medicine_mod = wis_mod;
-    perception_mod = wis_mod;
-    survival_mod = wis_mod;
-    deception_mod = cha_mod;
-    intimidation_mod = cha_mod;
-    performance_mod = cha_mod;
-    persuasion_mod = cha_mod;
-    thieves_tools_mod = dex_mod;
-
+    for (unsigned i = 0; i < skills_list.size(); i++){
+        skill_mods[skills_list[i]] = attribute_mods[base_attribute(skills_list[i])];
+    }
 }
 
 void Character::default_fighter(){
     PC_class = "fighter";
 
     //saves
-    str_save_mod = str_mod + prof;
-    dex_save_mod = dex_mod;
-    con_save_mod = con_mod + prof;
-    int_save_mod = int_mod;
-    wis_save_mod = wis_mod;
-    cha_save_mod = cha_mod;
+    save_mods["STR"] = attribute_mods["STR"] + prof;
+    save_mods["DEX"] = attribute_mods["DEX"];
+    save_mods["CON"] = attribute_mods["CON"] + prof;
+    save_mods["INT"] = attribute_mods["INT"];
+    save_mods["WIS"] = attribute_mods["WIS"];
+    save_mods["CHA"] = attribute_mods["CHA"];
 
     //hp
-    max_hp = 10+con_mod;
+    max_hp = 10+attribute_mods["CON"];
     cur_hp = max_hp;
     temp_hp = 0;
     hit_dice = level;
@@ -179,37 +180,37 @@ void Character::default_fighter(){
 
     //attacks
     melee_weapon = "greataxe";
-    melee_atk_mod = str_mod + prof;
+    melee_atk_mod = attribute_mods["STR"] + prof;
     melee_weapon_die = 12;
-    melee_dmg_bonus = str_mod;
+    melee_dmg_bonus = attribute_mods["STR"];
     ranged_weapon = "hand crossbow";
-    ranged_atk_mod = dex_mod + prof;
+    ranged_atk_mod = attribute_mods["DEX"] + prof;
     ranged_weapon_die = 6;
-    ranged_dmg_bonus = dex_mod;
+    ranged_dmg_bonus = attribute_mods["DEX"];
 
     //skills
-    perception_mod += prof;
-    athletics_mod += prof;
+    train("PERCEPTION");
+    train("ATHLETICS");
 
     //misc
     second_wind_available = true;
     AC = 17;
-    init = dex_mod;
+    init = attribute_mods["DEX"];
 }
 
 void Character::fighter(){
     PC_class = "fighter";
 
     //saves
-    str_save_mod = str_mod + prof;
-    dex_save_mod = dex_mod;
-    con_save_mod = con_mod + prof;
-    int_save_mod = int_mod;
-    wis_save_mod = wis_mod;
-    cha_save_mod = cha_mod;
+    save_mods["STR"] = attribute_mods["STR"] + prof;
+    save_mods["DEX"] = attribute_mods["DEX"];
+    save_mods["CON"] = attribute_mods["CON"] + prof;
+    save_mods["INT"] = attribute_mods["INT"];
+    save_mods["WIS"] = attribute_mods["WIS"];
+    save_mods["CHA"] = attribute_mods["CHA"];
 
     //hp
-    max_hp = 10+con_mod;
+    max_hp = 10+attribute_mods["CON"];
     if(race.find("Hill dwarf")!=string::npos) max_hp++;
     cur_hp = max_hp;
     temp_hp = 0;
@@ -220,11 +221,11 @@ void Character::fighter(){
     fighter_skills();
 
     //attacks
-    melee_atk_mod = str_mod + prof;
-    melee_dmg_bonus = str_mod;
-    ranged_atk_mod = dex_mod + prof;
-    ranged_dmg_bonus = dex_mod;
-    init = dex_mod;
+    melee_atk_mod = attribute_mods["STR"] + prof;
+    melee_dmg_bonus = attribute_mods["STR"];
+    ranged_atk_mod = attribute_mods["DEX"] + prof;
+    ranged_dmg_bonus = attribute_mods["DEX"];
+    init = attribute_mods["DEX"];
 
     //misc
     second_wind_available = true;
@@ -241,7 +242,7 @@ void Character::fighter(){
             ranged_weapon_die = 6;
             break;
         } else if(input == "leather"){
-            AC = 11+dex_mod;
+            AC = 11+attribute_mods["DEX"];
             ranged_weapon = "longbow";
             ranged_weapon_die = 8;
             break;
@@ -263,7 +264,7 @@ void Character::fighter(){
             if(input == "y"){
                cout << "\tRapier selected." << endl;
                melee_weapon = "rapier";
-               melee_atk_mod = dex_mod + prof;
+               melee_atk_mod = attribute_mods["DEX"] + prof;
                melee_weapon_die = 8;
             } else if(input == "n"){
                 melee_weapon = "longsword";
@@ -283,7 +284,7 @@ void Character::fighter(){
             if(input == "y"){
                 melee_weapon = "shortswords";
                 cout << "\tShortswords selected." << endl;
-                melee_atk_mod = dex_mod + prof;
+                melee_atk_mod = attribute_mods["DEX"] + prof;
                 melee_weapon_die = 6;
             } else {
                 melee_weapon = "handaxes";
@@ -333,7 +334,7 @@ void Character::selectRace(){
 
     do {
         if(input == "dwarf"){
-            con_score += 2;
+            attribute_scores["CON"] += 2;
             speed = 25;
             darkvision = true;
             cout << "\tDwarf selected. Choose a subrace: hill (+1 WIS, +1hp/lvl) or mountain (+2 STR)." << endl;
@@ -344,18 +345,18 @@ void Character::selectRace(){
                 if(input == "hill"){
                     cout << "\tHill dwarf selected." << endl;
                     race = "Hill dwarf";
-                    wis_score += 1;
+                    attribute_scores["WIS"] += 1;
                     break;
                 } else if(input == "mountain"){
                     cout << "\tMountain dwarf selected." << endl;
                     race = "Mountain dwarf";
-                    str_score += 2;
+                    attribute_scores["STR"] += 2;
                     break;
                 } else { cout << "\tInvalid input." << endl; }
             } while(true);
             break;
         } else if(input == "elf"){
-            dex_score += 2;
+            attribute_scores["DEX"] += 2;
             darkvision = true;
             cout << "\tElf selected. Choose a subrace: high (+1 INT, +1 wizard cantrip, 30ft speed) or wood (+1 wis, 35ft speed)." << endl;
             do {
@@ -364,14 +365,14 @@ void Character::selectRace(){
 
                 if(input == "high"){
                     cout << "\tHigh elf selected." << endl;
-                    int_score += 1;
+                    attribute_scores["INT"] += 1;
                     ///TODO add cantrip
                     race = "High elf";
                     speed = 30;
                     break;
                 } else if(input == "wood"){
                     cout << "\tWood elf selected." << endl;
-                    wis_score += 1;
+                    attribute_scores["WIS"] += 1;
                     speed = 35;
                     race = "Wood elf";
                     break;
@@ -380,12 +381,12 @@ void Character::selectRace(){
             break;
         } else if(input == "human"){
             cout << "\tHuman selected." << endl;
-            str_score++;
-            dex_score++;
-            con_score++;
-            int_score++;
-            wis_score++;
-            cha_score++;
+            attribute_scores["STR"]++;
+            attribute_scores["DEX"]++;
+            attribute_scores["CON"]++;
+            attribute_scores["INT"]++;
+            attribute_scores["WIS"]++;
+            attribute_scores["CHA"]++;
             speed = 30;
             race = "Human";
             darkvision = false;
@@ -395,20 +396,20 @@ void Character::selectRace(){
 
     set_attribute_mods();
     if(race.find("elf") != string::npos){
-        perception_mod += prof;
+        train("PERCEPTION");
     }
 }
 
 void Character::standard_array(){
-    str_score = 0;
-    dex_score = 0;
-    con_score = 0;
-    int_score = 0;
-    wis_score = 0;
-    cha_score = 0;
+    attribute_scores["STR"] = 0;
+    attribute_scores["DEX"] = 0;
+    attribute_scores["CON"] = 0;
+    attribute_scores["INT"] = 0;
+    attribute_scores["WIS"] = 0;
+    attribute_scores["CHA"] = 0;
 
     cout << "1) ATTRIBUTES: ";
-    cout << "Choose scores ('str', 'dex', 'con', 'int', 'wis', and 'cha') from the standard array." << endl;
+    cout << "Choose scores ('STR', 'DEX', 'CON', 'INT', 'WIS', and 'CHA') from the standard array." << endl;
     int i = 0;
     string input;
     int scores[] = {15, 14, 13, 12, 10, 8};
@@ -416,44 +417,14 @@ void Character::standard_array(){
         cout << "\tChoose which stat to put your " << scores[i] << " into: ";
         cin >> input;
 
-        if(input == "str"){
-            if(str_score == 0) str_score = scores[i];
+        if(input == "STR" || input == "DEX" || input == "CON" || input == "INT" || input == "WIS" || input == "CHA"){
+            if(attribute_scores[input] == 0) attribute_scores[input] = scores[i];
             else {
-                cout << "\tSTR already set to " << str_score << "." << endl;
-                continue;
-            }
-        } else if(input == "dex"){
-            if(dex_score == 0) dex_score = scores[i];
-            else {
-                cout << "\tDEX already set to " << dex_score << "." << endl;
-                continue;
-            }
-        } else if(input == "con"){
-            if(con_score == 0) con_score = scores[i];
-            else {
-                cout << "\tCON already set to " << con_score << "." << endl;
-                continue;
-            }
-        } else if(input == "int"){
-            if(int_score == 0) int_score = scores[i];
-            else {
-                cout << "INT already set to " << int_score << "." << endl;
-                continue;
-            }
-        } else if(input == "wis"){
-            if(wis_score == 0) wis_score = scores[i];
-            else {
-                cout << "WIS already set to " << wis_score << "." << endl;
-                continue;
-            }
-        } else if(input == "cha"){
-            if(cha_score == 0) cha_score = scores[i];
-            else {
-                cout << "CHA already set to " << cha_score << "." << endl;
+                cout << "\t" << input << " already set to " << attribute_scores[input] << "." << endl;
                 continue;
             }
         } else {
-            cout << "Stat not recognized. Did you enter it in all lowercase?" << endl;
+            cout << "Stat not recognized. (Did you enter it in all caps?)" << endl;
             continue;
         }
         i++;
@@ -517,8 +488,8 @@ void Character::spawn_cultist(int group_size){
     else if(group_size == 2) xp = 50;
 
     set_attributes(11,12,10,10,11,10);
-    deception_mod += prof;
-    religion_mod += prof;
+    train("DECEPTION");
+    train("RELIGION");
 
     melee_atk_mod = 3;
     melee_weapon_die = 6;
@@ -684,30 +655,30 @@ void Character::cast(Spell* spell, Character* target){
 
 int Character::saving_throw(Spell* spell){
     switch(spell->save_stat){
-        case STR_STAT: return str_save();
-        case DEX_STAT: return dex_save();
-        case CON_STAT: return con_save();
-        case INT_STAT: return int_save();
-        case WIS_STAT: return wis_save();
-        case CHA_STAT: return cha_save();
+        case STR_STAT: return save("STR");
+        case DEX_STAT: return save("DEX");
+        case CON_STAT: return save("CON");
+        case INT_STAT: return save("INT");
+        case WIS_STAT: return save("WIS");
+        case CHA_STAT: return save("CHA");
         default: return 0;
     }
 }
 
 int Character::spell_attack(){
     switch(casting_stat){
-        case INT_STAT: return int_chk()+prof;
-        case WIS_STAT: return wis_chk()+prof;
-        case CHA_STAT: return cha_chk()+prof;
+        case INT_STAT: return attribute_chk("INT")+prof;
+        case WIS_STAT: return attribute_chk("WIS")+prof;
+        case CHA_STAT: return attribute_chk("CHA")+prof;
         default: return 0;
     }
 }
 
 int Character::spell_save_DC(){
     switch(casting_stat){
-        case INT_STAT: return 8+prof+int_mod;
-        case WIS_STAT: return 8+prof+wis_mod;
-        case CHA_STAT: return 8+prof+cha_mod;
+        case INT_STAT: return 8+prof+attribute_mods["INT"];
+        case WIS_STAT: return 8+prof+attribute_mods["WIS"];
+        case CHA_STAT: return 8+prof+attribute_mods["CHA"];
         default: return 0;
     }
 }
@@ -732,7 +703,7 @@ void Character::print_status(){
     if(hit_dice > 0){
         cout << ": during a short rest ('rest' command), you can spend ";
         if(hit_dice == 1) cout << "it"; else cout << "them";
-        cout << " to restore 1d" << hit_die_size << "+" << con_mod << " hitpoints";
+        cout << " to restore 1d" << hit_die_size << "+" << attribute_mods["CON"] << " hitpoints";
         if(hit_dice > 1) cout << "each";
     }
     cout << "." << endl;
@@ -753,24 +724,45 @@ void Character::printCharacterSheet(){
     cout << "Level " << level << " " << race << " " << PC_class << "  [" << xp << "/" << next_levelup() << " xp to level " << level + 1 << "]" << endl;
 
     //Attributes
-    cout << "\tSTR " << str_score << " (";
-    if(str_mod >= 0) cout << "+";
-    cout << str_mod << "), DEX " << dex_score << " (";
-    if(dex_mod >= 0) cout << "+";
-    cout << dex_mod << "), CON " << con_score << " (";
-    if(con_mod >= 0) cout << "+";
-    cout << con_mod << "), INT " << int_score << " (";
-    if(int_mod >= 0) cout << "+";
-    cout << int_mod << "), WIS " << wis_score << " (";
-    if(wis_mod >= 0) cout << "+";
-    cout << wis_mod << "), CHA " << cha_score << " (";
-    if(cha_mod >= 0) cout << "+";
-    cout << cha_mod << ")" << endl;
+    string atts[6] = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
+    cout << "\t";
+    for (int i = 0; i < 6; i++){
+        cout << atts[i] << " " << attribute_scores[atts[i]] << " (";
+        if(attribute_mods[atts[i]] >= 0) cout << "+";
+        cout << attribute_mods[atts[i]] << ")";
+        if(i<5) cout << ", ";
+    }
+    cout << endl;
+
+//    cout << "\tSTR " << attribute_scores["STR"] << " (";
+//    if(str_mod >= 0) cout << "+";
+//    cout << str_mod << "), DEX " << dex_score << " (";
+//    if(dex_mod >= 0) cout << "+";
+//    cout << dex_mod << "), CON " << con_score << " (";
+//    if(con_mod >= 0) cout << "+";
+//    cout << con_mod << "), INT " << int_score << " (";
+//    if(int_mod >= 0) cout << "+";
+//    cout << int_mod << "), WIS " << wis_score << " (";
+//    if(wis_mod >= 0) cout << "+";
+//    cout << wis_mod << "), CHA " << cha_score << " (";
+//    if(cha_mod >= 0) cout << "+";
+//    cout << cha_mod << ")" << endl;
 
     cout << "\tAC " << AC << ", " << cur_hp << "/" << max_hp << " hp" << endl;
 
     cout << "\tMelee attack: " << melee_weapon << " +" << melee_atk_mod << ", d" << melee_weapon_die << "+" << melee_dmg_bonus << " damage" << endl;
     cout << "\tRanged attack: " << ranged_weapon << " +" << ranged_atk_mod << ", d" << ranged_weapon_die << "+" << ranged_dmg_bonus << " damage" << endl;
+
+
+    //trained skills
+    cout << "\tTrained skills: ";
+    for(unsigned i = 0; i < skills_list.size(); i++){
+        if(is_trained(skills_list[i])){
+            cout << skills_list[i] << " (+" << skill_mods[skills_list[i]] << ") ";
+        }
+    }
+    cout << endl;
+
     cout << "======================================================================================" << endl << endl;
 
 }
@@ -852,7 +844,7 @@ void Character::short_rest(){
     }
     if(hit_dice > 0){
         if(changed) cout << "Additionally, you"; else cout << "You";
-        cout << " may spend any number of your remaining hit dice; each will restore 1d" << hit_die_size << "+" << con_mod << " hp." << endl;
+        cout << " may spend any number of your remaining hit dice; each will restore 1d" << hit_die_size << "+" << attribute_mods["CON"] << " hp." << endl;
         cout << " You have " << hit_dice << " hit ";
         if(hit_dice == 1) cout << "die "; else cout << "dice ";
         cout << "remaining. How many would you like to spend?" << endl;
@@ -868,7 +860,7 @@ void Character::short_rest(){
         }
         int restored_hp = 0;
         for(int i = 0; i < num; i++){
-            restored_hp += rand()%hit_die_size+1+con_mod;
+            restored_hp += rand()%hit_die_size+1+attribute_mods["CON"];
             hit_dice--;
         }
 

@@ -101,7 +101,7 @@ bool Dungeon::useDoor(Door* d) {
         string input;
         cin >> input;
         if (input == "lockpick") {
-            if(PC.thieves_tools() > LOCKPICK_DC){
+            if(PC.skill_check("THIEVES TOOLS") > LOCKPICK_DC){
                 d->locked = false;
                 cout << "You successfully pick the lock." << endl << endl;
             } else {
@@ -109,7 +109,7 @@ bool Dungeon::useDoor(Door* d) {
                 return false;
             }
         } else if(input == "ram"){
-            if(PC.str_chk() > d->break_DC()){
+            if(PC.attribute_chk("STRENGTH") > d->break_DC()){
                 cout << "You successfully break down the door." << endl << endl;
                 d->material = "broken " + d->material;
                 d->locked = false;
@@ -130,7 +130,7 @@ bool Dungeon::useDoor(Door* d) {
         string input;
         cin >> input;
         if(input == "ram"){
-            if(PC.athletics() > d->break_DC()){
+            if(PC.skill_check("ATHLETICS") > d->break_DC()){
                 cout << "You successfully break down the door." << endl << endl;
                 d->material = "broken " + d->material;
                 d->barred = false;
@@ -539,7 +539,7 @@ void Dungeon::identify_items(){
     bool first_item_identified = true;
     cout << "As you rest, you look over the items you have gathered more closely." << endl;
     for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
-        if(!(*it)->identified && PC.int_chk() > LOOT_IDENTIFY_DC){
+        if(!(*it)->identified && PC.attribute_chk("INT") > LOOT_IDENTIFY_DC){
             if(first_item_identified) cout << "You are able to identify the following:" << endl;
             first_item_identified = false;
             cout << "\t- Your " << (*it)->get_description();
@@ -559,7 +559,7 @@ void Dungeon::identify_items(){
     }
 
     for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
-        if(!(*it)->identified && PC.arcana() > POTION_IDENTIFY_DC){
+        if(!(*it)->identified && PC.skill_check("ARCANA") > POTION_IDENTIFY_DC){
             if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
             first_item_identified = false;
             cout << "\t- Your " << (*it)->get_description();
@@ -573,7 +573,7 @@ void Dungeon::identify_items(){
     }
 
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        if(!(*it)->identified && PC.arcana() > SCROLL_IDENTIFY_DC){
+        if(!(*it)->identified && PC.skill_check("ARCANA") > SCROLL_IDENTIFY_DC){
             if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
             first_item_identified = false;
             cout << "\t- " << (*it)->quantity << " of your scrolls";
@@ -709,7 +709,7 @@ bool Dungeon::searching(){
         }
 
         //search for treasure
-        if(cur_room->has_treasure && PC.investigation() > FIND_TREASURE_DC){
+        if(cur_room->has_treasure && PC.skill_check("INVESTIGATION") > FIND_TREASURE_DC){
             cout << "You find a treasure hoard!" << endl;
             cur_room->has_treasure = false;
             rollTreasureHoard();
@@ -718,7 +718,7 @@ bool Dungeon::searching(){
 
         //search for secret doors
         for(int i = 0; i < MAX_DOORS; i++){
-            if(cur_room->doors[i] != NULL && cur_room->doors[i]->secret && PC.investigation() > SECRET_DOOR_DC){
+            if(cur_room->doors[i] != NULL && cur_room->doors[i]->secret && PC.skill_check("INVESTIGATION") > SECRET_DOOR_DC){
                 cur_room->doors[i]->secret = false;
                 if(found) cout << "You also find a secret door along the ";
                 else cout << "You find a secret door along the ";
