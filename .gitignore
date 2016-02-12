@@ -2,3 +2,5 @@
 *.depend
 *.layout
 *.cbTemp
+*.exe
+*.o
