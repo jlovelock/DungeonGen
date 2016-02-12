@@ -5,6 +5,7 @@
 #include <spells.h>
 #include <math.h>
 #include <vector>
+#include <weapon.h>
 
 using namespace std;
 
@@ -19,10 +20,11 @@ Character::Character(){
     level = 1;
     prof = 2;
     xp = 0;
+    main_hand = NULL; off_hand = NULL;
 
     cout << "New character: default or custom? ";
     string input;
-    cin >> input;
+    getline(cin, input);
     if(input == "custom"){
         cout << "Custom character selected." << endl;
         standard_array();
@@ -41,12 +43,7 @@ Character::Character(){
 
 
 bool Character::train(string skill){
-
-    ///TODO be less hack-y for two word skills
-    if(skill == "ANIMAL"){
-        cin >> skill;
-        skill = "ANIMAL HANDLING";
-    } else if(!is_skill(skill)) {
+    if(!is_skill(skill)) {
         cout << "\"" << skill << "\" is not a skill!" << endl;
         return false;
     } else if(is_trained(skill)){
@@ -69,7 +66,7 @@ void Character::fighter_skills(){
     cout << "Select from ACROBATICS, ANIMAL HANDLING, ATHLETICS, HISTORY, INSIGHT, INTIMIDATION, PERCEPTION, or SURVIVAL (all-caps only). " << endl;
     while(skills > 0){
         cout << "\tChoose " << skills << " more: ";
-        cin >> input;
+        getline(cin, input);
         if(train(input)) skills--;
     }
 }
@@ -178,15 +175,22 @@ void Character::default_fighter(){
     hit_dice = level;
     hit_die_size = 10;
 
+    //weapons
+    Weapon* w1 = new Weapon("greataxe");
+    weapons.push_back(w1);
+    equip(w1);
+    Weapon* w2 = new Weapon("hand crossbow");
+    weapons.push_back(w2);
+
     //attacks
-    melee_weapon = "greataxe";
-    melee_atk_mod = attribute_mods["STR"] + prof;
-    melee_weapon_die = 12;
-    melee_dmg_bonus = attribute_mods["STR"];
-    ranged_weapon = "hand crossbow";
-    ranged_atk_mod = attribute_mods["DEX"] + prof;
-    ranged_weapon_die = 6;
-    ranged_dmg_bonus = attribute_mods["DEX"];
+//    melee_weapon = "greataxe";
+//    melee_atk_mod = attribute_mods["STR"] + prof;
+//    melee_weapon_die = 12;
+//    melee_dmg_bonus = attribute_mods["STR"];
+//    ranged_weapon = "hand crossbow";
+//    ranged_atk_mod = attribute_mods["DEX"] + prof;
+//    ranged_weapon_die = 6;
+//    ranged_dmg_bonus = attribute_mods["DEX"];
 
     //skills
     train("PERCEPTION");
@@ -194,8 +198,16 @@ void Character::default_fighter(){
 
     //misc
     second_wind_available = true;
-    AC = 17;
+    _AC = 17;
     init = attribute_mods["DEX"];
+}
+
+int Character::AC(){
+    if((main_hand && main_hand->name() == "shield") || (off_hand && off_hand->name() == "shield"))
+        return _AC+2;
+    else
+        return _AC;
+
 }
 
 void Character::fighter(){
@@ -221,10 +233,10 @@ void Character::fighter(){
     fighter_skills();
 
     //attacks
-    melee_atk_mod = attribute_mods["STR"] + prof;
-    melee_dmg_bonus = attribute_mods["STR"];
-    ranged_atk_mod = attribute_mods["DEX"] + prof;
-    ranged_dmg_bonus = attribute_mods["DEX"];
+//    melee_atk_mod = attribute_mods["STR"] + prof;
+//    melee_dmg_bonus = attribute_mods["STR"];
+//    ranged_atk_mod = attribute_mods["DEX"] + prof;
+//    ranged_dmg_bonus = attribute_mods["DEX"];
     init = attribute_mods["DEX"];
 
     //misc
@@ -235,16 +247,20 @@ void Character::fighter(){
     cout << "4) ARMOR: Choose chainmail or leather. (Leather armor comes with a longbow.)" << endl;
     do {
         cout << "\tArmor choice: ";
-        cin >> input;
+        getline(cin, input);
         if(input == "chainmail"){
-            AC = 16;
-            ranged_weapon = "hand crossbow";
-            ranged_weapon_die = 6;
+            _AC = 16;
+            Weapon* w = new Weapon("hand crossbow");
+            weapons.push_back(w);
+            //ranged_weapon = "hand crossbow";
+            //ranged_weapon_die = 6;
             break;
         } else if(input == "leather"){
-            AC = 11+attribute_mods["DEX"];
-            ranged_weapon = "longbow";
-            ranged_weapon_die = 8;
+            _AC = 11+attribute_mods["DEX"];
+            Weapon* w = new Weapon("longbow");
+            weapons.push_back(w);
+//            ranged_weapon = "longbow";
+//            ranged_weapon_die = 8;
             break;
         } else cout << "\tInvalid selection." << endl;
     } while(true);
@@ -252,44 +268,67 @@ void Character::fighter(){
     cout << "6) WEAPON / SHIELD: Choose two-handed, one-handed, or dual-wielded weapon(s)." << endl;
     do {
         cout << "\ttwo-handed, one-handed, or dual: ";
-        cin >> input;
+        getline(cin, input);
         if(input == "two-handed"){
             cout << "\tGreataxe selected." << endl;
-            melee_weapon = "greataxe";
-            melee_weapon_die = 12;
+            Weapon* w = new Weapon("greataxe");
+            weapons.push_back(w);
+            equip(w);
+//            melee_weapon = "greataxe";
+//            melee_weapon_die = 12;
             break;
         } else if(input == "one-handed"){
             cout << "\tFinesse weapon (dex to wield)? [y/n] ";
-            cin >> input;
+            getline(cin, input);
             if(input == "y"){
                cout << "\tRapier selected." << endl;
-               melee_weapon = "rapier";
-               melee_atk_mod = attribute_mods["DEX"] + prof;
-               melee_weapon_die = 8;
+               Weapon* w = new Weapon("rapier");
+               weapons.push_back(w);
+               equip(w);
+//               melee_weapon = "rapier";
+//               melee_atk_mod = attribute_mods["DEX"] + prof;
+//               melee_weapon_die = 8;
             } else if(input == "n"){
-                melee_weapon = "longsword";
+//                melee_weapon = "longsword";
                 cout << "\tLongsword selected." << endl;
-                melee_weapon_die = 8;
+                Weapon* w = new Weapon("longsword");
+                weapons.push_back(w);
+                equip(w);
+//                melee_weapon_die = 8;
             }
             cout << "\tShield? [y/n] ";
-            cin >> input;
+            getline(cin, input);
             if(input == "y"){
                 cout << "\tShield added." << endl;
-                AC += 2;
+                Object* s = new Object("shield");
+                objects.push_back(s);
+                equip(s, true);
             } else cout << "\tNo shield." << endl;
             break;
         } else if(input == "dual"){
             cout << "\tFinesse weapons (dex to wield)? [y/n] ";
-            cin >> input;
+            getline(cin, input);
             if(input == "y"){
-                melee_weapon = "shortswords";
+//                melee_weapon = "shortswords";
+                Weapon* s1 = new Weapon("shortsword");
+                Weapon* s2 = new Weapon("shortsword");
+                weapons.push_back(s1);
+                weapons.push_back(s2);
+                equip(s1);
+                equip(s2, true);
                 cout << "\tShortswords selected." << endl;
-                melee_atk_mod = attribute_mods["DEX"] + prof;
-                melee_weapon_die = 6;
+//                melee_atk_mod = attribute_mods["DEX"] + prof;
+//                melee_weapon_die = 6;
             } else {
-                melee_weapon = "handaxes";
+//                melee_weapon = "handaxes";
                 cout << "\tHandaxes selected." << endl;
-                melee_weapon_die = 6;
+                Weapon* s1 = new Weapon("handaxe");
+                Weapon* s2 = new Weapon("handaxe");
+                weapons.push_back(s1);
+                weapons.push_back(s2);
+                equip(s1);
+                equip(s2, true);
+//                melee_weapon_die = 6;
             }
             break;
         }
@@ -302,17 +341,20 @@ void Character::fighter(){
 
     do {
         cout << "\tStyle: ";
-        cin >> input;
+        getline(cin, input);
 
-        if(input == "archery"){
-            ranged_atk_mod += 2;
+        if(input == "archery" || input == "defense" || input == "dueling") {
+            fighting_styles.push_back(input);
             break;
-        } else if(input == "defense") {
-            AC++;
-            break;
-        } else if(input == "dueling") {
-            melee_dmg_bonus += 2;
-            break;
+//        if(input == "archery"){
+//            ranged_atk_mod += 2;
+//            break;
+//        } else if(input == "defense") {
+//            AC++;
+//            break;
+//        } else if(input == "dueling") {
+//            melee_dmg_bonus += 2;
+//            break;
         } else {
             cout << "\tInvalid entry." << endl;
         }
@@ -330,7 +372,7 @@ void Character::selectRace(){
 
     cout << "\tRace: ";
     string input;
-    cin >> input;
+    getline(cin, input);
 
     do {
         if(input == "dwarf"){
@@ -340,7 +382,7 @@ void Character::selectRace(){
             cout << "\tDwarf selected. Choose a subrace: hill (+1 WIS, +1hp/lvl) or mountain (+2 STR)." << endl;
             do {
                 cout << "\tSubrace: ";
-                cin >> input;
+                getline(cin, input);
 
                 if(input == "hill"){
                     cout << "\tHill dwarf selected." << endl;
@@ -361,7 +403,7 @@ void Character::selectRace(){
             cout << "\tElf selected. Choose a subrace: high (+1 INT, +1 wizard cantrip, 30ft speed) or wood (+1 wis, 35ft speed)." << endl;
             do {
                 cout << "\tSubrace: ";
-                cin >> input;
+                getline(cin, input);
 
                 if(input == "high"){
                     cout << "\tHigh elf selected." << endl;
@@ -415,7 +457,7 @@ void Character::standard_array(){
     int scores[] = {15, 14, 13, 12, 10, 8};
     do {
         cout << "\tChoose which stat to put your " << scores[i] << " into: ";
-        cin >> input;
+        getline(cin, input);
 
         if(input == "STR" || input == "DEX" || input == "CON" || input == "INT" || input == "WIS" || input == "CHA"){
             if(attribute_scores[input] == 0) attribute_scores[input] = scores[i];
@@ -454,7 +496,7 @@ Character::Character(double CR){
 
 ///TODO include keen senses, darkvision
 void Character::spawn_giant_rat(int group_size){
-    AC = 12;
+    _AC = 12;
     max_hp = d6()+d6();
 
     if(group_size == 1) xp = 38;
@@ -462,14 +504,10 @@ void Character::spawn_giant_rat(int group_size){
 
     set_attributes(7,15,11,2,10,4);
 
-    melee_atk_mod = 4;
-    melee_weapon_die = 4;
-    melee_dmg_bonus = 2;
-    melee_weapon = "bite";
-
-    ranged_weapon = "N/A";
-    ranged_weapon_die = 0;
-    ranged_dmg_bonus = 0;
+    Weapon* w = new Weapon("bite", "4/1d4+2 piercing");
+    weapons.push_back(w);
+    main_hand = w;
+    off_hand = NULL;
 
     race = "rat";
     PC_class = "giant rat";
@@ -480,7 +518,7 @@ void Character::spawn_giant_rat(int group_size){
 ///TODO: instead of group_size (which assumes identical monsters), have another function
 ///  handle the monster spawn and therefore set the xp values
 void Character::spawn_cultist(int group_size){
-    AC = 12;
+    _AC = 12;
     max_hp = d8()+d8();
     speed = 30;
 
@@ -491,15 +529,12 @@ void Character::spawn_cultist(int group_size){
     train("DECEPTION");
     train("RELIGION");
 
-    melee_atk_mod = 3;
-    melee_weapon_die = 6;
-    melee_dmg_bonus = 1;
+    Weapon* w = new Weapon("scimitar","3/1d6+1 piercing");
+    weapons.push_back(w);
+    main_hand = w;
+    off_hand = NULL;
 
-    ranged_weapon_die = 0;
-    ranged_dmg_bonus = 0;
     PC_class = "cultist"; /// TODO rename this variable to something more reasonable? =P
-    melee_weapon = "scimitar";
-    ranged_weapon = "N/A";
     race = "human"; //arbitrary
     pack_tactics = false;
 }
@@ -510,12 +545,47 @@ void Character::spawn_cultist(int group_size){
 ///***********************************  ATTACKS  ****************************************///
 ///**************************************************************************************///
 
+
+Weapon* Character::weapon_select(Character* target){
+        if(is_monster) return weapons[0]; //TODO multi-weapon support for monsters??
+
+        map<string, Weapon*> choice_matrix;
+
+        cout << "Which weapon do you want to use?:" << endl;
+
+        while(true) {
+            for(vector<Weapon*>::iterator it = weapons.begin(); it != weapons.end(); ++it) {
+                if(distance_to(target) < (*it)->range()){
+                    choice_matrix[(*it)->name()] = *it;
+                    cout << "\t - " << (*it)->name();
+                    if(distance_to(target) >= 10 && (*it)->is_thrown())
+                        cout << " (thrown)";
+                    cout << endl;
+                }
+                else {
+                    cout << "\t(" << (*it)->name() << " out of range.)" << endl;
+                }
+            }
+
+            cout << endl << ">> ";
+            string choice;
+            getline(cin, choice);
+            map<string, Weapon*>::iterator w = choice_matrix.find(choice);
+            if(w == choice_matrix.end()) {
+                cout << "Invalid selection. Your choices are as follows: " << endl;
+            } else {
+                cout << choice_matrix.at(choice)->name() << " selected." << endl;
+                return choice_matrix.at(choice);
+            }
+        }
+}
+
 void Character::attack(Character* opponent, int attack_roll, int dmg){
     if(!opponent->is_alive()){
         cout << "Uh, he's already dead, but go right ahead if you really want to." << endl << endl;
         return;
     }
-    if(attack_roll >= opponent->AC){
+    if(attack_roll >= opponent->AC()){
         if(!is_monster){
             cout << "Your attack connects, dealing " << dmg << " points of damage to the " << opponent->PC_class << "." << endl;
             opponent->take_damage(dmg);
@@ -538,23 +608,43 @@ void Character::attack(Character* opponent, int attack_roll, int dmg){
 
 }
 
-void Character::melee_attack(Character* opponent){
-    if(in_melee == false){
-        if(is_monster) cout << "The " << PC_class << " charges you from across the room with his " << melee_weapon << " drawn." << endl;
-        else cout << "You charge forward to meet the " << opponent->PC_class << " with your " << melee_weapon << " drawn." << endl;
-    }
-    attack(opponent, melee_atk_roll(), melee_dmg());
-    in_melee = true;
-    opponent->in_melee = true; ///TODO FIXME if you attack at range first and melee second, it doesn't set your flag to "in melee", even though this line should have...
+/*
+ * Todos:
+ *  - Enforce weapon ranges / character locations
+ *  - Distinguish between melee / ranged / etc in flavour
+ */
+void Character::generic_attack(Character* opponent){
+    Weapon* w;
+    if(main_hand->is_weapon()) w = (Weapon*)main_hand;
+    else if(off_hand->is_weapon()) w = (Weapon*)off_hand;
+    else w = weapon_select(opponent);
+
+    if(is_monster) cout << "The " << PC_class << " attacks you with his " << w->name() << " drawn." << endl;
+    else cout << "You attack the " << opponent->PC_class << " with your " << w->name() << " drawn." << endl;
+
+    attack(opponent, attack_roll(w), damage(w));
 }
 
-void Character::ranged_attack(Character* opponent){
-    if(!is_monster) cout << "You draw your " << ranged_weapon << " and prepare to strike." << endl;
-    else cout << "The " << PC_class << " draws a " << ranged_weapon << " and readies a shot." << endl;
-    attack(opponent, ranged_atk_roll(), ranged_dmg());
-    in_melee = false;
-    opponent->in_melee = false;
-}
+
+//void Character::melee_attack(Character* opponent){
+//    Weapon* w = weapon_select(opponent);
+//    if(in_melee == false){
+//        if(is_monster) cout << "The " << PC_class << " charges you from across the room with his " << w.name() << " drawn." << endl;
+//        else cout << "You charge forward to meet the " << opponent->PC_class << " with your " << w.name() << " drawn." << endl;
+//    }
+//    attack(opponent, attack_roll(w), damage(w));
+//    in_melee = true;
+//    opponent->in_melee = true; ///TODO FIXME if you attack at range first and melee second, it doesn't set your flag to "in melee", even though this line should have...
+//}
+//
+//void Character::ranged_attack(Character* opponent){
+//    Weapon w = weapon_select(opponent);
+//    if(!is_monster) cout << "You draw your " << w.name() << " and prepare to strike." << endl;
+//    else cout << "The " << PC_class << " draws a " << w.name() << " and readies a shot." << endl;
+//    attack(opponent, attack_roll(w), damage(w));
+//    in_melee = false;
+//    opponent->in_melee = false;
+//}
 
 void Character::take_damage(int dmg){
     ///TODO make this whole section more flavourful!
@@ -623,7 +713,7 @@ void Character::cast(Spell* spell, Character* target){
         return;
     }
     if(spell->attack_roll_required){
-        if(spell_attack() > target->AC){
+        if(spell_attack() > target->AC()){
             int damage = spell->damage();
             cout << "Your " << spell->name << " hits the " << target->PC_class << " for " << damage << " points of " << spell->damage_type << " damage." << endl;
             target->take_damage(damage);
@@ -654,33 +744,15 @@ void Character::cast(Spell* spell, Character* target){
 }
 
 int Character::saving_throw(Spell* spell){
-    switch(spell->save_stat){
-        case STR_STAT: return save("STR");
-        case DEX_STAT: return save("DEX");
-        case CON_STAT: return save("CON");
-        case INT_STAT: return save("INT");
-        case WIS_STAT: return save("WIS");
-        case CHA_STAT: return save("CHA");
-        default: return 0;
-    }
+    return save(spell->save_stat);
 }
 
 int Character::spell_attack(){
-    switch(casting_stat){
-        case INT_STAT: return attribute_chk("INT")+prof;
-        case WIS_STAT: return attribute_chk("WIS")+prof;
-        case CHA_STAT: return attribute_chk("CHA")+prof;
-        default: return 0;
-    }
+    return attribute_chk(casting_stat)+prof;
 }
 
 int Character::spell_save_DC(){
-    switch(casting_stat){
-        case INT_STAT: return 8+prof+attribute_mods["INT"];
-        case WIS_STAT: return 8+prof+attribute_mods["WIS"];
-        case CHA_STAT: return 8+prof+attribute_mods["CHA"];
-        default: return 0;
-    }
+    return 8+prof+attribute_mods[casting_stat];
 }
 
 
@@ -713,7 +785,7 @@ void Character::print_status(){
 
     cout << endl << "Print character sheet? [y/n] ";
     char input;
-    cin >> input;
+    cin.get(input);
     if(input == 'y') printCharacterSheet();
 
     cout << endl;
@@ -748,10 +820,15 @@ void Character::printCharacterSheet(){
 //    if(cha_mod >= 0) cout << "+";
 //    cout << cha_mod << ")" << endl;
 
-    cout << "\tAC " << AC << ", " << cur_hp << "/" << max_hp << " hp" << endl;
+    cout << "\tAC " << AC() << ", " << cur_hp << "/" << max_hp << " hp" << endl;
 
-    cout << "\tMelee attack: " << melee_weapon << " +" << melee_atk_mod << ", d" << melee_weapon_die << "+" << melee_dmg_bonus << " damage" << endl;
-    cout << "\tRanged attack: " << ranged_weapon << " +" << ranged_atk_mod << ", d" << ranged_weapon_die << "+" << ranged_dmg_bonus << " damage" << endl;
+    cout << "\tWeapons:" << endl;
+    for(vector<Weapon*>::iterator it = weapons.begin(); it != weapons.end(); ++it){
+        cout << "\t - " << (*it)->get_weapon_description(this) << endl;
+    }
+
+//    cout << "\tMelee attack: " << melee_weapon << " +" << melee_atk_mod << ", d" << melee_weapon_die << "+" << melee_dmg_bonus << " damage" << endl;
+//    cout << "\tRanged attack: " << ranged_weapon << " +" << ranged_atk_mod << ", d" << ranged_weapon_die << "+" << ranged_dmg_bonus << " damage" << endl;
 
 
     //trained skills
@@ -767,15 +844,120 @@ void Character::printCharacterSheet(){
 
 }
 
-
+bool Character::proficient_with(string weapon_type){
+    for(vector<string>::iterator it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it) {
+        if (*it == weapon_type) return true;
+    }
+    return false;
+}
 
 ///**************************************************************************************///
 ///**********************************  MISCELLANIA  *************************************///
 ///**************************************************************************************///
 
+void Character::equip(Object* o, bool equip_to_offhand){
+    if(o->is_two_handed()){
+        if(main_hand == NULL && off_hand == NULL){
+            cout << o->name() << " equipped." << endl;
+            main_hand = o;
+            off_hand = o;
+            return;
+        }
+        else {
+            cout << "Unequip the ";
+            if(main_hand)
+                cout << main_hand->name();
+            if(main_hand && off_hand && !main_hand->is_two_handed())
+                cout << " and the ";
+            if(off_hand && !off_hand->is_two_handed())
+                cout << off_hand->name();
+            cout << "? [y/n]" << endl;
+
+            string input;
+            getline(cin, input);
+            if(input == "y") {
+                cout << o->name() << " equipped." << endl;
+                main_hand = o;
+                off_hand = o;
+            }
+            cout << endl;
+            return;
+        }
+
+    //One-handed
+    } else {
+        if(!off_hand && equip_to_offhand){
+            cout << o->name() << " equipped (off hand)." << endl;
+            off_hand = o;
+            return;
+        }
+        else if(!main_hand){
+            cout << o->name() << " equipped (main hand)." << endl;
+            main_hand = o;
+            return;
+        }
+        else if(main_hand && !off_hand) {
+            cout << o->name() << " and " << main_hand->name() << " equipped (main hand)." << endl;
+            cout << "Which in main hand? " << endl;
+            string input;
+            getline(cin, input);
+            while(true){
+                if(input == o->name()){
+                    off_hand = main_hand;
+                    main_hand = o;
+                    return;
+                } else if(input == main_hand->name()){
+                    off_hand = o;
+                    return;
+                } else {
+                    cout << "Invalid entry, try again." << endl;
+                }
+            }
+        }
+        //TODO better wording here
+        else {
+            cout << "You must unequip something first. The ";
+            if(main_hand)
+                cout << main_hand->name();
+            if(main_hand && off_hand && !main_hand->is_two_handed())
+                cout << ", the ";
+            if(off_hand && !off_hand->is_two_handed())
+                cout << off_hand->name();
+            cout << ", or cancel?" << endl;
+
+            string input;
+            cout << endl << ">> ";
+            getline(cin, input);
+            while(true){
+                if(input == main_hand->name()){
+                    cout << main_hand->name() << " unequipped, and " << o->name() << " equipped." << endl << endl;
+                    if(main_hand->is_two_handed())
+                        off_hand = NULL;
+                    main_hand = o;
+                    if(o->is_two_handed())
+                        off_hand = o;
+                    return;
+                } else if(input == off_hand->name()){
+                    cout << off_hand->name() << " unequipped, and " << o->name() << " equipped." << endl << endl;
+                    off_hand = o;
+                    return;
+                } else if(input == "cancel"){
+                    cout << endl;
+                    return;
+                } else {
+                    cout << "Invalid entry, try again." << endl;
+                }
+            }
+        }
+    }
+}
+
+int Character::distance_to(Character* target){
+    return sqrt(pow(xPos-target->xPos, 2)+pow(yPos-target->yPos, 2));
+}
+
 bool Character::within_range(Character* target, Spell* spell){
-    int distance_between = sqrt(pow(xPos-target->xPos, 2)+pow(yPos-target->yPos, 2));
-    if(distance_between <= spell->range) return true;
+    if(distance_to(target) <= spell->range) return true;
     else return false;
 }
 
@@ -810,7 +992,7 @@ void Character::special_action(){
     string input;
     do {
         cout << ">> ";
-        cin >> input;
+        getline(cin, input);
 
         if(input == "secondwind"){
             if(!second_wind_available){
@@ -852,7 +1034,9 @@ void Character::short_rest(){
         int num;
         while(true){
             cout << ">> ";
-            cin >> num;
+            string tmp;
+            getline(cin, tmp);
+            num = atoi(tmp.c_str());
             if(num > hit_dice)
                 cout << "You do not have that many hit dice remaining. Please re-enter a number." << endl;
             else

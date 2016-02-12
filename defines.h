@@ -2,6 +2,7 @@
 #define DEFINES_H
 
 #include <vector>
+#include <string>
 
 int d4();
 int d6();
@@ -13,6 +14,8 @@ int d100();
 int opposite(int wall);
 int left(int wall);
 int right(int wall);
+bool contains(std::string to_search, std::string keyword);
+
 
 
 static const char* skargs[] = {
@@ -45,6 +48,8 @@ static bool is_skill(std::string s){
     return false;
 }
 
+#define GRID_SIZE 40
+
 #define NORTH 100
 #define SOUTH 200
 #define EAST 300
@@ -66,12 +71,12 @@ static bool is_skill(std::string s){
 #define RARE 345
 #define VERY_RARE 456
 
-#define STR_STAT 101
-#define DEX_STAT 202
-#define CON_STAT 303
-#define INT_STAT 404
-#define WIS_STAT 505
-#define CHA_STAT 606
+//#define STR_STAT 101
+//#define DEX_STAT 202
+//#define CON_STAT 303
+//#define INT_STAT 404
+//#define WIS_STAT 505
+//#define CHA_STAT 606
 
 #define ACTION 222
 #define BONUS_ACTION 333

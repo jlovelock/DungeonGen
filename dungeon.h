@@ -18,6 +18,7 @@ class Dungeon{
     bool in_dungeon;
 
     void adjust_room_position(Room* rm);
+    void print_map();
 
     //treasure
     void rollIndividualTreasure(std::string);
@@ -27,11 +28,12 @@ class Dungeon{
     int cp, sp, ep, gp, pp;
     void print_inventory();
 
+    void equip_item(std::string);
     void rest();
-    void look();
-    bool searching();
-    bool combat();
-    bool combat(std::string input, bool is_ranged);
+    void look(std::string);
+    bool searching(std::string);
+    bool combat(std::string);
+    //bool combat(std::string input, bool is_ranged);
     bool melee_combat();
     bool ranged_combat();
     bool drink_potion();

@@ -4,6 +4,10 @@
 #include <spells.h>
 using namespace std;
 
+bool contains(string to_search, string keyword){
+    return to_search.find(keyword) != string::npos;
+}
+
 Dungeon::Dungeon(){
     cur_id = 1;
     cur_room = new Room();
@@ -25,29 +29,125 @@ Dungeon::~Dungeon(){
     }
 }
 
-///TODO clean up this function with subroutines, get rid of repetitiveness
+void Dungeon::print_map(){
+    int grid[GRID_SIZE][GRID_SIZE];
+
+    const int DOOR = 1;
+    const int WALL = 2;
+    const int HERE = 3;
+
+    for(int i = 0; i < GRID_SIZE; i++){
+        for(int j = 0; j < GRID_SIZE; j++){
+            grid[i][j] = 0;
+        }
+    }
+
+    for(Room* r = first_room; r != NULL; r = r->next){
+        for(int i = 0; i <= r->xDim; i+=5){
+            grid[(r->westEdge+i)/5][(r->southEdge)/5] = WALL;
+            grid[(r->westEdge+i)/5][(r->northEdge)/5] = WALL;
+        }
+        for(int i = 0; i <= r->yDim; i+=5){
+            grid[(r->westEdge)/5][(r->southEdge+i)/5] = WALL;
+            grid[(r->eastEdge)/5][(r->southEdge+i)/5] = WALL;
+        }
+        for(int d = 0; d < MAX_DOORS && r->doors[d] != NULL; d++){
+            grid[r->doors[d]->xPos/5][r->doors[d]->yPos/5] = DOOR;
+        }
+    }
+
+    int xMid = cur_room->westEdge+cur_room->xDim/2;
+    int yMid = cur_room->southEdge+cur_room->yDim/2;
+    grid[xMid/5][yMid/5] = HERE;
+
+    for(int i = GRID_SIZE-1; i >= 0; i--){
+        for(int j = 0; j < GRID_SIZE; j++){
+            if(grid[j][i] == WALL) cout << "#";
+            else if(grid[j][i] == DOOR) cout << " ";
+            else if(grid[j][i] == HERE) cout << "*";
+            else cout << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+}
+
+//TODO clean up this function with subroutines, get rid of repetitiveness
+///TODO: Ensure this works appropriately when multiple sequential adjustments are necessary! (So many test cases)
+///TODO: when one room perfectly overlaps another, no wall will trigger as problematic
 void Dungeon::adjust_room_position(Room* rm){
 
-    for(Room* compare = first_room; compare != NULL; compare = compare->next){
+    cout << "...adjusting..." << endl;
 
+    bool north_locked = false, south_locked = false, east_locked = false, west_locked = false;
+
+    switch(rm->doors[0]->getWall(rm)){
+        case NORTH:
+            north_locked = true;
+            break;
+        case SOUTH:
+            south_locked = true;
+            break;
+        case EAST:
+            east_locked = true;
+            break;
+        case WEST:
+            west_locked = true;
+    }
+
+    for(Room* compare = first_room; compare != NULL; compare = compare->next){
+        if(compare->id == rm->id) continue;
+        cout << "...checking room " << compare->id << ": " << endl;
         int offset = 0, shrink_amt = 0;
 
         //south
-        while(compare->withinY(rm->southEdge+offset)){
+        while(!south_locked && compare->issue_south(rm, offset)){
             offset++;
         }
         if(offset != 0){
-            rm->shift(offset, false);
+            cout << "@@@@@\tCORRECTION along South wall" << endl;
+            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            cout << "@\t- Offset: " << offset << endl;
+
+            if(south_locked){
+                ///FIXME
+                cout << "South double-locked! EXITING" << endl;
+                exit(EXIT_FAILURE);
+
+            } else if(north_locked){
+                rm->shrink(offset, NORTH);
+            } else {
+                rm->shift(offset, false);
+            }
             rm->linkDoors(compare, SOUTH);
+            south_locked = true;
+            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            continue;
         }
 
         //north
-        while(compare->withinY(rm->northEdge-shrink_amt)){
+        while(!north_locked && compare->issue_north(rm, shrink_amt)){
             shrink_amt++;
         }
         if(shrink_amt != 0){
-            rm->shrink(shrink_amt, false);
+            cout << "@@@@@\tCORRECTION along North wall" << endl;
+            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            cout << "@\t- Offset: " << shrink_amt << endl;
+
+            if(north_locked){
+                ///FIXME
+                cout << "North double-locked! EXITING" << endl;
+                exit(EXIT_FAILURE);
+            } else if(south_locked){
+                rm->shrink(shrink_amt, SOUTH);
+            } else {
+                rm->shift(shrink_amt, false, true);
+            }
             rm->linkDoors(compare, NORTH);
+            north_locked = true;
+            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            continue;
         }
 
         //reset for xDim
@@ -55,29 +155,55 @@ void Dungeon::adjust_room_position(Room* rm){
         shrink_amt = 0;
 
         //west
-        while(compare->withinX(rm->westEdge+offset)){
+        while(!west_locked && compare->issue_west(rm, offset)){
             offset++;
         }
 
         if(offset != 0){
-            rm->shift(offset, true);
+            cout << "@@@@@\tCORRECTION along West wall" << endl;
+            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            cout << "@\t- Offset: " << offset << endl;
+            if(west_locked){
+                ///FIXME
+                cout << "West double-locked! EXITING" << endl;
+                exit(EXIT_FAILURE);
+            } else if(east_locked){
+                rm->shrink(offset, EAST);
+            } else {
+                rm->shift(offset, true);
+            }
             rm->linkDoors(compare, WEST);
+            west_locked = true;
+            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            continue;
         }
 
         //east
-        while(compare->withinX(rm->eastEdge-shrink_amt)){
+        while(!east_locked && compare->issue_east(rm, shrink_amt)){
             shrink_amt++;
         }
 
         if(shrink_amt != 0){
-            rm->shrink(shrink_amt, true);
+            cout << "@@@@@\tNONZERO SHRINK HERE (East wall)" << endl;
+            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            cout << "@\t- Shrink: " << shrink_amt << endl;
+
+            if(east_locked){
+                ///FIXME
+                cout << "East double-locked! EXITING" << endl;
+                exit(EXIT_FAILURE);
+            } else if(west_locked){
+                rm->shrink(shrink_amt, WEST);
+            } else {
+                rm->shift(shrink_amt, true, true);
+            }
             rm->linkDoors(compare, EAST);
+            east_locked = true;
+            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
+            continue;
         }
-
-
     }
-
-
+    cout << "...done" << endl;
 }
 
 void Dungeon::check_completion(){
@@ -99,7 +225,7 @@ bool Dungeon::useDoor(Door* d) {
     if(d->locked){
         cout << "That door is locked. Try to lockpick, ram, or leave? ";
         string input;
-        cin >> input;
+        getline(cin, input);
         if (input == "lockpick") {
             if(PC.skill_check("THIEVES TOOLS") > LOCKPICK_DC){
                 d->locked = false;
@@ -128,7 +254,7 @@ bool Dungeon::useDoor(Door* d) {
     } else if(d->barred) {
         cout << "Something is blocking it from opening. Try to ram, or leave? ";
         string input;
-        cin >> input;
+        getline(cin, input);
         if(input == "ram"){
             if(PC.skill_check("ATHLETICS") > d->break_DC()){
                 cout << "You successfully break down the door." << endl << endl;
@@ -143,7 +269,7 @@ bool Dungeon::useDoor(Door* d) {
     } else if(d->main_exit) {
         cout << "This leads outside? Leave the dungeon? [y/n] ";
         char input;
-        cin >> input;
+        cin.get(input);
         if(input == 'y'){
             cout << "You have left the dungeon!" << endl;
             in_dungeon = false;
@@ -152,8 +278,8 @@ bool Dungeon::useDoor(Door* d) {
     }
 
     int door_num = 0;
-    //revisiting a room that is already initialized
 
+    //revisiting a room that is already initialized
     if(d->second != NULL){
         cout << "You turn back to the ";
         if(cur_room->isFirstRoom(d)){
@@ -178,18 +304,17 @@ bool Dungeon::useDoor(Door* d) {
         cur_room->printDescription(door_num);
 
 
-
-
     //creating (and moving to) a new room
     } else {
-        if(d->material == "passage") d->second = new Room(cur_id, d, true);
-        else d->second = new Room(cur_id, d, false);
-        adjust_room_position(d->second);
-        cur_id++;
-        last_room->next = d->second;
-        last_room = d->second;
-        cur_room = d->second;
+        Room* next_rm;
+        if(d->material == "passage") next_rm = new Room(cur_id++, d, true);
+        else next_rm = new Room(cur_id++, d, false);
+        last_room->next = next_rm;
+        last_room = next_rm;
+        cur_room = next_rm;
         cur_room->doors[0] = d;
+        d->second = next_rm;
+        adjust_room_position(next_rm);
         cur_room->printInitialDescription(door_num);
     }
 
@@ -208,11 +333,9 @@ bool Dungeon::parse_open_door(string input){
 
     int doorCopies = 0, doorNum = 0;
     for(int i = 0; i < MAX_DOORS && cur_room->doors[i] != NULL; i++){
-        if(cur_room->doors[i]->getWall(cur_room) == input){
-            if(!cur_room->doors[i]->secret){
-                doorNum = i;
-                doorCopies++;
-            }
+        if(cur_room->doors[i]->getWallString(cur_room) == input && !cur_room->doors[i]->secret){
+            doorNum = i;
+            doorCopies++;
         }
     }
     if(doorCopies == 1)
@@ -223,7 +346,7 @@ bool Dungeon::parse_open_door(string input){
         cout << "Which instance?" << endl;
         int instance = 0;
         for(int i = 0; i < MAX_DOORS && cur_room->doors[i] != NULL; i++){
-            if(cur_room->doors[i]->getWall(cur_room) == input && !cur_room->doors[i]->secret){
+            if(cur_room->doors[i]->getWallString(cur_room) == input && !cur_room->doors[i]->secret){
                 cout << "\t- " << instance++;
 
                 //print description if it leads to a room you've visited
@@ -243,9 +366,12 @@ bool Dungeon::parse_open_door(string input){
         cout << endl << ">> ";
 
         int doorIndex;
-        cin >> doorIndex;
+        string tmp;
+        getline(cin, tmp);
+        doorIndex = atoi(tmp.c_str());
+
         for(int i = 0; i < MAX_DOORS && cur_room->doors[i] != NULL; i++){
-            if(cur_room->doors[i]->getWall(cur_room) == input && cur_room->doors[i]->secret == false){
+            if(cur_room->doors[i]->getWallString(cur_room) == input && cur_room->doors[i]->secret == false){
                 if(doorIndex == 0) return useDoor(cur_room->doors[i]);
                 else doorIndex--;
             }
@@ -259,7 +385,7 @@ bool Dungeon::parse_open_door(string input){
 
 bool Dungeon::parse_open_door(){
     string input;
-    cin >> input;
+    getline(cin, input);
     return parse_open_door(input);
 
 }
@@ -295,8 +421,13 @@ void Dungeon::rollIndividualTreasure(string monster_name){
 
 void Dungeon::print_inventory(){
     cout << "WEAPONS: " << endl;
-    cout << "\t- " << PC.melee_weapon << endl;
-    cout << "\t- " << PC.ranged_weapon << endl << endl;
+    for(vector<Weapon*>::iterator it = PC.weapons.begin(); it != PC.weapons.end(); ++it){
+        cout << "\t - " << (*it)->get_weapon_description(&PC);
+        if((*it)->is_equipped_to(&PC))
+            cout << " (equipped)";
+        cout << endl;
+    }
+    cout << endl;
 
     if(cp > 0 || sp > 0 || ep > 0 || gp > 0 || pp > 0){
         cout << "COINS: " << endl;
@@ -336,7 +467,7 @@ void Dungeon::print_inventory(){
     }
 
     if(!loot.empty()){
-        cout << "MISC:" << endl;
+        cout << "MISC TREASURE:" << endl;
         for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
             cout << "\t- ";
             //if(!(*it)->identified) cout << "[?] ";
@@ -345,6 +476,17 @@ void Dungeon::print_inventory(){
         cout << endl;
     }
     cout << endl;
+
+    if(!PC.objects.empty()){
+        cout << "OTHER ITEMS: " << endl;
+        for(vector<Object*>::iterator it = PC.objects.begin(); it != PC.objects.end(); ++it){
+            cout << "\t - " << (*it)->name();
+            if((*it)->is_equipped_to(&PC))
+                cout << " (equipped)";
+            cout << endl;
+        }
+        cout << endl;
+    }
 }
 
 void Dungeon::rollTreasureHoard(){
@@ -601,83 +743,81 @@ void Dungeon::rest(){
     }
 }
 
-
-void Dungeon::look(){
-    string input;
-    cin >> input;
-    if(input == "at") cin >> input;
-
+///COME BACK HERE AND FIX THIS YOU DOLT
+void Dungeon::look(string input){
     //room description
-    if(input == "room" || input == "around"){
+    if(contains(input, "room") || contains(input, "around")){
         cur_room->printFullDescription();
 
     //looking at a monster
     ///TODO add multi-monster support
-    } else if(cur_room->get_monster(input) != NULL) {
+    ///TODO FIXME since changing how input worked
+    } else if(contains(input,cur_room->get_monster())) {
         if(cur_room->has_monsters())
            cout << "He looks like a bad guy. You should kill him. What did you expect?" << endl << endl;
         else
             cout << "He looks like a bad guy. A dead bad guy. Good thing you killed him." << endl << endl;
 
     //looking at your weapons
-    } else if(input == PC.melee_weapon || input == PC.ranged_weapon){
-        cout << "It's a little rusty, but it's served you well over the years." << endl << endl;
+    ///TODO fixme
+//    } else if(input == PC.melee_weapon || input == PC.ranged_weapon){
+//        cout << "It's a little rusty, but it's served you well over the years." << endl << endl;
 
     } else {
         ///TODO check if it's an item in inventory, give description on it
-        cout << "I'm not smart enough to know what a \"" << input << "\" is... sorry. Try another command?" << endl << endl;
+        cout << "I get that you want to look at something, but I'm not sure what... sorry. Try another command?" << endl << endl;
     }
 }
 
 //returns true iff fighting happened
-bool Dungeon::combat(string input, bool is_ranged)
+bool Dungeon::combat(string input)
 {
-    if(cur_room->get_monster(input) != NULL){
-        if(is_ranged){
-            if(PC.in_melee){
-                ///TODO FIXME multi-monster support (make sure the right monster gets the AOO
-                ///add Character* in_melee_with to the Character class? (maybe even an array?)
-                cout << "As you step away from the " << cur_room->get_active_monster() << ", it turns to attack you!" << endl;
-                cur_room->get_monster(input)->melee_attack(&PC);
-            }
-            PC.ranged_attack(cur_room->get_monster(input));
-        } else {
-            PC.melee_attack(cur_room->get_monster(input));
-        }
+    ///TODO multi-monster support
+    if(contains(input, cur_room->get_active_monster())){
+        PC.generic_attack(cur_room->get_active_monster_char());
         return true;
+
+//        if(is_ranged){
+//            if(PC.in_melee){
+//                ///TODO FIXME multi-monster support (make sure the right monster(s) get(s) the AOO)
+//                ///add Character* in_melee_with to the Character class? (maybe even an array?)
+//                cout << "As you step away from the " << cur_room->get_active_monster() << ", it turns to attack you!" << endl;
+//                cur_room->get_monster(input)->melee_attack(&PC);
+//            }
+//            PC.ranged_attack(cur_room->get_monster(input));
+//        } else {
+//            PC.melee_attack(cur_room->get_monster(input));
+//        }
+//        return true;
     } else {
-        cout << "You can't attack a \"" << input << "\"." << endl;
+        cout << "That's not something you can attack." << endl;
         return false;
     }
-
 }
-
-//returns true iff fighting happened
-bool Dungeon::combat(){
-    string monster_name;
-    cin >> monster_name;
-
-    cout << "Melee or ranged?" << endl;
-    cout << ">> ";
-    string input;
-    cin >> input;
-    cout << endl;
-    if(input == "ranged")
-        return combat(monster_name, true);
-    else
-        return combat(monster_name, false);
-
-}
+//
+////returns true iff fighting happened
+//bool Dungeon::combat(){
+//    string monster_name;
+//    cin >> monster_name;
+//
+//
+////    cout << "Melee or ranged?" << endl;
+////    cout << ">> ";
+////    string input;
+////    cin >> input;
+////    cout << endl;
+////    if(input == "ranged")
+//        return combat(monster_name, true);
+////    else
+////        return combat(monster_name, false);
+//
+//}
 
 //returns false iff no action was taken
-bool Dungeon::searching(){
-    string input;
-    cin >> input;
-
-
+bool Dungeon::searching(string input){
     //search a single monster
     ///TODO multi-monster support
-    if(cur_room->get_monster(input) != NULL){
+    if(contains(input, cur_room->get_monster())){
         if(cur_room->has_monsters()){
             cout << "You can't do that while it's still alive!" << endl;
             return false;
@@ -691,7 +831,7 @@ bool Dungeon::searching(){
         }
 
     //search the whole room
-    } else if(input == "room" || input == "area"){
+    } else if(contains(input, "room") || contains(input, "area")){
         if(cur_room->has_monsters()){
             cout << "You can't do that with the " << cur_room->get_active_monster() << " around!" << endl;
             return false;
@@ -778,7 +918,7 @@ bool Dungeon::cast_spell(){
 
     cout << endl << ">> ";
     char input;
-    cin >> input;
+    cin.get(input);
 
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
         char idx = 'A';
@@ -811,7 +951,7 @@ bool Dungeon::drink_potion(){
         else cout << "Drink the unidentified " << potions.front()->description << " potion? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
 
 
-        cin >> input;
+        getline(cin, input);
         if(input == "y"){
             drink_potion(0);
             return true;
@@ -832,7 +972,7 @@ bool Dungeon::drink_potion(){
                 idx++;
             }
             cout << endl << ">> ";
-            cin >> inputChar;
+            cin.get(inputChar);
         } while((unsigned)(inputChar - 'A') > potions.size());
 
         drink_potion(inputChar-'A');
@@ -840,11 +980,33 @@ bool Dungeon::drink_potion(){
     }
 }
 
+//TODO check if item is already equipped, being careful of items with duplicate names (ie equipping a second offhand shortsword is OK)
+void Dungeon::equip_item(string input){
+    Object* to_equip = NULL;
+
+    for(vector<Weapon*>::iterator it = PC.weapons.begin(); it != PC.weapons.end(); ++it){
+        if(contains(input, (*it)->name())){
+            to_equip = *it;
+        }
+    }
+
+    for(vector<Object*>::iterator it = PC.objects.begin(); it != PC.objects.end(); ++it){
+        if(contains(input, (*it)->name())){
+            to_equip = *it;
+        }
+    }
+
+    if(to_equip == NULL){
+        cout << "Either you don't have that in your inventory, or it's not an equippable item." << endl;
+    } else {
+        PC.equip(to_equip);
+    }
+}
 
 bool Dungeon::getCommand() {
     cout << ">> ";
     string input;
-    cin >> input;
+    getline(cin, input);
     cout << endl;
     if(input == "exit"){
         return false;
@@ -854,47 +1016,50 @@ bool Dungeon::getCommand() {
     } else if (input == "rest"){
         rest();
         return true;
-    } else if(input == "look" || input == "examine" || input == "inspect"){
-        look();
+    } else if(contains(input, "look")|| contains(input, "examine") || contains(input,"inspect")){
+        look(input);
         return true;
     } else if(input == "status"){
         PC.print_status();
         return true;
 
     //combat
-    } else if(input == "melee"){
-        cin >> input; //get monster name
-        if(input == "attack") cin >> input;
-        if(!combat(input, false)) return true;
-    } else if(input == "ranged"){
-        cin >> input; //get monster name
-        if(input == "attack") cin >> input;
-        if(!combat(input, true)) return true;
-    } else if(input == "attack" || input == "fight"){
-        if(!combat()) return true;
+    } else if(contains(input, "attack")) {
+        if(!combat(input)) return true;
+//    } else if(input == "melee"){
+//        cin >> input; //get monster name
+//        if(input == "attack") cin >> input;
+//        if(!combat(input, false)) return true;
+//    } else if(input == "ranged"){
+//        cin >> input; //get monster name
+//        if(input == "attack") cin >> input;
+//        if(!combat(input, true)) return true;
+//    } else if(input == "attack" || input == "fight"){
+//        if(!combat()) return true;
 
-    } else if(input == "search" || input == "loot"){
-        searching();
+    } else if(contains(input,"search") || contains(input, "loot")){
+        searching(input);
     } else if(input == "inventory"){
         print_inventory();
         return true;
-    } else if(input == "drink" || input == "potion"){
-        if(input == "drink") cin >> input;
+    } else if(contains(input, "drink") || contains(input, "potion")){
         if(!drink_potion()) return true;
 
-    } else if(input == "identify"){
-        cin >> input;
+    } else if(contains(input, "identify")){
         if(loot.empty() && potions.empty()) cout << "Sorry, not sure what you're referring to there." << endl << endl;
         else cout << "Inspecting things in that much detail takes a while. Maybe you should rest for a bit?" << endl << endl;
         return true;
-    } else if(input == "cast" || input == "read"){
-        if(input == "read") cin >> input; //if they type 'read scroll'
+    } else if(contains(input, "cast") || contains(input, "read")){
         if(!cast_spell()) return true;
 
-    //switch rooms
-    } else if(input == "open" || input == "go"){
-        parse_open_door();
+    } else if(contains(input, "equip")){
+        equip_item(input);
         return true;
+
+    //switch rooms
+//    } else if(input == "open" || input == "go"){
+//        parse_open_door();
+//        return true;
     } else {
         parse_open_door(input);
         return true;
@@ -905,7 +1070,7 @@ bool Dungeon::getCommand() {
     ///TODO robustness here
     ///TODO FIXME multiple monster support
         cout << "The " << cur_room->get_active_monster() << " turns to attack you!" << endl;
-        cur_room->get_active_monster_char()->melee_attack(&PC);
+        cur_room->get_active_monster_char()->generic_attack(&PC);
     }
 
     if(!PC.is_alive()) return false;
@@ -915,6 +1080,7 @@ bool Dungeon::getCommand() {
 void Dungeon::run() {
     cur_room->printInitialDescription(0);
     while (in_dungeon && getCommand()){
+        print_map();
         check_completion();
     }
     cout << "Thanks for playing!" << endl;

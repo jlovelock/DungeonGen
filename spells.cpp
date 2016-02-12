@@ -34,7 +34,7 @@ void Spell::magic_missile(){
 
     attack_roll_required = false;
     save_allowed = false;
-    save_stat = 0;
+    save_stat = "";
 
     num_damage_dice = 3;
     damage_die = 4;
@@ -51,7 +51,7 @@ void Spell::fire_bolt(){
 
     attack_roll_required = true;
     save_allowed = false;
-    save_stat = 0;
+    save_stat = "";
 
     num_damage_dice = 1;
     damage_die = 10;
@@ -69,7 +69,7 @@ void Spell::scorching_ray(){
 
     attack_roll_required = true;
     save_allowed = false;
-    save_stat = 0;
+    save_stat = "";
 
     num_damage_dice = 6;
     damage_die = 6;

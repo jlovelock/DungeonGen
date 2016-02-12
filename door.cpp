@@ -141,11 +141,18 @@ int Door::break_DC(){
     else return 20;
 }
 
-string Door::getWall(Room* rm){
+string Door::getWallString(Room* rm){
     if(firstWall == NORTH) return isFirstRoom(rm) ? "north" : "south";
     else if(firstWall == SOUTH) return isFirstRoom(rm) ? "south" : "north";
     else if(firstWall == EAST) return isFirstRoom(rm) ? "east" : "west";
     else return isFirstRoom(rm) ? "west" : "east";
+}
+
+int Door::getWall(Room* rm){
+    if(firstWall == NORTH) return isFirstRoom(rm) ? NORTH : SOUTH;
+    else if(firstWall == SOUTH) return isFirstRoom(rm) ? SOUTH : NORTH;
+    else if(firstWall == EAST) return isFirstRoom(rm) ? EAST : WEST;
+    else return isFirstRoom(rm) ? WEST : EAST;
 }
 
 bool Door::isFirstRoom(Room* rm){

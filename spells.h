@@ -1,5 +1,6 @@
 #include <character.h>
 #include <defines.h>
+#include <string>
 
 #ifndef SPELLS_H
 #define SPELLS_H
@@ -15,11 +16,11 @@ class Spell {
     int level; //cantrips are 0
     int range; //in feet
     int duration; //in rounds: 1 round = 6 seconds
-    int casting_time;
-    int casting_stat;
+    int casting_time; //#define'd as ACTION, BONUS_ACTION, or REACTION
+    std::string casting_stat; //"INT", "WIS", or "CHA"
 
     bool save_allowed;
-    int save_stat; //#defined as STR_STAT, etc
+    std::string save_stat;
 
     bool attack_roll_required;
 

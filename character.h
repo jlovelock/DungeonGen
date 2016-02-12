@@ -5,12 +5,17 @@
 #include <defines.h>
 #include <cstdlib>
 #include <spells.h>
+#include <weapon.h>
+#include <vector>
 #include <map>
+#include <objects.h>
+#include <iostream>
 
 class Character {
     friend class Dungeon;
     friend class Room;
     friend class Spell;
+    friend class Object;
 
     ///TODO change these as the character moves around!
     int xPos, yPos;
@@ -24,6 +29,10 @@ class Character {
     int level;
     int prof;
     int speed;
+
+    //equipped stuff
+    Object *main_hand, *off_hand;
+    void equip(Object*, bool equip_to_offhand=false);
 
     //Attributes
     std::map<std::string, int> attribute_scores;
@@ -42,19 +51,37 @@ class Character {
     bool is_trained(std::string skill){ return skill_mods[skill] != attribute_mods[base_attribute(skill)]; }
 
     //Melee attacks
-    std::string melee_weapon;
-    int melee_atk_mod, melee_weapon_die, melee_dmg_bonus;
-    int melee_atk_roll(){ return d20()+melee_atk_mod; }
-    int melee_dmg(){ return rand()%melee_weapon_die+1+melee_dmg_bonus; }
+    int distance_to(Character* target);
+    std::vector<Weapon*> weapons; //in inventory
+    std::vector<Object*> objects;
+    std::vector<std::string> weapon_proficiencies; //"martial", "simple", and/or specific weapon names
 
-    //Ranged attacks
-    std::string ranged_weapon;
-    int ranged_atk_mod, ranged_weapon_die, ranged_dmg_bonus;
-    int ranged_atk_roll(){ return d20()+ranged_atk_mod; }
-    int ranged_dmg(){ return rand()%ranged_weapon_die+1+ranged_dmg_bonus; }
+    Weapon* weapon_select(Character* target);
+
+    int attack_roll(Weapon* w){
+        return w->attack_roll(this);
+    }
+
+    ///TODO add class features &etc
+    int damage(Weapon* w){
+        return w->damage_roll(this);
+    }
+
+//    std::string melee_weapon;
+//    int melee_atk_mod, melee_weapon_die, melee_dmg_bonus;
+//    int melee_atk_roll(){ return d20()+melee_atk_mod; }
+//    int melee_dmg(){ return rand()%melee_weapon_die+1+melee_dmg_bonus; }
+//
+//    //Ranged attacks
+//    std::string ranged_weapon;
+//    int ranged_atk_mod, ranged_weapon_die, ranged_dmg_bonus;
+//    int ranged_atk_roll(){ return d20()+ranged_atk_mod; }
+//    int ranged_dmg(){ return rand()%ranged_weapon_die+1+ranged_dmg_bonus; }
 
     //Misc combat stats
-    int AC;
+    std::vector<std::string> fighting_styles;
+    int _AC;
+    int AC();
     int max_hp, cur_hp, temp_hp;
     int hit_dice, hit_die_size;
     int init;
@@ -62,9 +89,10 @@ class Character {
 
     //Combat functions
     void attack(Character*, int, int);
-    void melee_attack(Character*);
-    void ranged_attack(Character*);
-    bool is_hit(int attack_roll){ return attack_roll >= AC; }
+    void generic_attack(Character*);
+//    void melee_attack(Character*);
+//    void ranged_attack(Character*);
+    bool is_hit(int attack_roll){ return attack_roll >= AC(); }
     void take_damage(int dmg);
     bool is_alive(){ return cur_hp > 0; }
 
@@ -73,7 +101,7 @@ class Character {
     bool second_wind_available;
 
     //Spellcasting
-    int casting_stat;
+    std::string casting_stat;
     int spell_attack();
     int spell_save_DC();
     void cast(Spell* spell, Character* target);
@@ -109,7 +137,10 @@ class Character {
     public:
         Character();
         void printCharacterSheet();
-
+        bool proficient_with(std::string weapon_type);
+        int attribute_mod(std::string att){ return attribute_mods[att]; }
+        int proficiency_bonus(){ return prof; }
+        bool has_free_hand(){ return main_hand == NULL || off_hand == NULL; }
 };
 
 

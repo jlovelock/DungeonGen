@@ -15,6 +15,7 @@ class Room {
     Character* monsters[MAX_MONSTERS];
     bool has_monsters();
     std::string get_active_monster();
+    std::string get_monster();
     Character* get_monster(std::string name);
     Character* get_active_monster_char();
 
@@ -38,10 +39,19 @@ class Room {
     bool within(int x, int y);
     bool withinX(int);
     bool withinY(int);
-    void shift(int amt, bool dim_x);
-    void shrink(int amt, bool dim_x);
+    bool bordering(int x, int y);
+    void shift(int amt, bool dim_x, bool rev=false);
+    //void shrink(int amt, bool dim_x);
+    void shrink(unsigned amt, int const_wall);
+    void remove_connections(int wall);
     void adjustPosition(Room*);
     void linkDoors(Room* adjacent, int wall);
+    int find_overwrite_index(bool can_delete=true);
+
+    bool issue_east(Room*, int);
+    bool issue_west(Room*, int);
+    bool issue_north(Room*, int);
+    bool issue_south(Room*, int);
 
     ///TODO add more descriptions
     std::string shape, purpose_full, purpose_short;

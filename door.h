@@ -31,7 +31,8 @@ class Door {
     bool isFirstRoom(Room*);
 
     Door(Room* room, int entrance);
-    std::string getWall(Room*);
+    std::string getWallString(Room*);
+    int getWall(Room*);
     Door(Room* room, int _wall, bool passage, bool main);
     void initialize_door(Room* room, int _wall, bool passage, bool main);
     int break_DC();
