@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <character.h>
+#include <defines.h>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ Character::Character(){
     ///@TODO: Class selection
     cout << "New character: default or custom? ";
     string input;
-    getline(cin, input);
+    read(input);
     if(input == "custom"){
         cout << "Custom character selected." << endl;
         standard_array();
@@ -73,7 +74,8 @@ void Character::standard_array(){
     int scores[] = {15, 14, 13, 12, 10, 8};
     do {
         cout << "\tChoose which stat to put your " << scores[i] << " into: ";
-        getline(cin, input);
+        read(input);
+        convert_to_uppercase(input);
 
         if(input == "STR" || input == "DEX" || input == "CON" || input == "INT" || input == "WIS" || input == "CHA"){
             if(attribute_scores[input] == 0) attribute_scores[input] = scores[i];
@@ -82,7 +84,7 @@ void Character::standard_array(){
                 continue;
             }
         } else {
-            cout << "Stat not recognized. (Did you enter it in all caps?)" << endl;
+            cout << "Stat not recognized: re-enter?" << endl;
             continue;
         }
         i++;
@@ -141,6 +143,8 @@ bool Character::train(string skill){
 }
 
 string Character::base_attribute(string skill){
+    convert_to_uppercase(skill);
+
     if(
       skill == "ATHLETICS"
     )
@@ -200,7 +204,7 @@ void Character::selectRace(){
 
     cout << "\tRace: ";
     string input;
-    getline(cin, input);
+    read(input);
 
     do {
         if(input == "dwarf"){
@@ -210,7 +214,7 @@ void Character::selectRace(){
             cout << "\tDwarf selected. Choose a subrace: hill (+1 WIS, +1hp/lvl) or mountain (+2 STR)." << endl;
             do {
                 cout << "\tSubrace: ";
-                getline(cin, input);
+                read(input);
 
                 if(input == "hill"){
                     cout << "\tHill dwarf selected." << endl;
@@ -231,7 +235,7 @@ void Character::selectRace(){
             cout << "\tElf selected. Choose a subrace: high (+1 INT, +1 wizard cantrip, 30ft speed) or wood (+1 wis, 35ft speed)." << endl;
             do {
                 cout << "\tSubrace: ";
-                getline(cin, input);
+                read(input);
 
                 if(input == "high"){
                     cout << "\tHigh elf selected." << endl;

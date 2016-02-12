@@ -81,7 +81,7 @@ void Character::fighter(){
     cout << "4) ARMOR: Choose chainmail or leather. (Leather armor comes with a longbow.)" << endl;
     do {
         cout << "\tArmor choice: ";
-        getline(cin, input);
+        read(input);
         if(input == "chainmail"){
             _AC = 16;
             Weapon* w = new Weapon("hand crossbow");
@@ -102,7 +102,7 @@ void Character::fighter(){
     cout << "6) WEAPON / SHIELD: Choose two-handed, one-handed, or dual-wielded weapon(s)." << endl;
     do {
         cout << "\ttwo-handed, one-handed, or dual: ";
-        getline(cin, input);
+        read(input);
         if(input == "two-handed"){
             cout << "\tGreataxe selected." << endl;
             Weapon* w = new Weapon("greataxe");
@@ -113,7 +113,7 @@ void Character::fighter(){
             break;
         } else if(input == "one-handed"){
             cout << "\tFinesse weapon (dex to wield)? [y/n] ";
-            getline(cin, input);
+            read(input);
             if(input == "y"){
                cout << "\tRapier selected." << endl;
                Weapon* w = new Weapon("rapier");
@@ -131,7 +131,7 @@ void Character::fighter(){
 //                melee_weapon_die = 8;
             }
             cout << "\tShield? [y/n] ";
-            getline(cin, input);
+            read(input);
             if(input == "y"){
                 cout << "\tShield added." << endl;
                 Object* s = new Object("shield");
@@ -141,7 +141,7 @@ void Character::fighter(){
             break;
         } else if(input == "dual"){
             cout << "\tFinesse weapons (dex to wield)? [y/n] ";
-            getline(cin, input);
+            read(input);
             if(input == "y"){
 //                melee_weapon = "shortswords";
                 Weapon* s1 = new Weapon("shortsword");
@@ -175,7 +175,7 @@ void Character::fighter(){
 
     do {
         cout << "\tStyle: ";
-        getline(cin, input);
+        read(input);
 
         if(input == "archery" || input == "defense" || input == "dueling") {
             fighting_styles.push_back(input);
@@ -198,16 +198,16 @@ void Character::fighter(){
 }
 
 
-
 void Character::fighter_skills(){
     string input;
 
     int skills = 2;
     cout << "3) SKILLS: ";
-    cout << "Select from ACROBATICS, ANIMAL HANDLING, ATHLETICS, HISTORY, INSIGHT, INTIMIDATION, PERCEPTION, or SURVIVAL (all-caps only). " << endl;
+    cout << "Select from acrobatics, animal handling, athletics, history, insight, intimidation, perception, or survival. " << endl;
     while(skills > 0){
         cout << "\tChoose " << skills << " more: ";
-        getline(cin, input);
+        read(input);
+        convert_to_uppercase(input);
         if(train(input)) skills--;
     }
 }

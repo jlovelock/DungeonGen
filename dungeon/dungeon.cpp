@@ -5,10 +5,6 @@
 
 using namespace std;
 
-bool contains(string to_search, string keyword){
-    return to_search.find(keyword) != string::npos;
-}
-
 Dungeon::Dungeon(){
     cur_id = 1;
     cur_room = new Room();
@@ -47,10 +43,10 @@ void Dungeon::check_completion(){
 
 bool Dungeon::useDoor(Door* d) {
 
+    string input;
     if(d->locked){
         cout << "That door is locked. Try to lockpick, ram, or leave? ";
-        string input;
-        getline(cin, input);
+        read(input);
         if (input == "lockpick") {
             if(PC.skill_check("THIEVES TOOLS") > LOCKPICK_DC){
                 d->locked = false;
@@ -78,8 +74,7 @@ bool Dungeon::useDoor(Door* d) {
         d->barred = false;
     } else if(d->barred) {
         cout << "Something is blocking it from opening. Try to ram, or leave? ";
-        string input;
-        getline(cin, input);
+        read(input);
         if(input == "ram"){
             if(PC.skill_check("ATHLETICS") > d->break_DC()){
                 cout << "You successfully break down the door." << endl << endl;
@@ -93,9 +88,8 @@ bool Dungeon::useDoor(Door* d) {
 
     } else if(d->main_exit) {
         cout << "This leads outside? Leave the dungeon? [y/n] ";
-        char input;
-        cin.get(input);
-        if(input == 'y'){
+        read(input);
+        if(input == "y"){
             cout << "You have left the dungeon!" << endl;
             in_dungeon = false;
         }
@@ -186,9 +180,9 @@ bool Dungeon::parse_open_door(string input){
         cout << endl << ">> ";
 
         int doorIndex;
-        string tmp;
-        getline(cin, tmp);
-        doorIndex = atoi(tmp.c_str());
+        string num;
+        read(num);
+        doorIndex = atoi(num.c_str());
 
         for(int i = 0; i < MAX_DOORS && cur_room->doors[i] != NULL; i++){
             if(cur_room->doors[i]->getWallString(cur_room) == input && cur_room->doors[i]->secret == false){
@@ -205,7 +199,7 @@ bool Dungeon::parse_open_door(string input){
 
 bool Dungeon::parse_open_door(){
     string input;
-    getline(cin, input);
+    read(input);
     return parse_open_door(input);
 
 }
@@ -359,7 +353,8 @@ bool Dungeon::searching(string input){
 bool Dungeon::getCommand() {
     cout << ">> ";
     string input;
-    getline(cin, input);
+    //getline(cin, input);
+    read(input);
     cout << endl;
     if(input == "exit"){
         return false;

@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 void Character::equip(Object* o, bool equip_to_offhand){
     if(o->is_two_handed()){
         if(main_hand == NULL && off_hand == NULL){
@@ -27,7 +26,7 @@ void Character::equip(Object* o, bool equip_to_offhand){
             cout << "? [y/n]" << endl;
 
             string input;
-            getline(cin, input);
+            read(input);
             if(input == "y") {
                 cout << o->name() << " equipped." << endl;
                 main_hand = o;
@@ -53,7 +52,7 @@ void Character::equip(Object* o, bool equip_to_offhand){
             cout << o->name() << " and " << main_hand->name() << " equipped (main hand)." << endl;
             cout << "Which in main hand? " << endl;
             string input;
-            getline(cin, input);
+            read(input);
             while(true){
                 if(input == o->name()){
                     off_hand = main_hand;
@@ -80,7 +79,7 @@ void Character::equip(Object* o, bool equip_to_offhand){
 
             string input;
             cout << endl << ">> ";
-            getline(cin, input);
+            read(input);
             while(true){
                 if(input == main_hand->name()){
                     cout << main_hand->name() << " unequipped, and " << o->name() << " equipped." << endl << endl;
@@ -145,7 +144,7 @@ void Character::special_action(){
     string input;
     do {
         cout << ">> ";
-        getline(cin, input);
+        read(input);
 
         if(input == "secondwind"){
             if(!second_wind_available){
@@ -188,7 +187,7 @@ void Character::short_rest(){
         while(true){
             cout << ">> ";
             string tmp;
-            getline(cin, tmp);
+            read(tmp);
             num = atoi(tmp.c_str());
             if(num > hit_dice)
                 cout << "You do not have that many hit dice remaining. Please re-enter a number." << endl;

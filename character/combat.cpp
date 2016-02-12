@@ -33,7 +33,7 @@ Weapon* Character::weapon_select(Character* target){
 
             cout << endl << ">> ";
             string choice;
-            getline(cin, choice);
+            read(choice);
             map<string, Weapon*>::iterator w = choice_matrix.find(choice);
             if(w == choice_matrix.end()) {
                 cout << "Invalid selection. Your choices are as follows: " << endl;

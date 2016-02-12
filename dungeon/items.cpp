@@ -357,7 +357,7 @@ bool Dungeon::drink_potion(){
         else cout << "Drink the unidentified " << potions.front()->description << " potion? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
 
 
-        getline(cin, input);
+        read(input);
         if(input == "y"){
             drink_potion(0);
             return true;

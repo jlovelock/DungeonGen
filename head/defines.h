@@ -15,8 +15,8 @@ int opposite(int wall);
 int left(int wall);
 int right(int wall);
 bool contains(std::string to_search, std::string keyword);
-
-
+void convert_to_uppercase(std::string& input);
+void convert_to_lowercase(std::string& input);
 
 static const char* skargs[] = {
     "ATHLETICS",
@@ -41,12 +41,9 @@ static const char* skargs[] = {
 
 static const std::vector<std::string> skills_list(skargs, skargs+sizeof(skargs)/sizeof(skargs[0]));
 
-static bool is_skill(std::string s){
-    for(unsigned i = 0; i < skills_list.size(); i++){
-        if(skills_list[i] == s) return true;
-    }
-    return false;
-}
+bool is_skill(std::string s);
+
+void read(std::string& input);
 
 #define GRID_SIZE 30
 
