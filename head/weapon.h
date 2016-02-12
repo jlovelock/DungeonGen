@@ -3,7 +3,6 @@
 #define WEAPON_H
 
 #include <string>
-#include <character.h>
 #include <objects.h>
 #include <iostream>
 

@@ -1,4 +1,3 @@
-#include <character.h>
 #include <defines.h>
 #include <string>
 

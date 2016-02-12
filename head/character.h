@@ -2,14 +2,15 @@
 #define CHARACTER_H
 
 #include <string>
-#include <defines.h>
 #include <cstdlib>
-#include <spells.h>
-#include <weapon.h>
 #include <vector>
 #include <map>
-#include <objects.h>
 #include <iostream>
+
+#include <defines.h>
+#include <objects.h>
+#include <spells.h>
+#include <weapon.h>
 
 class Character {
     friend class Dungeon;

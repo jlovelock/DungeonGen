@@ -7,6 +7,7 @@
 #define DUNGEON_H
 
 class Dungeon{
+    friend class Tests;
     Character PC;
     int cur_id;
     Room* cur_room; //where the player is
@@ -19,6 +20,8 @@ class Dungeon{
 
     void adjust_room_position(Room* rm);
     void print_map();
+    void add_room(Door*, bool);
+    void add_room(int wall, int x, int y);
 
     //treasure
     void rollIndividualTreasure(std::string);

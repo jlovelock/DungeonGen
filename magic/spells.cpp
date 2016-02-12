@@ -1,7 +1,7 @@
-#include <spells.h>
-#include <character.h>
-#include <defines.h>
 
+#include <stdlib.h>
+#include <spells.h>
+#include <defines.h>
 
 
 int Spell::damage(){

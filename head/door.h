@@ -10,6 +10,7 @@ class Door {
 
     friend class Room;
     friend class Dungeon;
+    friend class Tests;
     std::string material;
     bool locked;
     bool secret;
@@ -33,7 +34,7 @@ class Door {
     Door(Room* room, int entrance);
     std::string getWallString(Room*);
     int getWall(Room*);
-    Door(Room* room, int _wall, bool passage, bool main);
+    Door(Room* room, int _wall, bool passage, bool main=false);
     void initialize_door(Room* room, int _wall, bool passage, bool main);
     int break_DC();
 

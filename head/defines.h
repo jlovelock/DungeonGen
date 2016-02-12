@@ -48,7 +48,7 @@ static bool is_skill(std::string s){
     return false;
 }
 
-#define GRID_SIZE 40
+#define GRID_SIZE 30
 
 #define NORTH 100
 #define SOUTH 200

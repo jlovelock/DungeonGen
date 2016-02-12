@@ -9,6 +9,7 @@
 class Room {
     friend class Dungeon;
     friend class Door;
+    friend class Tests;
     Room* next; //linked list, appends whenever a room is generated; used in algorithms that traverse all rooms
 
     //baddies!
@@ -64,14 +65,18 @@ class Room {
 
     Room(int, int, bool);
     Room();
+    Room(int _id, Door* d, int x, int y, bool is_large=false); //For testing only
     Room(int _id, Door* d, bool passage);
     void printInitialDescription(int);
     void printDescription(int);
-    void printFullDescription();
+    void printFullDescription(int doorNum=0); ///@TODO doorNum should be the entrance door for initial room
 
     void generateChamber(Door*);
     void generatePassage(Door*);
     void addSecretDoor(int, int);
+
+    void add_door(int);
+    void add_exits(int, int[]);
 
 };
 

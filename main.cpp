@@ -1,19 +1,18 @@
 #include <iostream>
-#include <room.h>
 #include <cstdlib>
 #include <time.h>
+
 #include <dungeon.h>
-#include <string>
-#include <character.h>
-#include <vector>
+#include <tests.h>
 
 using namespace std;
 
 
-
-
 int main(){
     srand(time(NULL));
+
+//    Tests t;
+//    t.unbar_door();
 
     Dungeon d;
     d.run();
