@@ -43,3 +43,11 @@ bool is_skill(std::string s){
     }
     return false;
 }
+
+//Precondition: list MUST be terminated with an empty string!!
+bool in_list(string key, string arr[]){
+    for(int i = 0; arr[i] != ""; i++){
+        if(key == arr[i]) return true;
+    }
+    return false;
+}

@@ -47,6 +47,10 @@ class Dungeon{
     void check_completion();
     bool completed_known;
 
+    bool use_locked_door(Door*);
+    bool use_barred_door(Door*);
+    bool can_open(Door*);
+
 public:
     Dungeon();
     ~Dungeon();

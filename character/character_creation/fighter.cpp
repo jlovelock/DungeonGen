@@ -12,12 +12,7 @@ void Character::default_fighter(){
     PC_class = "fighter";
 
     //saves
-    save_mods["STR"] = attribute_mods["STR"] + prof;
-    save_mods["DEX"] = attribute_mods["DEX"];
-    save_mods["CON"] = attribute_mods["CON"] + prof;
-    save_mods["INT"] = attribute_mods["INT"];
-    save_mods["WIS"] = attribute_mods["WIS"];
-    save_mods["CHA"] = attribute_mods["CHA"];
+    train_saves("STR", "CON");
 
     //hp
     max_hp = 10+attribute_mods["CON"];
@@ -48,12 +43,7 @@ void Character::fighter(){
     PC_class = "fighter";
 
     //saves
-    save_mods["STR"] = attribute_mods["STR"] + prof;
-    save_mods["DEX"] = attribute_mods["DEX"];
-    save_mods["CON"] = attribute_mods["CON"] + prof;
-    save_mods["INT"] = attribute_mods["INT"];
-    save_mods["WIS"] = attribute_mods["WIS"];
-    save_mods["CHA"] = attribute_mods["CHA"];
+    train_saves("STR", "CON");
 
     //hp
     max_hp = 10+attribute_mods["CON"];

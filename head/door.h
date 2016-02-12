@@ -1,4 +1,5 @@
 #include <room.h>
+#include <character.h>
 
 #ifndef DOOR_H
 #define DOOR_H
@@ -37,6 +38,9 @@ class Door {
     Door(Room* room, int _wall, bool passage, bool main=false);
     void initialize_door(Room* room, int _wall, bool passage, bool main);
     int break_DC();
+
+    bool pick_lock(Character*);
+    bool break_down(Character*);
 
 };
 

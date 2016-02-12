@@ -31,9 +31,11 @@ void Dungeon::print_map(){
         }
     }
 
-    int xMid = cur_room->westEdge+cur_room->xDim/2;
-    int yMid = cur_room->southEdge+cur_room->yDim/2;
-    grid[xMid/5][yMid/5] = HERE;
+//    int xMid = cur_room->westEdge+cur_room->xDim/2;
+//    int yMid = cur_room->southEdge+cur_room->yDim/2;
+//    grid[xMid/5][yMid/5] = HERE;
+
+    grid[PC.xPos/5][PC.yPos/5] = HERE;
 
     for(int i = GRID_SIZE-1; i >= 0; i--){
         for(int j = 0; j < GRID_SIZE; j++){

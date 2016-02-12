@@ -56,7 +56,7 @@ Room::Room(){
         default: ///TODO add the rest of the options!
             shape = "square";
             xDim = 20; yDim = 20;
-            setEdgeCoords(SOUTH, 50,50); //the coordinate of the exit door
+            setEdgeCoords(SOUTH, START_X, START_Y); //the coordinate of the exit door
 
             doors[0] = new Door(this, SOUTH, false, true);
             doors[1] = new Door(this, EAST, true, false);

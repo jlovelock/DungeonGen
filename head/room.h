@@ -78,6 +78,8 @@ class Room {
     void add_door(int);
     void add_exits(int, int[]);
 
+    int get_door_id(Door* d);
+
 };
 
 #endif // ROOM_H

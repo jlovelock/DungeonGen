@@ -7,6 +7,14 @@
 using namespace std;
 
 
+///@TODO: get doors properly spaced out along walls, so this works as expected
+int Room::get_door_id(Door* d){
+    for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
+        if(doors[i]->xPos == d->xPos && doors[i]->yPos == d->yPos) return i;
+    }
+    return -1;
+}
+
 Room::~Room(){
     for(int i = 0; i < MAX_DOORS; i++){
         if(doors[i] != NULL){

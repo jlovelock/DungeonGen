@@ -10,12 +10,24 @@
 
 using namespace std;
 
+
+void Character::train_saves(string save1, string save2){
+    convert_to_uppercase(save1); convert_to_uppercase(save2);
+    string att_list[6] = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
+    for(int i = 0; i < 6; i++){
+        save_mods[att_list[i]] = attribute_mods[att_list[i]];
+        if(att_list[i] == save1 || att_list[i] == save2){
+            save_mods[att_list[i]] += prof;
+        }
+    }
+}
+
 ///**************************************************************************************///
 ///*********************************  INITIALIZERS  *************************************///
 ///**************************************************************************************///
 
 Character::Character(){
-    xPos = 0; yPos = 0; ///TODO set properly
+    xPos = START_X; yPos = START_Y+5;
     is_monster = false;
     in_melee = false;
     level = 1;

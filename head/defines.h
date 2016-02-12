@@ -17,6 +17,7 @@ int right(int wall);
 bool contains(std::string to_search, std::string keyword);
 void convert_to_uppercase(std::string& input);
 void convert_to_lowercase(std::string& input);
+bool in_list(std::string, std::string[]);
 
 static const char* skargs[] = {
     "ATHLETICS",
@@ -78,5 +79,8 @@ void read(std::string& input);
 #define ACTION 222
 #define BONUS_ACTION 333
 #define REACTION 444
+
+#define START_X 50
+#define START_Y 50
 
 #endif // DEFINES_H

@@ -38,7 +38,6 @@ class Character {
     //Attributes
     std::map<std::string, int> attribute_scores;
     std::map<std::string, int> attribute_mods;
-    int attribute_chk(std::string att){ return d20() + attribute_mods[att]; }
 
     //Saving throws
     std::map<std::string, int> save_mods;
@@ -47,7 +46,6 @@ class Character {
     //Skills
     std::map<std::string, int> skill_mods;
     std::string base_attribute(std::string skill);
-    int skill_check(std::string skill){ return d20()+skill_mods[skill]; }
     bool train(std::string skill);
     bool is_trained(std::string skill){ return skill_mods[skill] != attribute_mods[base_attribute(skill)]; }
 
@@ -126,6 +124,8 @@ class Character {
     void selectRace();
     void levelup();
 
+    void train_saves(std::string, std::string);
+
     //monsters
     Character(double CR);
     void set_attributes(int, int, int, int, int, int);
@@ -142,6 +142,8 @@ class Character {
         int attribute_mod(std::string att){ return attribute_mods[att]; }
         int proficiency_bonus(){ return prof; }
         bool has_free_hand(){ return main_hand == NULL || off_hand == NULL; }
+        int skill_check(std::string skill){ return d20()+skill_mods[skill]; }
+        int attribute_chk(std::string att){ return d20() + attribute_mods[att]; }
 };
 
 
