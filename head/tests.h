@@ -4,7 +4,9 @@
 
 class Tests {
 public:
-void unbar_door();
+    Tests();
+    ~Tests();
+    void unbar_door();
 
 };
 

@@ -321,7 +321,7 @@ bool Dungeon::cast_spell(){
         return false;
     }
 
-    cout << endl << ">> ";
+    cout << endl;
     char input;
     cin.get(input);
 
@@ -377,7 +377,7 @@ bool Dungeon::drink_potion(){
                 else cout << "unidentified " << (*it)->description << " potion" << endl;
                 idx++;
             }
-            cout << endl << ">> ";
+            cout << endl;
             cin.get(inputChar);
         } while((unsigned)(inputChar - 'A') > potions.size());
 

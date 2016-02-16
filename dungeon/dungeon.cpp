@@ -187,12 +187,11 @@ bool Dungeon::searching(string input){
 
 
 bool Dungeon::getCommand() {
-    cout << ">> ";
     string input;
     //getline(cin, input);
     read(input);
     cout << endl;
-    if(input == "exit"){
+    if(contains(input, "new") || contains(input, "restart")){
         return false;
     } else if(input == "special"){
         PC.special_action();
@@ -268,5 +267,5 @@ void Dungeon::run() {
         print_map();
         check_completion();
     }
-    cout << "Thanks for playing!" << endl;
+    cout << "Restarting with a new dungeon..." << endl;
 }

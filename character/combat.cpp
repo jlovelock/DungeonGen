@@ -4,10 +4,15 @@ using namespace std;
 
 
 int Character::AC(){
+    int modifiers = 0;
     if((main_hand && main_hand->name() == "shield") || (off_hand && off_hand->name() == "shield"))
-        return _AC+2;
-    else
-        return _AC;
+        modifiers +=2;
+
+    ///@TODO they should only get this bonus when wearing armor
+    if(has_fighting_style("defense"))
+        modifiers +=1;
+
+    return _AC;
 }
 
 Weapon* Character::weapon_select(Character* target){
@@ -31,7 +36,7 @@ Weapon* Character::weapon_select(Character* target){
                 }
             }
 
-            cout << endl << ">> ";
+            cout << endl;
             string choice;
             read(choice);
             map<string, Weapon*>::iterator w = choice_matrix.find(choice);

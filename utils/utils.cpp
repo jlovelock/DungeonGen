@@ -32,8 +32,14 @@ void convert_to_uppercase(string& input){
 }
 
 void read(string& input){
+    cout << endl << ">> ";
     getline(cin, input);
     convert_to_lowercase(input);
+
+    if(contains(input, "exit") || contains(input, "quit")){
+        cout << endl << "Thanks for playing!" << endl;
+        exit(EXIT_SUCCESS);
+    }
 }
 
 bool is_skill(std::string s){
@@ -47,7 +53,7 @@ bool is_skill(std::string s){
 //Precondition: list MUST be terminated with an empty string!!
 bool in_list(string key, string arr[]){
     for(int i = 0; arr[i] != ""; i++){
-        if(key == arr[i]) return true;
+        if(contains(key, arr[i])) return true;
     }
     return false;
 }

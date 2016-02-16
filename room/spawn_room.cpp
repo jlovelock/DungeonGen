@@ -147,11 +147,11 @@ void Room::set_contents(){
         has_treasure = true;
     }
 
-    ///For debugging non-monster-related stuff: remove me later!!
-    if(monsters[0] != NULL){
-        delete monsters[0];
-        monsters[0] = NULL;
-    }
+//    ///For debugging non-monster-related stuff: remove me later!!
+//    if(monsters[0] != NULL){
+//        delete monsters[0];
+//        monsters[0] = NULL;
+//    }
 
 }
 
@@ -169,7 +169,7 @@ void Room::generateChamber(Door* d){
     set_contents();
 
     ///*********DEBUG, REMOVE ME AFTER
-    has_treasure = false;
+    has_treasure = true;
 
     //set chamber size, shape, and exits
     bool is_large = false;

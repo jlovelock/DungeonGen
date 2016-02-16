@@ -31,6 +31,7 @@ void Character::default_fighter(){
     //skills
     train("PERCEPTION");
     train("ATHLETICS");
+    fighting_styles.push_back("defense");
 
     //misc
     second_wind_available = true;

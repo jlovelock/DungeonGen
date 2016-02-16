@@ -1,6 +1,15 @@
 
 #include <dungeon.h>
+#include <defines.h>
 #include <tests.h>
+
+Tests::Tests(){
+    test_mode = true;
+}
+
+Tests::~Tests(){
+    test_mode = false;
+}
 
 //Unbarring a door from the other side!
 void Tests::unbar_door(){

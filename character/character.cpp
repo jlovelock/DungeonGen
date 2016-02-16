@@ -1,11 +1,27 @@
 
 #include <iostream>
-#include <string.h>
+#include <string>
 #include <limits.h>
 #include <math.h>
 #include <character.h>
 
 using namespace std;
+
+///@TODO make sure weapon is always in main hand
+string Character::equipped_weapon_type(){
+    if(main_hand && main_hand->is_two_handed()) return "two handed";
+    else if(main_hand && main_hand->is_weapon()){
+        if(off_hand && off_hand->is_weapon()) return "dual";
+        else return "one handed";
+    } else return "none";
+}
+
+bool Character::has_fighting_style(string style){
+    for(vector<string>::iterator it = fighting_styles.begin(); it != fighting_styles.end(); ++it){
+        if((*it) == style) return true;
+    }
+    return false;
+}
 
 void Character::equip(Object* o, bool equip_to_offhand){
     if(o->is_two_handed()){
@@ -78,7 +94,7 @@ void Character::equip(Object* o, bool equip_to_offhand){
             cout << ", or cancel?" << endl;
 
             string input;
-            cout << endl << ">> ";
+            cout << endl;
             read(input);
             while(true){
                 if(input == main_hand->name()){
@@ -143,7 +159,6 @@ void Character::special_action(){
     cout << endl;
     string input;
     do {
-        cout << ">> ";
         read(input);
 
         if(input == "secondwind"){
@@ -185,7 +200,6 @@ void Character::short_rest(){
 
         int num;
         while(true){
-            cout << ">> ";
             string tmp;
             read(tmp);
             num = atoi(tmp.c_str());

@@ -19,6 +19,8 @@ void convert_to_uppercase(std::string& input);
 void convert_to_lowercase(std::string& input);
 bool in_list(std::string, std::string[]);
 
+extern bool test_mode;
+
 static const char* skargs[] = {
     "ATHLETICS",
     "ACROBATICS",

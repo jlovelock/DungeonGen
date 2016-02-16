@@ -79,6 +79,7 @@ class Character {
 
     //Misc combat stats
     std::vector<std::string> fighting_styles;
+
     int _AC;
     int AC();
     int max_hp, cur_hp, temp_hp;
@@ -144,6 +145,8 @@ class Character {
         bool has_free_hand(){ return main_hand == NULL || off_hand == NULL; }
         int skill_check(std::string skill){ return d20()+skill_mods[skill]; }
         int attribute_chk(std::string att){ return d20() + attribute_mods[att]; }
+        bool has_fighting_style(std::string);
+        std::string equipped_weapon_type();
 };
 
 

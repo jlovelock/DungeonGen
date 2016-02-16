@@ -156,12 +156,19 @@ int Weapon::base_dmg(Character* c){
 }
 
 
-///TODO implement these
 int Weapon::misc_atk_mods(Character* c){
-    return 0;
+    int sum = 0;
+    if(c->has_fighting_style("archery") && _range > 10){
+        sum += 2;
+    }
+    return sum;
 }
 int Weapon::misc_dmg_mods(Character* c){
-    return 0;
+    int sum = 0;
+    if(c->has_fighting_style("dueling") && c->equipped_weapon_type() == "one handed"){
+        sum += 2;
+    }
+    return sum;
 }
 
 int Weapon::get_attack_mod(Character* c){

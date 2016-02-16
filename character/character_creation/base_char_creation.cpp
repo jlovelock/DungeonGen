@@ -36,7 +36,7 @@ Character::Character(){
     main_hand = NULL; off_hand = NULL;
 
     ///@TODO: Class selection
-    cout << "New character: default or custom? ";
+    cout << "New character: default or custom? " << endl;
     string input;
     read(input);
     if(input == "custom"){
