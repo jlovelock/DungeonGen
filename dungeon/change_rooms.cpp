@@ -80,61 +80,16 @@ bool Dungeon::parse_open_door(string input){
         return false;
     }
 
-    int doorCopies = 0, doorNum = 0;
-    for(int i = 0; i < MAX_DOORS && cur_room->doors[i] != NULL; i++){
-        if(contains(input, cur_room->doors[i]->getWallString(cur_room)) && !cur_room->doors[i]->secret){
-            doorNum = i;
-            doorCopies++;
-        }
-    }
-    if(doorCopies == 1)
-        return useDoor(cur_room->doors[doorNum]);
-
-    else if(doorCopies > 1) {
-
-        cout << "Which instance?" << endl;
-        int instance = 0;
-        for(int i = 0; i < MAX_DOORS && cur_room->doors[i] != NULL; i++){
-            if(cur_room->doors[i]->getWallString(cur_room) == input && !cur_room->doors[i]->secret){
-                cout << "\t- " << instance++;
-
-                //print description if it leads to a room you've visited
-                if(cur_room->doors[i]->second != NULL){
-                    cout << " (leading back to the ";
-                    if(cur_room->isFirstRoom(cur_room->doors[i]))
-                        cout << cur_room->doors[i]->second->purpose_short;
-                    else
-                        cout << cur_room->doors[i]->first->purpose_short;
-                    cout << ")";
-                } else {
-                    cout << " (leading somewhere new)";
-                }
-                cout << endl;
-            }
-        }
-        cout << endl;
-
-        int doorIndex;
-        string num;
-        read(num);
-        doorIndex = atoi(num.c_str());
-
-        for(int i = 0; i < MAX_DOORS && cur_room->doors[i] != NULL; i++){
-            if(contains(input, cur_room->doors[i]->getWallString(cur_room)) && cur_room->doors[i]->secret == false){
-                if(doorIndex == 0) return useDoor(cur_room->doors[i]);
-                else doorIndex--;
-            }
-        }
-    }
-
-    cout << "There's no door along that wall." << endl;
-    return false;
-
+    return useDoor(cur_room->get_door_on_wall(input));
 }
 
 
 
 bool Dungeon::useDoor(Door* d) {
+    if(!d){
+        cout << "There's no door along that wall." << endl;
+        return false;
+    }
     if(!can_open(d)) return false;
 
     int door_num = 0;

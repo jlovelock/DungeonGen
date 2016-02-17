@@ -3,29 +3,25 @@
 #include <defines.h>
 #include <tests.h>
 
+using namespace std;
+
+ifstream testfile_input;
+
+
 Tests::Tests(){
     test_mode = true;
 }
 
 Tests::~Tests(){
     test_mode = false;
+    testfile_input.close();
 }
 
-//Unbarring a door from the other side!
-void Tests::unbar_door(){
-    Dungeon* d = new Dungeon();
-    d->add_room(NORTH, 20, 20);
-
-    d->cur_room->add_door(EAST);
-    d->cur_room->doors[1]->barred = true;
-    d->cur_room->doors[1]->barredSide = false;
-
-    d->cur_room = d->first_room;
-    d->add_room(EAST, 20, 20);
-    d->cur_room->add_door(NORTH);
-    d->add_room(NORTH, 20, 20);
-
-    d->run();
-
-    delete d;
+void Tests::init_input_file(string test_name){
+    string filename = "test\\" + test_name + ".txt";
+    testfile_input.open(filename.c_str());
+    if(!testfile_input){
+        cout << "Cannot open file \"" << test_name << ".txt\"" << endl;
+        exit(EXIT_FAILURE);
+    }
 }

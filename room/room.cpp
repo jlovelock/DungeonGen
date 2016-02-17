@@ -7,6 +7,58 @@
 using namespace std;
 
 
+Door* Room::get_door_on_wall(string input){
+    int doorCopies = 0, doorNum = 0;
+    for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
+        if(contains(input, doors[i]->getWallString(this)) && !doors[i]->secret){
+            doorNum = i;
+            doorCopies++;
+        }
+    }
+    if(doorCopies == 1)
+        return doors[doorNum];
+
+    else if(doorCopies > 1) {
+
+        cout << "Which instance?" << endl;
+        int instance = 0;
+        for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
+            if(doors[i]->getWallString(this) == input && !doors[i]->secret){
+                cout << "\t- " << instance++;
+
+                //print description of room it leads to
+                if(doors[i]->second != NULL){
+                    cout << " (leading back to the ";
+                    if(isFirstRoom(doors[i]))
+                        cout << doors[i]->second->purpose_short;
+                    else
+                        cout << doors[i]->first->purpose_short;
+                    cout << ")";
+                } else {
+                    cout << " (leading somewhere new)";
+                }
+                cout << endl;
+            }
+        }
+        cout << endl;
+
+        int doorIndex;
+        string num;
+        read(num);
+        doorIndex = atoi(num.c_str());
+
+        for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
+            if(contains(input, doors[i]->getWallString(this)) && doors[i]->secret == false){
+                if(doorIndex == 0) return doors[i];
+                else doorIndex--;
+            }
+        }
+    }
+
+    ///@TODO sanitize input / loop until a valid door # is entered by user, instead of crapping out here
+    return NULL;
+}
+
 ///@TODO: get doors properly spaced out along walls, so this works as expected
 int Room::get_door_id(Door* d){
     for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){

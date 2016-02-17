@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 int d4();
 int d6();
@@ -20,6 +21,7 @@ void convert_to_lowercase(std::string& input);
 bool in_list(std::string, std::string[]);
 
 extern bool test_mode;
+extern std::ifstream testfile_input;
 
 static const char* skargs[] = {
     "ATHLETICS",

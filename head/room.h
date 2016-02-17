@@ -12,6 +12,8 @@ class Room {
     friend class Tests;
     Room* next; //linked list, appends whenever a room is generated; used in algorithms that traverse all rooms
 
+    Door* get_door_on_wall(std::string wall);
+
     //baddies!
     Character* monsters[MAX_MONSTERS];
     bool has_monsters();
