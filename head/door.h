@@ -42,6 +42,8 @@ class Door {
     bool pick_lock(Character*);
     bool break_down(Character*);
 
+    bool within_bounds(Room*);
+
 };
 
 #endif // DOOR_H

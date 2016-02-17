@@ -4,6 +4,18 @@
 
 using namespace std;
 
+bool Door::within_bounds(Room* r){
+
+    // check x position
+    if(firstWall == NORTH || firstWall == SOUTH){
+        return xPos >= r->westEdge && xPos <= r->eastEdge;
+
+    // check y position
+    } else {
+        return yPos >= r->southEdge && yPos <= r->northEdge;
+    }
+}
+
 bool Door::pick_lock(Character* c){
     if(c->skill_check("THIEVES TOOLS") > LOCKPICK_DC){
         locked = false;

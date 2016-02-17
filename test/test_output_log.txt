@@ -88,7 +88,7 @@ You remove the bar on the door and head through.
 
 You turn back to the .
 @@ S: 70 / N: 90 / W: 40 / E: 60
-There is an opening to a corridor on the south wall (leading back to the storage room)[50,70], as well as the wooden door you entered from to the east (leading back to the ) [60,80].
+There is an opening to a corridor on the south wall (leading back to the banquet room)[50,70], as well as the wooden door you entered from to the east (leading back to the ) [60,80].
 
                               
                               
@@ -165,7 +165,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 @	- Offset: 5
 ----shifting by 5 dim_x = 0
 ## Attempting to link room 2 with room 1!
-	- CASE 2: Adding door @ index 1
+	- Easy mode: no doors to align =]
 @	- Final coords: S 40 / N 70 / W 60 / E 90
 ...done
                               

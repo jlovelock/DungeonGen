@@ -43,6 +43,7 @@ class Room {
     bool withinX(int);
     bool withinY(int);
     bool bordering(int x, int y);
+    bool bordering(Door*);
     void shift(int amt, bool dim_x, bool rev=false);
     //void shrink(int amt, bool dim_x);
     void shrink(unsigned amt, int const_wall);

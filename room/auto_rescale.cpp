@@ -222,13 +222,16 @@ void Room::linkDoors(Room* adjacent, int wall){
     vector<Door*> new_rm_doors;
     vector<Door*> adj_rm_doors;
     for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
-        if(doors[i]->firstWall == wall){
+        if(doors[i]->firstWall == wall
+           && adjacent->bordering(doors[i]->xPos, doors[i]->yPos)
+           && doors[i]->within_bounds(adjacent)){
             new_rm_doors.push_back(doors[i]);
         }
     }
     for(int i = 0; i < MAX_DOORS && adjacent->doors[i] != NULL; i++){
         if(adjacent->doors[i]->getWall(adjacent) == opposite(wall)
-           && bordering(adjacent->doors[i]->xPos, adjacent->doors[i]->yPos))
+           && bordering(adjacent->doors[i]->xPos, adjacent->doors[i]->yPos)
+           && adjacent->doors[i]->within_bounds(this))
             {
                 adj_rm_doors.push_back(adjacent->doors[i]);
             }
@@ -374,4 +377,12 @@ bool Room::bordering(int x, int y){
         x == westEdge ||
         y == northEdge ||
         y == southEdge;
+}
+
+bool Room::bordering(Door* d){
+    return
+        d->xPos == eastEdge ||
+        d->xPos == westEdge ||
+        d->yPos == northEdge ||
+        d->yPos == southEdge;
 }
