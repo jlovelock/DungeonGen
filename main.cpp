@@ -9,13 +9,14 @@ using namespace std;
 
 bool test_mode = false;
 
-int main(){
+void init(){
     srand(time(NULL));
     test_mode = false;
+}
 
-    Tests* t = new Tests();
-    t->unbar_door();
-    delete t;
+int main(){
+    init();
+    run_all_tests();
 
     while(1){
         Dungeon d;

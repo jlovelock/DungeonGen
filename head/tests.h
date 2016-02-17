@@ -7,10 +7,12 @@
 class Tests {
 private:
     void init_input_file(std::string test_name);
+
 public:
     Tests();
     ~Tests();
     void unbar_door();
+    void shift_room_basic();
 
 
 };

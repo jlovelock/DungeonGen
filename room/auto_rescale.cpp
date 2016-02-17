@@ -216,7 +216,7 @@ int Room::find_overwrite_index(bool can_delete){
 
 ///@TODO: Finish this function!
 void Room::linkDoors(Room* adjacent, int wall){
-    cout << "## Attempting to link two rooms!" << endl;
+    cout << "## Attempting to link room " << id << " with room " << adjacent->id << "!" << endl;
 
     // Populate lists of all relevant doors for both rooms
     vector<Door*> new_rm_doors;

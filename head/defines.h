@@ -19,9 +19,11 @@ bool contains(std::string to_search, std::string keyword);
 void convert_to_uppercase(std::string& input);
 void convert_to_lowercase(std::string& input);
 bool in_list(std::string, std::string[]);
+void run_all_tests();
 
 extern bool test_mode;
 extern std::ifstream testfile_input;
+extern unsigned num_tests_run;
 
 static const char* skargs[] = {
     "ATHLETICS",
