@@ -4,6 +4,13 @@
 using namespace std;
 
 
+void Room::remove_all_monsters(){
+    for(int i = 0; i < MAX_MONSTERS && monsters[i] != NULL; i++){
+        delete monsters[i];
+        monsters[i] = NULL;
+    }
+}
+
 bool Room::has_monsters(){
     for(int i = 0; i < MAX_MONSTERS; i++){
         if (monsters[i] == NULL) return false;

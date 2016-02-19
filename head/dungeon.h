@@ -46,10 +46,18 @@ class Dungeon{
 
     void check_completion();
     bool completed_known;
+    void preferences();
 
     bool use_locked_door(Door*);
     bool use_barred_door(Door*);
     bool can_open(Door*);
+
+    //preferences & settings
+    std::string dungeon_type;       // STRONGHOLD[0]
+    bool monsters_enabled;          // false[0], true[1]
+    std::string treasure_enabled;   //RANDOM[0], ALWAYS[1], or NEVER[2]
+    void read_preferences();
+    void write_preferences();
 
 public:
     Dungeon();

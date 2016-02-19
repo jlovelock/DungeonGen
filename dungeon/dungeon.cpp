@@ -13,6 +13,7 @@ Dungeon::Dungeon(){
     in_dungeon = true;
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
     completed_known = false;
+    read_preferences();
 }
 
 Dungeon::~Dungeon(){
@@ -26,6 +27,125 @@ Dungeon::~Dungeon(){
     }
 }
 
+void Dungeon::read_preferences(){
+    ifstream sfile("save/settings.conf");
+
+	char c;
+
+    // Dungeon type: STRONGHOLD[0]
+    sfile.get(c);
+    switch(c){
+        case '0':
+            dungeon_type = "STRONGHOLD";
+            break;
+        default:
+            cout << "Corrupt settings file detected [dtype=" << c << "]. Exiting." << endl;
+            exit(EXIT_FAILURE);
+    }
+
+    // Monsters enabled: false[0], true[1]
+    sfile.get(c);
+    switch(c){
+        case '0':
+            monsters_enabled = false;
+            break;
+        case '1':
+            monsters_enabled = true;
+            break;
+        default:
+            cout << "Corrupt settings file detected [m_ena=" << c << "]. Exiting." << endl;
+            exit(EXIT_FAILURE);
+    }
+
+    //treasure_enabled: RANDOM[0], ALWAYS[1], or NEVER[2]
+    sfile.get(c);
+    switch(c){
+        case '0':
+            treasure_enabled = "RANDOM";
+            break;
+        case '1':
+            treasure_enabled = "ALWAYS";
+            break;
+        case '2':
+            treasure_enabled = "NEVER";
+            break;
+        default:
+            cout << "Corrupt settings file detected [t_ena=" << c << "]. Exiting." << endl;
+            exit(EXIT_FAILURE);
+    }
+
+	sfile.close();
+}
+
+void Dungeon::write_preferences(){
+    ofstream sfile("save/settings.conf");
+
+    // Dungeon type: STRONGHOLD[0]
+    if(dungeon_type == "STRONGHOLD"){
+        sfile.put('0');
+    }
+
+    // Monsters enabled: false[0], true[1]
+    if(monsters_enabled)
+        sfile.put('0');
+    else
+        sfile.put('1');
+
+    //treasure_enabled: RANDOM[0], ALWAYS[1], or NEVER[2]
+    if(treasure_enabled == "RANDOM")
+        sfile.put('0');
+    else if(treasure_enabled == "ALWAYS")
+        sfile.put('1');
+    else
+        sfile.put('2');
+
+    sfile.close();
+}
+
+
+void Dungeon::preferences(){
+    cout << "Your current settings:" << endl;
+    cout << "\tDungeon type: " << dungeon_type << endl;
+    cout << "\tMonster spawning: " << (monsters_enabled ? "ON" : "OFF") << endl;
+    cout << "\tTreasure hoards: " << treasure_enabled << endl << endl;
+    cout << "Enter the setting you'd like to change, or 'cancel' to go back to the previous menu." << endl;
+    string input;
+    read(input);
+
+    if(contains(input, "dungeon") || contains(input, "type")){
+        cout << "Sorry, only the STRONGHOLD dungeon type is supported at this time." << endl;
+        return;
+    } else if(contains(input, "monster") || contains(input, "spawn")){
+        cout << "Monsters ON or OFF? " << endl;
+        read(input);
+        if(contains(input, "off")){
+            monsters_enabled = false;
+            cout << "Monster spawning set to OFF." << endl;
+        } else if(contains(input, "on")){
+            monsters_enabled = true;
+            cout << "Monster spawning set to ON." << endl;
+        } else {
+            cout << "Error, unrecognized input." << endl;
+        }
+        return;
+    } else if(contains(input, "treasure") || contains(input, "hoard")){
+        cout << "Treasure hoard spawning: RANDOM, ALWAYS, or NEVER?" << endl;
+        read(input);
+        if(contains(input, "random")){
+            treasure_enabled = "RANDOM";
+            cout << "Treasure hoards will spawn randomly." << endl;
+        } else if(contains(input, "always")){
+            treasure_enabled = "ALWAYS";
+            cout << "There will be a treasure hoard in every room." << endl;
+        } else if(contains(input, "never")){
+            treasure_enabled = "NEVER";
+            cout << "Treasure hoards will never spawn." << endl;
+        } else {
+            cout << "Input not recognized." << endl;
+        }
+    }
+    write_preferences();
+}
 
 void Dungeon::check_completion(){
 
@@ -234,6 +354,10 @@ bool Dungeon::getCommand() {
         return true;
     } else if(contains(input, "cast") || contains(input, "read")){
         if(!cast_spell()) return true;
+
+    } else if(contains(input, "settings") || contains(input, "preferences")){
+        preferences();
+        return true;
 
     } else if(contains(input, "equip")){
         equip_item(input);

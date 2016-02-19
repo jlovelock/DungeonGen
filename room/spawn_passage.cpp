@@ -7,7 +7,7 @@ void Room::generatePassage(Door* d){
     //cout << "--this should be a passage, but it's a room for now :) bear with me!--" << endl;
 
     ///TODO: add passage support here!
-    generateChamber(d);
+    generateChamber("STRONGHOLD", d);
     return;
 
 

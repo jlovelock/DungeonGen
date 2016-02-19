@@ -81,9 +81,7 @@ Room::~Room(){
 
         }
     }
-    for(int i = 0; i < MAX_MONSTERS && monsters[i] != NULL; i++){
-        delete monsters[i];
-    }
+    remove_all_monsters();
 }
 
 

@@ -115,9 +115,9 @@ void Dungeon::adjust_room_position(Room* rm){
         }
 
         if(shrink_amt != 0){
-            cout << "@@@@@\tNONZERO SHRINK HERE (East wall)" << endl;
+            cout << "@@@@@\tCORRECTION along East wall" << endl;
             cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            cout << "@\t- Shrink: " << shrink_amt << endl;
+            cout << "@\t- Offset: " << shrink_amt << endl;
 
             if(east_locked){
                 ///FIXME
@@ -138,7 +138,10 @@ void Dungeon::adjust_room_position(Room* rm){
 }
 
 void Dungeon::add_room(Door* d, bool is_passage){
-    Room* next_rm = new Room(cur_id++, d, is_passage);
+    Room* next_rm = new Room(dungeon_type, cur_id++, d, is_passage);
+    if(!monsters_enabled) next_rm->remove_all_monsters();
+    if(treasure_enabled == "ALWAYS") next_rm->has_treasure = true;
+    else if(treasure_enabled == "NEVER") next_rm->has_treasure = false;
     last_room->next = next_rm;
     last_room = next_rm;
     cur_room = next_rm;

@@ -54,5 +54,4 @@ void Tests::shift_room_basic(){
     assert(d->cur_room->southEdge == d->first_room->next->southEdge - 30);
 
     delete d;
-
 }

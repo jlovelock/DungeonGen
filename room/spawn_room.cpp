@@ -1,4 +1,8 @@
 #include <room.h>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 int rollExits(bool large){
     int x = d20();
@@ -48,7 +52,7 @@ Room::Room(){
     next = NULL;
     for(int i = 0; i < MAX_MONSTERS; i++)
         monsters[i] = NULL;
-    setPurpose();
+    setPurpose("STRONGHOLD"); ///@TODO specify based on preferences
 
     int x = d10();
     switch(x){
@@ -146,16 +150,9 @@ void Room::set_contents(){
     } else {
         has_treasure = true;
     }
-
-//    ///For debugging non-monster-related stuff: remove me later!!
-//    if(monsters[0] != NULL){
-//        delete monsters[0];
-//        monsters[0] = NULL;
-//    }
-
 }
 
-void Room::generateChamber(Door* d){
+void Room::generateChamber(string dungeon_type, Door* d){
 
     ///TODO handle monster spawning properly!
     for(int i = 0; i < MAX_MONSTERS; i++)
@@ -165,11 +162,8 @@ void Room::generateChamber(Door* d){
     has_treasure = false;
     is_passage = false;
 
-    setPurpose();
+    setPurpose(dungeon_type);
     set_contents();
-
-    ///*********DEBUG, REMOVE ME AFTER
-    has_treasure = true;
 
     //set chamber size, shape, and exits
     bool is_large = false;
@@ -257,7 +251,7 @@ void Room::generateChamber(Door* d){
     setExits(d->firstWall, is_large);
 }
 
-Room::Room(int _id, Door* d, bool passage){
+Room::Room(string type, int _id, Door* d, bool passage){
     id = _id;
 
     int x = d20();
@@ -266,13 +260,22 @@ Room::Room(int _id, Door* d, bool passage){
     if(x < 10 || passage)
         generatePassage(d);
     else
-        generateChamber(d);
+        generateChamber(type, d);
 
     next = NULL;
 }
 
 ///TODO add other dungeon types -- currently this is just for the "stronghold" type
-void Room::setPurpose(){
+void Room::setPurpose(string type){
+    if(type == "STRONGHOLD")
+        set_purpose_stronghold();
+    else {
+        cout << "Error: unknown dungeon type. Exiting." << endl;
+        exit(EXIT_FAILURE);
+    }
+
+}
+void Room::set_purpose_stronghold(){
     int x = d100();
     switch(x){
         case 1: case 2:

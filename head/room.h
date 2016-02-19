@@ -62,19 +62,20 @@ class Room {
 
     bool isFirstRoom(Door*);
     void setExits(int entrance, bool large);
-    void setPurpose();
+    void set_purpose_stronghold();
+    void setPurpose(std::string);
     void set_contents();
     ~Room();
 
     Room(int, int, bool);
     Room();
     Room(int _id, Door* d, int x, int y, bool is_large=false); //For testing only
-    Room(int _id, Door* d, bool passage);
+    Room(std::string type, int _id, Door* d, bool passage);
     void printInitialDescription(int);
     void printDescription(int);
     void printFullDescription(int doorNum=0); ///@TODO doorNum should be the entrance door for initial room
 
-    void generateChamber(Door*);
+    void generateChamber(std::string, Door*);
     void generatePassage(Door*);
     void addSecretDoor(int, int);
 
@@ -82,6 +83,7 @@ class Room {
     void add_exits(int, int[]);
 
     int get_door_id(Door* d);
+    void remove_all_monsters();
 
 };
 
