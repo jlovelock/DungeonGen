@@ -7,6 +7,41 @@
 
 using namespace std;
 
+void Character::set_position(int x, int y){
+    xPos = x;
+    yPos = y;
+}
+
+void Character::move_position(int x, int y){
+    xPos += x;
+    yPos += y;
+}
+
+pair<int,int> Character::get_position(){
+    return make_pair(xPos, yPos);
+}
+
+bool Character::find_secret_door(Door* d){
+    if (d && d->is_secret() && skill_check("INVESTIGATION") > SECRET_DOOR_DC){
+        d->find_door();
+        return true;
+    }
+    return false;
+}
+
+bool Character::search_monster(bool print_err_msgs){
+    if(is_alive()){
+        cout << "You can't do that while it's still alive!" << endl;
+        return false;
+    } else if (searched){
+        cout << "You've already done that." << endl;
+        return false;
+    } else {
+        searched = true;
+        return true;
+    }
+}
+
 ///@TODO make sure weapon is always in main hand
 string Character::equipped_weapon_type(){
     if(main_hand && main_hand->is_two_handed()) return "two handed";

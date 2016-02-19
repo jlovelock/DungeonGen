@@ -2,11 +2,9 @@
 
 using namespace std;
 
-Room::Room(int _id, Door* d, int x, int y, bool is_large){
-    id = _id;
-    next = NULL;
-    has_treasure = false;
-    is_passage = false;
+Room::Room(Door* d, int x, int y, bool is_large){
+    id = max_id++;
+    treasure = false;
     hazard = "";
     for(int i = 0; i < MAX_MONSTERS; i++)
         monsters[i] = NULL;

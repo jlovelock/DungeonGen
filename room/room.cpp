@@ -6,6 +6,13 @@
 
 using namespace std;
 
+int Room::max_id = 0;
+
+
+Room* Room::connected(Door* d){
+    return isFirstRoom(d) ? d->second : d->first;
+}
+
 
 Door* Room::get_door_on_wall(string input){
     int doorCopies = 0, doorNum = 0;
@@ -127,6 +134,14 @@ void Room::addSecretDoor(int door_num, int entrance){
 //    //else cout << " room, ";
 //}
 
+void Room::printFullDescription(Door* d){
+    printFullDescription(get_door_id(d));
+}
+
+void Room::printDescription(Door* d){
+    printDescription(get_door_id(d));
+}
+
 void Room::printFullDescription(int doorNum){
     cout << "You are in a " << xDim << " by " << yDim << " foot " << shape << " ";
     cout << purpose_short << ", " << purpose_full << endl;
@@ -218,4 +233,17 @@ void Room::printDescription(int doorNum){
 
 }
 
+
+void Room::search_for_secret_doors(Character* c, bool& found){
+    for(int i = 0; i < MAX_DOORS; i++){
+        if(c->find_secret_door(doors[i])){
+        //if(cur_room->doors[i] != NULL && cur_room->doors[i]->secret && PC.skill_check("INVESTIGATION") > SECRET_DOOR_DC){
+            //cur_room->doors[i]->secret = false;
+            if(found) cout << "You also find a secret door along the ";
+            else cout << "You find a secret door along the ";
+            cout << doors[i]->getWall(this) << " wall." << endl << endl;
+            found = true;
+        }
+    }
+}
 

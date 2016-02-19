@@ -1,12 +1,82 @@
 
-#include <iostream>
-#include <dungeon.h>
-
+#include <game.h>
 using namespace std;
 
 
+void Game::print_inventory(){
+    cout << "WEAPONS: " << endl;
+    for(vector<Weapon*>::iterator it = PC->weapons.begin(); it != PC->weapons.end(); ++it){
+        cout << "\t - " << (*it)->get_weapon_description(PC);
+        if((*it)->is_equipped_to(PC))
+            cout << " (equipped)";
+        cout << endl;
+    }
+    cout << endl;
+
+    if(cp > 0 || sp > 0 || ep > 0 || gp > 0 || pp > 0){
+        cout << "COINS: " << endl;
+        if(cp > 0) cout << "\t- " << cp << "cp" << endl;
+        if(sp > 0) cout << "\t- " << sp << "sp" << endl;
+        if(ep > 0) cout << "\t- " << ep << "ep" << endl;
+        if(gp > 0) cout << "\t- " << gp << "gp" << endl;
+        if(pp > 0) cout << "\t- " << pp << "ep" << endl;
+        cout << endl;
+    }
+
+    if(!potions.empty()){
+        cout << "POTIONS:" << endl;
+        for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
+            cout << "\t- ";
+            //if(!(*it)->identified) cout << "[?] ";
+            cout << (*it)->quantity << " " << (*it)->get_description() << "." << endl;
+        }
+        cout << endl;
+    }
+
+    if(!scrolls.empty()){
+        cout << "SPELL SCROLLS:" << endl;
+        int num_unidentified_scrolls = 0;
+        for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+            if(!(*it)->identified)
+                num_unidentified_scrolls++;
+            else
+                cout << "\t- " << (*it)->quantity << " " << (*it)->get_description() << "." << endl;
+        }
+        if(num_unidentified_scrolls > 0){
+            cout << "\t- " << num_unidentified_scrolls << " unidentified spell scroll";
+            if(num_unidentified_scrolls > 1) cout << "s";
+            cout << "." << endl;
+        }
+        cout << endl;
+    }
+
+    if(!loot.empty()){
+        cout << "MISC TREASURE:" << endl;
+        for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
+            cout << "\t- ";
+            //if(!(*it)->identified) cout << "[?] ";
+            cout << (*it)->quantity << " " << (*it)->get_description() << "." << endl;
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+    if(!PC->objects.empty()){
+        cout << "OTHER ITEMS: " << endl;
+        for(vector<Object*>::iterator it = PC->objects.begin(); it != PC->objects.end(); ++it){
+            cout << "\t - " << (*it)->name();
+            if((*it)->is_equipped_to(PC))
+                cout << " (equipped)";
+            cout << endl;
+        }
+        cout << endl;
+    }
+}
+
+
+
 ///(long-term) TODO: add the full tables here (by CR)
-void Dungeon::rollIndividualTreasure(string monster_name){
+void Game::rollIndividualTreasure(string monster_name){
     int x = d100();
     int reward;
     if(x < 31){
@@ -35,7 +105,65 @@ void Dungeon::rollIndividualTreasure(string monster_name){
 }
 
 
-void Dungeon::rollTreasureHoard(){
+
+void Game::identify_items(){
+    bool first_item_identified = true;
+    cout << "As you rest, you look over the items you have gathered more closely." << endl;
+    for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
+        if(!(*it)->identified && PC->attribute_chk("INT") > LOOT_IDENTIFY_DC){
+            if(first_item_identified) cout << "You are able to identify the following:" << endl;
+            first_item_identified = false;
+            cout << "\t- Your " << (*it)->get_description();
+            if((*it)->type=="art"){
+                if((*it)->quantity == 1) cout << " is";
+                else cout << " are";
+            }
+            else if((*it)->quantity == 1)
+                cout << " is a " << (*it)->name;
+            else
+                cout << " are " << (*it)->name << "s";
+            cout << " worth " << (*it)->value << "gp";
+            if((*it)->quantity > 1) cout << " each";
+            cout << "." << endl;
+            (*it)->identified = true;
+        }
+    }
+
+    for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
+        if(!(*it)->identified && PC->skill_check("ARCANA") > POTION_IDENTIFY_DC){
+            if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
+            first_item_identified = false;
+            cout << "\t- Your " << (*it)->get_description();
+            if((*it)->quantity == 1)
+                cout << " is a potion of ";
+            else
+                cout << " are potions of ";
+            cout << (*it)->name << "." << endl;
+            (*it)->identified = true;
+        }
+    }
+
+    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+        if(!(*it)->identified && PC->skill_check("ARCANA") > SCROLL_IDENTIFY_DC){
+            if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
+            first_item_identified = false;
+            cout << "\t- " << (*it)->quantity << " of your scrolls";
+            if((*it)->quantity == 1)
+                cout << " is a scroll of ";
+            else
+                cout << " are scrolls of ";
+            cout << (*it)->name << "." << endl;
+            (*it)->identified = true;
+        }
+    }
+
+
+    if(first_item_identified) cout << "Unfortunately, you are unable to identify anything." << endl;
+    cout << endl;
+}
+
+
+void Game::rollTreasureHoard(){
     vector<Treasure*> hoard;
 
     int num_objects, value;
@@ -133,8 +261,12 @@ void Dungeon::rollTreasureHoard(){
     }
 
     ///**********REMOVE ME AFTER
-    num_magic_items = d6();
-    magic_item_table = 'A';
+    if(dungeon->magic_items_enabled() == "ALWAYS") {
+        num_magic_items = d6();
+        magic_item_table = 'A';
+    } else if(dungeon->magic_items_enabled() == "NEVER"){
+        num_magic_items = 0;
+    }
 
 
 
@@ -223,180 +355,17 @@ void Dungeon::rollTreasureHoard(){
     }
 }
 
-void Dungeon::identify_items(){
-    bool first_item_identified = true;
-    cout << "As you rest, you look over the items you have gathered more closely." << endl;
-    for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
-        if(!(*it)->identified && PC.attribute_chk("INT") > LOOT_IDENTIFY_DC){
-            if(first_item_identified) cout << "You are able to identify the following:" << endl;
-            first_item_identified = false;
-            cout << "\t- Your " << (*it)->get_description();
-            if((*it)->type=="art"){
-                if((*it)->quantity == 1) cout << " is";
-                else cout << " are";
-            }
-            else if((*it)->quantity == 1)
-                cout << " is a " << (*it)->name;
-            else
-                cout << " are " << (*it)->name << "s";
-            cout << " worth " << (*it)->value << "gp";
-            if((*it)->quantity > 1) cout << " each";
-            cout << "." << endl;
-            (*it)->identified = true;
-        }
-    }
-
-    for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
-        if(!(*it)->identified && PC.skill_check("ARCANA") > POTION_IDENTIFY_DC){
-            if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
-            first_item_identified = false;
-            cout << "\t- Your " << (*it)->get_description();
-            if((*it)->quantity == 1)
-                cout << " is a potion of ";
-            else
-                cout << " are potions of ";
-            cout << (*it)->name << "." << endl;
-            (*it)->identified = true;
-        }
-    }
-
-    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        if(!(*it)->identified && PC.skill_check("ARCANA") > SCROLL_IDENTIFY_DC){
-            if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
-            first_item_identified = false;
-            cout << "\t- " << (*it)->quantity << " of your scrolls";
-            if((*it)->quantity == 1)
-                cout << " is a scroll of ";
-            else
-                cout << " are scrolls of ";
-            cout << (*it)->name << "." << endl;
-            (*it)->identified = true;
-        }
-    }
-
-
-    if(first_item_identified) cout << "Unfortunately, you are unable to identify anything." << endl;
-    cout << endl;
-}
-
-
-void Dungeon::drink_potion(int index){
-    potions.at(index)->quantity--;
-    if(PC.cur_hp == PC.max_hp)
-        cout << "Nothing appears to happen." << endl << endl;
-    else
-        PC.heal(potions.at(index)->healing_amount());
-
-    if(potions.at(index)->quantity == 0){
-        delete potions.at(index);
-        potions.erase(potions.begin()+index);
-    }
-}
-
-//returns true iff a spell was cast
-bool Dungeon::cast_spell(){
-    if(scrolls.empty()){
-        cout << "You have no scrolls from which to cast." << endl << endl;
-        return false;
-    }
-    if(!cur_room->has_monsters()){
-        cout << "There are no enemies in the room to cast spells at." << endl << endl;
-        return false;
-    }
-
-    bool flag = true;
-    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        char idx = 'A';
-        if((*it)->identified){
-            if(flag){
-                cout << "Choose which scroll you would like to cast, or enter 'cancel' to exit this menu." << endl;
-                flag = false;
-            }
-            cout << "\t(" << idx << "): " << (*it)->get_description() << endl;
-            ++idx;
-        }
-    }
-    if(flag){
-        cout << "You can't cast a scroll you haven't identified. You can attempt to identify them while you rest." << endl;
-        return false;
-    }
-
-    cout << endl;
-    char input;
-    cin.get(input);
-
-    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        char idx = 'A';
-        if((*it)->identified){
-            if(idx == input){
-                PC.cast((*it)->spell, cur_room->get_active_monster_char());
-                (*it)->quantity--;
-                if((*it)->quantity == 0){
-                    delete *it;
-                    scrolls.erase(it);
-                }
-                return true;
-            }
-            ++idx;
-        }
-    }
-    return false;
-
-}
-
-
-//returns true iff you drank a potion
-bool Dungeon::drink_potion(){
-    if(potions.empty()){
-        cout << "You have no potions to drink!" << endl;
-        return false;
-    }
-    string input;
-    if(potions.size() == 1){
-        if(potions.front()->identified) cout << "Drink the " << potions.front()->name << " potion? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
-        else cout << "Drink the unidentified " << potions.front()->description << " potion? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
-
-
-        read(input);
-        if(input == "y"){
-            drink_potion(0);
-            return true;
-        } else {
-            cout << "Alright, what do you want to do instead?" << endl;
-            return false;
-        }
-
-    } else {
-        char inputChar;
-        do {
-            cout << "Which potion?" << endl;
-            char idx = 'A';
-            for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
-                cout << "\t(" << idx << "): ";
-                if((*it)->identified) cout << (*it)->name << " potion" << endl;
-                else cout << "unidentified " << (*it)->description << " potion" << endl;
-                idx++;
-            }
-            cout << endl;
-            cin.get(inputChar);
-        } while((unsigned)(inputChar - 'A') > potions.size());
-
-        drink_potion(inputChar-'A');
-        return true;
-    }
-}
-
 //TODO check if item is already equipped, being careful of items with duplicate names (ie equipping a second offhand shortsword is OK)
-void Dungeon::equip_item(string input){
+void Game::equip_item(string input){
     Object* to_equip = NULL;
 
-    for(vector<Weapon*>::iterator it = PC.weapons.begin(); it != PC.weapons.end(); ++it){
+    for(vector<Weapon*>::iterator it = PC->weapons.begin(); it != PC->weapons.end(); ++it){
         if(contains(input, (*it)->name())){
             to_equip = *it;
         }
     }
 
-    for(vector<Object*>::iterator it = PC.objects.begin(); it != PC.objects.end(); ++it){
+    for(vector<Object*>::iterator it = PC->objects.begin(); it != PC->objects.end(); ++it){
         if(contains(input, (*it)->name())){
             to_equip = *it;
         }
@@ -405,6 +374,6 @@ void Dungeon::equip_item(string input){
     if(to_equip == NULL){
         cout << "Either you don't have that in your inventory, or it's not an equippable item." << endl;
     } else {
-        PC.equip(to_equip);
+        PC->equip(to_equip);
     }
 }

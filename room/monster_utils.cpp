@@ -34,6 +34,11 @@ string Room::get_monster(){
         return "N/A";
 }
 
+//redo when multi-monster support gets implemented
+Character* Room::get_monster_char(){
+    return monsters[0];
+}
+
 string Room::get_active_monster(){
     for(int i = 0; i < MAX_MONSTERS && monsters[i] != NULL; i++){
         if(monsters[i]->is_alive()) return monsters[i]->PC_class;

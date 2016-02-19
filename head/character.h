@@ -11,6 +11,7 @@
 #include <objects.h>
 #include <spells.h>
 #include <weapon.h>
+#include <door.h>
 
 class Character {
     friend class Dungeon;
@@ -24,6 +25,7 @@ class Character {
     //Misc
     std::string PC_class;
     std::string race;
+    std::string short_name; //for monsters
     bool darkvision;
     bool is_monster;
     int xp;
@@ -33,7 +35,6 @@ class Character {
 
     //equipped stuff
     Object *main_hand, *off_hand;
-    void equip(Object*, bool equip_to_offhand=false);
 
     //Attributes
     std::map<std::string, int> attribute_scores;
@@ -51,8 +52,6 @@ class Character {
 
     //Melee attacks
     int distance_to(Character* target);
-    std::vector<Weapon*> weapons; //in inventory
-    std::vector<Object*> objects;
     std::vector<std::string> weapon_proficiencies; //"martial", "simple", and/or specific weapon names
 
     Weapon* weapon_select(Character* target);
@@ -87,32 +86,18 @@ class Character {
     int init;
     bool in_melee;
 
-    //Combat functions
-    void attack(Character*, int, int);
-    void generic_attack(Character*);
-//    void melee_attack(Character*);
-//    void ranged_attack(Character*);
-    bool is_hit(int attack_roll){ return attack_roll >= AC(); }
-    void take_damage(int dmg);
-    bool is_alive(){ return cur_hp > 0; }
-
     //Special abilities
-    void special_action();
     bool second_wind_available;
 
     //Spellcasting
     std::string casting_stat;
     int spell_attack();
     int spell_save_DC();
-    void cast(Spell* spell, Character* target);
     bool within_range(Character* target, Spell* spell);
     int saving_throw(Spell*);
 
     //Misc other functions
-    void short_rest();
     int next_levelup();
-    void print_status();
-    void heal(int hp);
 
     //Character creation functions
     void standard_array();
@@ -135,6 +120,12 @@ class Character {
     void spawn_giant_rat(int group_size);
     bool searched;
 
+    bool pick_lock(Door*);
+    bool break_down(Door*);
+    bool use_locked_door(Door*);
+    bool use_blocked_door(Door*);
+
+
 
     public:
         Character();
@@ -147,7 +138,39 @@ class Character {
         int attribute_chk(std::string att){ return d20() + attribute_mods[att]; }
         bool has_fighting_style(std::string);
         std::string equipped_weapon_type();
+        void short_rest();
+        bool search_monster(bool print_err_msgs=false);
+
+    //Combat functions
+    void attack(Character*, int, int);
+    void generic_attack(Character*);
+    std::string get_name();
+//    void melee_attack(Character*);
+//    void ranged_attack(Character*);
+    bool is_hit(int attack_roll){ return attack_roll >= AC(); }
+    void take_damage(int dmg);
+    bool is_alive(){ return cur_hp > 0; }
+
+    bool find_secret_door(Door*);
+    void special_action();
+    void print_status();
+
+    bool is_injured(){ return cur_hp < max_hp; }
+    void heal(int hp);
+
+        void cast(Spell* spell, Character* target);
+
+    std::vector<Weapon*> weapons; //in inventory
+    std::vector<Object*> objects;
+
+    void equip(Object*, bool equip_to_offhand=false);
+        bool can_open(Door*);
+
+    std::pair<int, int> get_position();
+    void set_position(int, int);
+    void move_position(int, int);
 };
+
 
 
 #endif // CHARACTER_H

@@ -28,22 +28,33 @@ class Door {
     Room* first;
     Room* second; //doors connect the rooms!
 
-
     int firstWall; //NORTH, SOUTH, etc; for the first room (second room has opposite)
     bool isFirstRoom(Room*);
 
     Door(Room* room, int entrance);
     std::string getWallString(Room*);
-    int getWall(Room*);
     Door(Room* room, int _wall, bool passage, bool main=false);
     void initialize_door(Room* room, int _wall, bool passage, bool main);
-    int break_DC();
 
-    bool pick_lock(Character*);
-    bool break_down(Character*);
+    //bool break_down(Character*);
 
     bool within_bounds(Room*);
 
+public:
+    bool is_main_exit(){ return main_exit; }
+    bool is_secret(){ return secret; }
+    bool is_locked(){ return locked; }
+    bool is_barred(){ return barred; }
+    bool is_passage(){ return material == "passage"; }
+    void unbar(){ barred = false; }
+    void find_door(){ secret = false; }
+    void unlock(){ locked = false; }
+    int break_DC();
+    void break_down();
+    bool pick_lock(Character*);
+    bool barred_from(Room*);
+    int getWall(Room*);
+    std::pair<int, int> get_position(){ return std::make_pair(xPos, yPos); }
 };
 
 #endif // DOOR_H

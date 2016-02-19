@@ -8,6 +8,10 @@
 
 using namespace std;
 
+string Character::get_name(){
+    return short_name;
+}
+
 //For spawning monsters
 Character::Character(double CR){
     ///TODO add more monster options, random roll for one of the appropriate CR
@@ -23,6 +27,7 @@ Character::Character(double CR){
 
 ///TODO include keen senses, darkvision
 void Character::spawn_giant_rat(int group_size){
+    short_name = "rat";
     _AC = 12;
     max_hp = d6()+d6();
 
@@ -45,6 +50,7 @@ void Character::spawn_giant_rat(int group_size){
 ///TODO: instead of group_size (which assumes identical monsters), have another function
 ///  handle the monster spawn and therefore set the xp values
 void Character::spawn_cultist(int group_size){
+    short_name = "cultist";
     _AC = 12;
     max_hp = d8()+d8();
     speed = 30;

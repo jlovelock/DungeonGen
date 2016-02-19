@@ -1,3 +1,7 @@
+
+#ifndef TREASURE_H
+#define TREASURE_H
+
 #include <spells.h>
 
 class Treasure {
@@ -27,3 +31,4 @@ public:
     Spell* spell;
 };
 
+#endif // TREASURE_H

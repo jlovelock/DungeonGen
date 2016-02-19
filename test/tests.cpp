@@ -48,8 +48,8 @@ void Tests::init_input_file(string test_name){
 void run_all_tests(){
 
     Tests* t = new Tests();
-    t->unbar_door();
-    t->shift_room_basic();
+//    t->unbar_door();
+//    t->shift_room_basic();
     //...add more tests here
     delete t;
 

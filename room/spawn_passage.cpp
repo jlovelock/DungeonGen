@@ -10,9 +10,6 @@ void Room::generatePassage(Door* d){
     generateChamber("STRONGHOLD", d);
     return;
 
-
-    ///TODO FIXME!!
-    is_passage = true;
     int entrance = d->firstWall;
 
     int x = d20();

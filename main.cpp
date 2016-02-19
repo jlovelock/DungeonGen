@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <time.h>
 
-#include <dungeon.h>
+#include <game.h>
 #include <tests.h>
 
 using namespace std;
@@ -19,8 +19,11 @@ int main(){
     run_all_tests();
 
     while(1){
-        Dungeon d;
-        d.run();
+//        Dungeon d;
+//        d.run();
+        Game* g = new Game;
+        g->run();
+        delete g;
     }
 
     return 0;

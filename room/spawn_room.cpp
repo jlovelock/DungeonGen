@@ -47,9 +47,7 @@ void Room::setExits(int entrance, bool large){
 
 ///For creating the starting area only!!
 Room::Room(){
-    id = 0;
-    is_passage=false;
-    next = NULL;
+    id = max_id++;
     for(int i = 0; i < MAX_MONSTERS; i++)
         monsters[i] = NULL;
     setPurpose("STRONGHOLD"); ///@TODO specify based on preferences
@@ -110,17 +108,17 @@ void Room::set_contents(){
         monsters[0] = new Character(0);
     } else if(x < 16){
         monsters[0] = new Character(0);
-        has_treasure = true;
+        treasure = true;
     } else if(x < 28){
         ///pet or allied creature
     } else if(x < 34){
         ///pet or allied creature
-        has_treasure = true;
+        treasure = true;
     } else if(x < 43){
         monsters[0] = new Character(0);
     } else if(x < 51){
         monsters[0] = new Character(0);
-        has_treasure = true;
+        treasure = true;
     } else if(x < 59){
         int y = d20();
         if(y < 4) hazard = "brown mold";
@@ -136,7 +134,7 @@ void Room::set_contents(){
         ///trap
     } else if(x < 77){
         ///trap
-        has_treasure = true;
+        treasure = true;
     } else if(x < 81){
         ///trick
     } else if(x > 88 && x < 95){
@@ -148,7 +146,7 @@ void Room::set_contents(){
         else if(y < 18) hazard = "violet fungus";
         else hazard = "yellow mold";
     } else {
-        has_treasure = true;
+        treasure = true;
     }
 }
 
@@ -159,8 +157,7 @@ void Room::generateChamber(string dungeon_type, Door* d){
         monsters[i] = NULL;
 
     //defaults
-    has_treasure = false;
-    is_passage = false;
+    treasure = false;
 
     setPurpose(dungeon_type);
     set_contents();
@@ -251,8 +248,8 @@ void Room::generateChamber(string dungeon_type, Door* d){
     setExits(d->firstWall, is_large);
 }
 
-Room::Room(string type, int _id, Door* d, bool passage){
-    id = _id;
+Room::Room(string type, Door* d, bool passage){
+    id = max_id++;
 
     int x = d20();
 
@@ -261,8 +258,6 @@ Room::Room(string type, int _id, Door* d, bool passage){
         generatePassage(d);
     else
         generateChamber(type, d);
-
-    next = NULL;
 }
 
 ///TODO add other dungeon types -- currently this is just for the "stronghold" type

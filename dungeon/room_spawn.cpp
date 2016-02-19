@@ -27,7 +27,9 @@ void Dungeon::adjust_room_position(Room* rm){
             west_locked = true;
     }
 
-    for(Room* compare = first_room; compare != NULL; compare = compare->next){
+    //for(Room* compare = first_room; compare != NULL; compare = compare->next){
+    for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
+        Room* compare = *it;
         if(compare->id == rm->id) continue;
         cout << "...checking room " << compare->id << ": " << endl;
         int offset = 0, shrink_amt = 0;
@@ -137,15 +139,12 @@ void Dungeon::adjust_room_position(Room* rm){
     cout << "...done" << endl;
 }
 
-void Dungeon::add_room(Door* d, bool is_passage){
-    Room* next_rm = new Room(dungeon_type, cur_id++, d, is_passage);
-    if(!monsters_enabled) next_rm->remove_all_monsters();
-    if(treasure_enabled == "ALWAYS") next_rm->has_treasure = true;
-    else if(treasure_enabled == "NEVER") next_rm->has_treasure = false;
-    last_room->next = next_rm;
-    last_room = next_rm;
-    cur_room = next_rm;
-    cur_room->doors[0] = d;
-    d->second = cur_room;
-    adjust_room_position(cur_room);
+Room* Dungeon::add_room(Door* d, bool is_passage){
+    Room* next_rm = new Room(dtype, d, is_passage);
+    rooms.push_back(next_rm);
+    if(!monsters_enabled()) next_rm->remove_all_monsters();
+    next_rm->doors[0] = d;
+    d->second = next_rm;
+    adjust_room_position(next_rm);
+    return next_rm;
 }

@@ -6,7 +6,6 @@
 using namespace std;
 
 
-
 int opposite(int wall){
     if(wall == NORTH) return SOUTH;
     if(wall == SOUTH) return NORTH;
@@ -52,4 +51,14 @@ int Door::getWall(Room* rm){
 
 bool Door::isFirstRoom(Room* rm){
     return this->first->id == rm->id;
+}
+
+void Door::break_down(){
+    material = "broken " + material;
+    locked = false;
+}
+
+// returns true iff it's barred from the side of r
+bool Door::barred_from(Room* r){
+    return barred && (barredSide xor (r->id != first->id));
 }
