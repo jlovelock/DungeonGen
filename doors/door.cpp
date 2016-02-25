@@ -4,6 +4,8 @@
 
 using namespace std;
 
+int Door::max_id = 0;
+
 bool Door::within_bounds(Room* r){
 
     // check x position

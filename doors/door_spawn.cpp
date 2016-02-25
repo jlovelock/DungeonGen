@@ -5,6 +5,7 @@
 
 //Starting room / testing
 Door::Door(Room* room, int _wall, bool passage, bool main){
+    if(main) max_id = 0;
     initialize_door(room, _wall, passage, main);
 }
 
@@ -63,6 +64,8 @@ void Door::set_position(Room* room){
 void Door::initialize_door(Room* room, int _wall, bool is_passage, bool is_main){
     first = room;
     second = NULL;
+
+    id = max_id++;
 
     //position
     firstWall = _wall;

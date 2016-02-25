@@ -34,17 +34,24 @@ class Room {
     bool withinX(int);
     bool withinY(int);
     bool bordering(int x, int y);
-    bool bordering(Door*);
-    void shift(int amt, bool dim_x, bool rev=false);
-    void shrink(unsigned amt, int const_wall);
+    bool bordering(Door*, int delta_x=0, int delta_y=0);
+    bool bordering(Door* d, int delta_n, int delta_s, int delta_e, int delta_w);
+    void shift(int, int);
+    void shrink(int, int);
+    void shuffle_bounds(int dN, int dS, int dE, int dW);
     void remove_connections(int wall);
     void adjustPosition(Room*);
-    void linkDoors(Room* adjacent, int wall);
+    void link_doors(Room* adjacent, int wall);
     int find_overwrite_index(bool can_delete=true);
-    bool issue_east(Room*, int);
-    bool issue_west(Room*, int);
-    bool issue_north(Room*, int);
-    bool issue_south(Room*, int);
+    bool issue(int direction, Room*);
+    bool issue_shift(Room* r, int x, int y);
+    bool issue_shrink(Room* r, int shrink_direction, int shrink_amt);
+    bool issue_east(Room*, int, int, int, int);
+    bool issue_west(Room*, int, int, int, int);
+    bool issue_north(Room*, int, int, int, int);
+    bool issue_south(Room*, int, int, int, int);
+    bool try_shift(int dir, Room* compare, Door* entry);
+    bool try_shrink(int dir, Room* compare, Door* entry);
 
 
     /** Spawning new rooms **/
@@ -64,13 +71,15 @@ class Room {
 
     bool isFirstRoom(Door*);
 
-    void add_door(int);
+    Door* add_door(int);
     void add_exits(int, int[]);
     void addSecretDoor(int, int);
 
     int get_door_id(Door* d);
     void printDescription(int); //TODO restructure and get rid of this function
     void remove_all_monsters();
+
+    int shared_wall(Room*);
 
 public:
     Room();
@@ -88,12 +97,15 @@ public:
     void search_for_secret_doors(Character*, bool& found);
 
     void printFullDescription(int doorNum=0); ///@TODO doorNum should be the entrance door for initial room
-    Door* get_door_on_wall(std::string wall);
+    Door* get_door_on_wall(std::string wall, bool use_first=false);
     Room* connected(Door*);
 
     void printDescription(Door*);
     void printFullDescription(Door*);
     std::string get_purpose_short(){ return purpose_short; }
+    std::string location();
+
+    int get_id() { return id; }
 
 };
 

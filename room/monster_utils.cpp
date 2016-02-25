@@ -13,8 +13,7 @@ void Room::remove_all_monsters(){
 
 bool Room::has_monsters(){
     for(int i = 0; i < MAX_MONSTERS; i++){
-        if (monsters[i] == NULL) return false;
-        else if(monsters[i]->is_alive()) return true;
+        if (monsters[i] && monsters[i]->is_alive()) return true;
     }
     return false;
 }

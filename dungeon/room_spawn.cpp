@@ -4,140 +4,91 @@
 
 using namespace std;
 
-//TODO clean up this function with subroutines, get rid of repetitiveness
-///TODO: Ensure this works appropriately when multiple sequential adjustments are necessary! (So many test cases)
-///TODO: when one room perfectly overlaps another, no wall will trigger as problematic
+
+/*
+ * Nb. This cannot adjust rooms that are perfectly overlapping others.
+ *   However, if doors are connected properly on other room spawns, this should never be the case.
+ */
 void Dungeon::adjust_room_position(Room* rm){
 
-    cout << "...adjusting..." << endl;
+    cout << "Adjusting position (original " << rm->location() << ")" << endl;
+    int dir[] = {NORTH, SOUTH, EAST, WEST};
 
-    bool north_locked = false, south_locked = false, east_locked = false, west_locked = false;
+    map<int, bool> locked;
+    for(int i = 0; i < 4; i++){ locked[ dir[i] ] = false; }
+    locked[rm->doors[0]->getWall(rm)] = true;
 
-    switch(rm->doors[0]->getWall(rm)){
-        case NORTH:
-            north_locked = true;
-            break;
-        case SOUTH:
-            south_locked = true;
-            break;
-        case EAST:
-            east_locked = true;
-            break;
-        case WEST:
-            west_locked = true;
-    }
+    bool adjustments_needed;
+    do {
+        adjustments_needed = false;
+        for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
+            if((*it)->id == rm->id) continue;
+            cout << "...checking room " << (*it)->id << ": ";
 
-    //for(Room* compare = first_room; compare != NULL; compare = compare->next){
-    for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
-        Room* compare = *it;
-        if(compare->id == rm->id) continue;
-        cout << "...checking room " << compare->id << ": " << endl;
-        int offset = 0, shrink_amt = 0;
+            // See which walls of the room to be adjusted (if any) are overlapped by *it
+            bool issue_found = false;
+            map<int, bool> overlap;
+            for(int i = 0; i < 4; i++){
+                cout << " " << to_string(dir[i]);
+                overlap[ dir[i] ] = rm->issue(dir[i], *it);
+                issue_found = issue_found || overlap[ dir[i] ];
 
-        //south
-        while(!south_locked && compare->issue_south(rm, offset)){
-            offset++;
-        }
-        if(offset != 0){
-            cout << "@@@@@\tCORRECTION along South wall" << endl;
-            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            cout << "@\t- Offset: " << offset << endl;
-
-            if(south_locked){
-                ///FIXME
-                cout << "South double-locked! EXITING" << endl;
-                exit(EXIT_FAILURE);
-
-            } else if(north_locked){
-                rm->shrink(offset, NORTH);
-            } else {
-                rm->shift(offset, false);
+                if(overlap[dir[i]]) cout << "**";
             }
-            rm->linkDoors(compare, SOUTH);
-            south_locked = true;
-            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            continue;
-        }
-
-        //north
-        while(!north_locked && compare->issue_north(rm, shrink_amt)){
-            shrink_amt++;
-        }
-        if(shrink_amt != 0){
-            cout << "@@@@@\tCORRECTION along North wall" << endl;
-            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            cout << "@\t- Offset: " << shrink_amt << endl;
-
-            if(north_locked){
-                ///FIXME
-                cout << "North double-locked! EXITING" << endl;
-                exit(EXIT_FAILURE);
-            } else if(south_locked){
-                rm->shrink(shrink_amt, SOUTH);
-            } else {
-                rm->shift(shrink_amt, false, true);
+            cout << " ";
+            if(!issue_found) {
+                cout << "OK" << endl;
+                continue;
             }
-            rm->linkDoors(compare, NORTH);
-            north_locked = true;
-            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            continue;
-        }
 
-        //reset for xDim
-        offset = 0;
-        shrink_amt = 0;
-
-        //west
-        while(!west_locked && compare->issue_west(rm, offset)){
-            offset++;
-        }
-
-        if(offset != 0){
-            cout << "@@@@@\tCORRECTION along West wall" << endl;
-            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            cout << "@\t- Offset: " << offset << endl;
-            if(west_locked){
-                ///FIXME
-                cout << "West double-locked! EXITING" << endl;
+            if(overlap[dir[0]] && overlap[dir[1]] && overlap[dir[2]] && overlap[dir[3]]){
+                cout << "ERROR: perfectly overlapping room provided. Cannot adjust. Exiting." << endl;
                 exit(EXIT_FAILURE);
-            } else if(east_locked){
-                rm->shrink(offset, EAST);
-            } else {
-                rm->shift(offset, true);
             }
-            rm->linkDoors(compare, WEST);
-            west_locked = true;
-            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            continue;
-        }
 
-        //east
-        while(!east_locked && compare->issue_east(rm, shrink_amt)){
-            shrink_amt++;
-        }
+            adjustments_needed = true;
+            bool fixed = false;
+            Door* entry_door = rm->doors[0];
 
-        if(shrink_amt != 0){
-            cout << "@@@@@\tCORRECTION along East wall" << endl;
-            cout << "@\t- Initial coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            cout << "@\t- Offset: " << shrink_amt << endl;
-
-            if(east_locked){
-                ///FIXME
-                cout << "East double-locked! EXITING" << endl;
-                exit(EXIT_FAILURE);
-            } else if(west_locked){
-                rm->shrink(shrink_amt, WEST);
-            } else {
-                rm->shift(shrink_amt, true, true);
+            // Try shifts in each direction without an overlapping wall
+            for(int i = 0; i < 4; i++){
+                if( !overlap[ dir[i] ] && !locked[ dir[i] ]){
+                    if(rm->try_shift(dir[i], *it, entry_door)){
+                       locked[ opposite(dir[i]) ] = true;
+                       fixed = true;
+                       break;
+                    }
+                }
             }
-            rm->linkDoors(compare, EAST);
-            east_locked = true;
-            cout << "@\t- Final coords: S " << rm->southEdge << " / N " << rm->northEdge << " / W " << rm->westEdge << " / E " << rm->eastEdge << endl;
-            continue;
-        }
-    }
+
+            // If still not fixed, need to shrink instead of shifting
+            // note that "shrinking north" means the north wall is held constant while the south wall is moved north (&etc)
+            if(!fixed){
+                for(int i = 0; i < 4 && !fixed; i++){
+                    if( !overlap[ dir[i] ] ){
+                        if(rm->try_shrink(dir[i], *it, entry_door)){
+                            locked[ opposite(dir[i]) ] = true;
+                            fixed = true;
+                            break;
+                        }
+                    } // end if
+                } // end for
+            } // end if (!fixed)
+        } // end for (each room)
+    } while(adjustments_needed);
+
+    cout << endl << "linking doors:" << endl;
+    link_all_doors(rm);
     cout << "...done" << endl;
 }
+
+void Dungeon::link_all_doors(Room* new_room){
+    for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
+        if(new_room->id == (*it)->id) continue;
+        new_room->link_doors(*it, new_room->shared_wall(*it));
+    }
+}
+
 
 Room* Dungeon::add_room(Door* d, bool is_passage){
     Room* next_rm = new Room(dtype, d, is_passage);

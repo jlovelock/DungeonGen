@@ -59,6 +59,25 @@ void Door::break_down(){
 }
 
 // returns true iff it's barred from the side of r
+// (ie, you can remove the bar if you're inside r)
 bool Door::barred_from(Room* r){
     return barred && (barredSide xor (r->id != first->id));
+}
+
+string to_string(int dir){
+    switch(dir){
+        case NORTH: return "north";
+        case SOUTH: return "south";
+        case EAST: return "east";
+        case WEST: return "west";
+        default: return "undefined";
+    }
+}
+
+
+void Door::set_defaults(){
+    // defaults
+    locked = false;
+    barred = false;
+    secret = false;
 }

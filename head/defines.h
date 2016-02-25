@@ -52,7 +52,10 @@ bool is_skill(std::string s);
 
 void read(std::string& input);
 
+std::string to_string(int dir);
+
 #define GRID_SIZE 30
+#define TEST_REPETITION 10
 
 #define NORTH 100
 #define SOUTH 200

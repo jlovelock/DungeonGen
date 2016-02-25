@@ -5,7 +5,7 @@ using namespace std;
 Game::Game(){
     PC = new Character();
     dungeon = new Dungeon();
-    cur_room = new Room();
+    cur_room = dungeon->starting_room();
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
 }
 
@@ -26,10 +26,9 @@ void Game::run() {
 
 bool Game::getCommand() {
     string input;
-    //getline(cin, input);
     read(input);
     cout << endl;
-    if(contains(input, "new") || contains(input, "restart")){
+    if(contains(input, "new") || contains(input, "restart") || contains(input, "reset")){
         return false;
     } else if(input == "special"){
         PC->special_action();

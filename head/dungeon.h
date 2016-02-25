@@ -22,6 +22,8 @@ class Dungeon{
     void read_preferences();
     void write_preferences();
 
+    void link_all_doors(Room*);
+
 public:
     Dungeon();
     ~Dungeon();
@@ -38,6 +40,8 @@ public:
     std::string treasure_enabled(){ return t_ena; }
     std::string dungeon_type(){ return dtype; }
     std::string magic_items_enabled(){ return mag_it; }
+
+    Room* starting_room(){ return rooms.front(); }
 };
 
 #endif // DUNGEON_H

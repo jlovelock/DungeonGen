@@ -43,7 +43,11 @@ bool Game::parse_open_door(string input){
 
     //revisiting a room that is already initialized
     if(next_rm != NULL) {
-        cout << "You turn back to the " << next_rm->get_purpose_short() << "." << endl;
+        if(!next_rm->get_purpose_short().empty())
+            cout << "You turn back to the " << next_rm->get_purpose_short();
+        else
+            cout << "You enter room " << next_rm->get_id();
+        cout << "." << endl;
         cur_room = next_rm;
         cur_room->printDescription(d);
 
@@ -72,7 +76,6 @@ bool Game::parse_open_door(string input){
             x -= 5; break;
     }
     PC->set_position(x, y);
-
     return true;
 }
 

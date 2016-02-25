@@ -3,146 +3,112 @@
 
 using namespace std;
 
-/*
- * Shift the rooms coordinates by <amt>, in the x direction (if <dim_x>) or the y direction (otherwise)
- * Shifts north/east when rev(erse) is false, and south/west when true
- */
-void Room::shift(int amt, bool dim_x, bool rev){
 
-    cout << "----shifting by " << amt << " dim_x = " << dim_x << endl;
-
-    //shuffle doors
-    for(int i = 0; i < MAX_DOORS; i++){
-        if(doors[i] != NULL){
-            if(dim_x)
-                if(rev)
-                    doors[i]->xPos -= amt;
-                else
-                    doors[i]->xPos += amt;
-            else
-                if(rev)
-                    doors[i]->yPos -= amt;
-                else
-                    doors[i]->yPos += amt;
-        }
-    }
-    //shuffle room bounds
-    if(dim_x){
-        if(rev){
-            eastEdge -= amt;
-            westEdge -= amt;
-        } else {
-            eastEdge += amt;
-            westEdge += amt;
-        }
-    } else {
-        if(rev){
-            northEdge -= amt;
-            southEdge -= amt;
-        } else {
-            northEdge += amt;
-            southEdge += amt;
-        }
-    }
+void Room::shift(int delta_x, int delta_y){
+    shuffle_bounds(delta_y, delta_y, delta_x, delta_x);
 }
 
-////if dim_x is true, holds west edge constant and shrinks east
-////if dim_x is false, holds south edge constant and shrinks north
-//void Room::shrink(int amt, bool dim_x){
-//    //shuffle doors
-//    for(int i = 0; i < MAX_DOORS; i++){
-//        if(doors[i] != NULL){
-//            float position; //% location of door along wall
-//            if(dim_x) {
-//                position = (float)(doors[i]->xPos - westEdge)/(eastEdge - westEdge);
-//                doors[i]->xPos = westEdge + (eastEdge - westEdge - amt)*position;
-//            } else {
-//                position = (float)(doors[i]->yPos - southEdge)/(northEdge - southEdge);
-//                doors[i]->yPos = southEdge + (northEdge - southEdge - amt)*position;
-//            }
-//        }
-//    }
-//    //shuffle room bounds
-//    if(dim_x){
-//        eastEdge -= amt;
-//        xDim -= amt;
-//    } else {
-//        northEdge -= amt;
-//        yDim -= amt;
-//    }
-//}
+void Room::shrink(int direction, int amount){
+    int dN = (direction == SOUTH ? amount * -1 : 0);
+    int dS = (direction == NORTH ? amount      : 0);
+    int dE = (direction == WEST  ? amount * -1 : 0);
+    int dW = (direction == EAST  ? amount      : 0);
+    shuffle_bounds(dN, dS, dE, dW);
+}
 
-// holds <const_wall> constant and shifts its opposite inward by <amt>
-// **note that amt must always be positive here (unlike for shift)!!
-void Room::shrink(unsigned amt, int const_wall){
-    cout << "---Shrinking by " << amt << ": Const wall = " << const_wall << endl;
-    //shuffle doors
+///@TODO don't shuffle entry door position!
+void Room::shuffle_bounds(int dN, int dS, int dE, int dW){
+    // Shift room boundary
+    northEdge += dN;
+    southEdge += dS;
+    eastEdge  += dE;
+    westEdge  += dW;
+    xDim = eastEdge - westEdge;
+    yDim = northEdge - southEdge;
+
+    // Shuffle doors
     for(int i = 0; i < MAX_DOORS; i++){
-        if(doors[i] != NULL){
+        if(doors[i]){
+            // shift along same wall
+            if(doors[i]->second) continue;
+            switch(doors[i]->getWall(this)){
+                case NORTH: case SOUTH:
+                    doors[i]->xPos = (1+ (dE-dW)/(eastEdge - westEdge))*(doors[i]->xPos - westEdge)  + westEdge  + dW;
+                    break;
+                case EAST: case WEST:
+                    doors[i]->yPos = (1+ (dN-dS)/(northEdge-southEdge))*(doors[i]->yPos - southEdge) + southEdge + dS;
+            }
 
-            // if door is linked to another door already, don't shift it
-            if(doors[i]->first != NULL && doors[i]->second != NULL){
-                /// @TODO: unless not shifting it pushes it outside the room, in which case de-link it
-            } else {
-
-                float position; //% location of door along wall
-                int door_wall = doors[i]->getWall(this);
-                switch(const_wall){
-                    case WEST:
-                        if(door_wall == EAST){
-                            doors[i]->xPos -= amt;
-                        } else if(door_wall == NORTH || door_wall == SOUTH){
-                            position = (float)(doors[i]->xPos - westEdge)/(eastEdge - westEdge);
-                            doors[i]->xPos = westEdge + (eastEdge - westEdge - amt)*position;
-                        }
-                        break;
-                    case EAST:
-                        if(door_wall == WEST){
-                            doors[i]->xPos += amt;
-                        } else if(door_wall == NORTH || door_wall == SOUTH){
-                            position = (float)(doors[i]->xPos - westEdge)/(eastEdge - westEdge);
-                            doors[i]->xPos = westEdge + amt + (eastEdge - westEdge - amt)*position;
-                        }
-                        break;
-                    case SOUTH:
-                        if(door_wall == NORTH){
-                            doors[i]->yPos -= amt;
-                        } else if(door_wall == EAST || door_wall == WEST){
-                            position = (float)(doors[i]->yPos - southEdge)/(northEdge - southEdge);
-                            doors[i]->yPos = southEdge + (northEdge - southEdge - amt)*position;
-                        }
-                        break;
-                    case NORTH:
-                        if(door_wall == SOUTH){
-                            doors[i]->yPos += amt;
-                        } else if(door_wall == EAST || door_wall == WEST){
-                            position = (float)(doors[i]->yPos - southEdge)/(northEdge - southEdge);
-                            doors[i]->yPos = southEdge + amt + (northEdge - southEdge - amt)*position;
-                        }
-                }
+            // shift with moving wall
+            switch(doors[i]->getWall(this)){
+                case NORTH: doors[i]->yPos += dN; break;
+                case SOUTH: doors[i]->yPos += dS; break;
+                case EAST:  doors[i]->xPos += dE; break;
+                case WEST:  doors[i]->xPos += dW; break;
             }
         }
     }
-    //shuffle room bounds
-    switch(const_wall){
-        case NORTH:
-            southEdge += amt;
-            yDim -= amt;
-            return;
-        case SOUTH:
-            northEdge -= amt;
-            yDim -= amt;
-            return;
-        case EAST:
-            westEdge += amt;
-            xDim -= amt;
-            return;
-        case WEST:
-            eastEdge -= amt;
-            xDim -= amt;
-            return;
-    }
 }
+
+bool Room::try_shrink(int dir, Room* compare, Door* entry){
+    int delta = 0;
+    int dN=0, dS=0, dE=0, dW=0;
+    while(true) {
+
+        delta++;
+        switch(dir){
+            case NORTH: dS++;  break;
+            case SOUTH: dN--;  break;
+            case EAST:  dW++;  break;
+            case WEST:  dE--;  break;
+        }
+
+        // make sure you haven't shrunk to size 0
+        if(northEdge + dN == southEdge + dS || eastEdge + dE == westEdge + dW)
+            return false;
+
+        // ensure entry door is still valid
+        if(!bordering(entry, dN, dS, dE, dW))
+            return false;
+
+        // check if issue resolved
+        if(!issue_shrink(compare, dir, delta)){
+            cout << "shrinking " << to_string(dir) << " by " << delta << "." << endl;
+            shrink(dir, delta);
+            return true;
+        }
+
+    }
+    return false;
+}
+
+bool Room::try_shift(int dir, Room* compare, Door* entry){
+    int delta_x = 0, delta_y = 0;
+    while(true) {
+        //update deltas
+        switch(dir){
+            case NORTH: delta_y++; break;
+            case SOUTH: delta_y--; break;
+            case EAST:  delta_x++; break;
+            default:    delta_x--; break;
+        }
+
+        // ensure entry door is still valid
+        if(!bordering(entry, delta_x, delta_y))
+            return false;
+
+        // check if issue resolved
+        if(!issue_shift(compare, delta_x, delta_y)){
+            cout << "shifting (delta_x = " << delta_x << ", delta_y = " << delta_y << "." << endl;
+            shift(delta_x, delta_y);
+            return true;
+        }
+    }
+    // should never reach, but here to avoid warnings =]
+    cout << "Something's messed up. You shouldn't have been able to reach here! (try_shift)" << endl;
+    return false;
+}
+
 void Room::remove_connections(int wall){
     // beginning at 1: don't want to remove initial entry door
     for(int i = 1; i < MAX_DOORS && doors[i] != NULL; i++){
@@ -214,9 +180,24 @@ int Room::find_overwrite_index(bool can_delete){
     return cur_door;
 }
 
+int Room::shared_wall(Room* r){
+    if(northEdge == r->southEdge && !(r->eastEdge <= westEdge || r->westEdge >= eastEdge))
+        return NORTH;
+    else if(southEdge == r->northEdge && !(r->eastEdge <= westEdge || r->westEdge >= eastEdge))
+        return SOUTH;
+    else if(eastEdge == r->westEdge && !(r->northEdge <= southEdge || r->southEdge >= northEdge))
+        return EAST;
+    else if(westEdge == r->eastEdge && !(r->northEdge <= southEdge || r->southEdge >= northEdge))
+        return WEST;
+    else
+        return 0;
+}
+
 ///@TODO: Finish this function!
-void Room::linkDoors(Room* adjacent, int wall){
-    cout << "## Attempting to link room " << id << " with room " << adjacent->id << "!" << endl;
+// wall = from caller room
+void Room::link_doors(Room* adjacent, int wall){
+    if(wall == 0) return;
+    cout << "-- Attempting to link room " << id << " with room " << adjacent->id << "!" << endl;
 
     // Populate lists of all relevant doors for both rooms
     vector<Door*> new_rm_doors;
@@ -224,14 +205,16 @@ void Room::linkDoors(Room* adjacent, int wall){
     for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
         if(doors[i]->firstWall == wall
            && adjacent->bordering(doors[i]->xPos, doors[i]->yPos)
-           && doors[i]->within_bounds(adjacent)){
+           && doors[i]->within_bounds(adjacent)
+           && doors[i]->second == NULL){
             new_rm_doors.push_back(doors[i]);
         }
     }
     for(int i = 0; i < MAX_DOORS && adjacent->doors[i] != NULL; i++){
         if(adjacent->doors[i]->getWall(adjacent) == opposite(wall)
            && bordering(adjacent->doors[i]->xPos, adjacent->doors[i]->yPos)
-           && adjacent->doors[i]->within_bounds(this))
+           && adjacent->doors[i]->within_bounds(this)
+           && adjacent->doors[i]->second == NULL)
             {
                 adj_rm_doors.push_back(adjacent->doors[i]);
             }
@@ -291,98 +274,86 @@ void Room::linkDoors(Room* adjacent, int wall){
 }
 
 
-//shift on south/west, shrink on north/east
-///TODO: one wall needs to be held constant (whichever door you came through). Make sure that happens!
-//void Room::adjustPosition(Room* compare){
-//    int offset = 0, shrink_amt = 0;
-//
-//    //south
-//    while(compare->withinY(southEdge+offset)){
-//        offset++;
-//    }
-//    if(offset != 0){
-//        shift(offset, false);
-//        linkDoors(compare, SOUTH);
-//    }
-//
-//    //north
-//    while(compare->withinY(northEdge-shrink_amt)){
-//        shrink_amt++;
-//    }
-//    if(shrink_amt != 0){
-//        shrink(shrink_amt, false);
-//        linkDoors(compare, NORTH);
-//    }
-//
-//    //reset for xDim
-//    offset = 0;
-//    shrink_amt = 0;
-//
-//    //west
-//    while(compare->withinX(westEdge+offset)){
-//        offset++;
-//    }
-//
-//    if(offset != 0){
-//        shift(offset, true);
-//        linkDoors(compare, WEST);
-//    }
-//
-//    //east
-//    while(compare->withinX(eastEdge-shrink_amt)){
-//        shrink_amt++;
-//    }
-//
-//    if(shrink_amt != 0){
-//        shrink(shrink_amt, true);
-//        linkDoors(compare, EAST);
-//    }
-//
-//}
-
-///@TODO: clean these up!
-// Returns true iff the parameter room's xth edge is causing a problem (within bounds for) the main caller room
-bool Room::issue_north(Room* r, int offset){
-    return
-        r->northEdge-offset > southEdge &&
-        (r->northEdge-offset < northEdge || r->southEdge-offset < southEdge) &&
-        !(r->eastEdge <= westEdge || r->westEdge >= eastEdge);
+/*
+ * Returns true iff the caller room's xth edge is overlapped by the parameter room.
+ * The caller room is shifted by the offset deltas.
+ * delta_x is positive when shifting east / negative west; y is positive north / negative south.
+ * (It pains me to have so much repeated code like this, but with small-but-nonobvious differences
+ *    between them, I actually can't think of a worthwhile way to collapse, given that there's only
+ *    four different options total.)
+ */
+ bool Room::issue(int direction, Room* r){
+    switch (direction) {
+        case NORTH:  return issue_north(r, 0, 0, 0, 0);
+        case SOUTH:  return issue_south(r, 0, 0, 0, 0);
+        case EAST:   return issue_east(r, 0, 0, 0, 0);
+        case WEST:   return issue_west(r, 0, 0, 0, 0);
+        default:     return false;
+    }
 }
 
-bool Room::issue_south(Room* r, int offset){
-    return
-        r->southEdge+offset < northEdge &&
-        (r->southEdge+offset > southEdge || r->northEdge+offset > northEdge) &&
-        !(r->eastEdge <= westEdge || r->westEdge >= eastEdge);
+ bool Room::issue_shift(Room* r, int x, int y){
+    return issue_north(r, y, y, x, x) ||
+           issue_south(r, y, y, x, x) ||
+           issue_east(r, y, y, x, x)  ||
+           issue_west(r, y, y, x, x);
 }
 
-bool Room::issue_east(Room* r, int offset){
-    return
-        r->eastEdge-offset > westEdge &&
-        (r->eastEdge-offset < eastEdge || r->westEdge-offset < westEdge) &&
-        !(r->southEdge >= northEdge || r->northEdge <= southEdge);
+ bool Room::issue_shrink(Room* r, int shrink_direction, int shrink_amt){
+    int n = (shrink_direction == SOUTH ? shrink_amt * -1 : 0);
+    int s = (shrink_direction == NORTH ? shrink_amt      : 0);
+    int e = (shrink_direction == WEST  ? shrink_amt * -1 : 0);
+    int w = (shrink_direction == EAST  ? shrink_amt      : 0);
+
+    return issue_north(r, n, s, e, w) ||
+           issue_south(r, n, s, e, w) ||
+           issue_east(r, n, s, e, w)  ||
+           issue_west(r, n, s, e, w);
 }
 
-bool Room::issue_west(Room* r, int offset){
+bool Room::issue_north(Room* r, int delta_n, int delta_s, int delta_e, int delta_w){
     return
-        r->westEdge+offset < eastEdge &&
-        (r->westEdge+offset > westEdge || r->eastEdge+offset > eastEdge) &&
-        !(r->southEdge >= northEdge || r->northEdge <= southEdge);
+        r->northEdge >= northEdge + delta_n &&
+        r->southEdge < northEdge + delta_n &&
+        !(r->eastEdge <= westEdge + delta_w || r->westEdge >= eastEdge + delta_e);
 }
 
+bool Room::issue_south(Room* r, int delta_n, int delta_s, int delta_e, int delta_w){
+    return
+        r->southEdge <= southEdge + delta_s &&
+        r->northEdge > southEdge + delta_s &&
+        !(r->eastEdge <= westEdge + delta_w || r->westEdge >= eastEdge + delta_e);
+}
 
+bool Room::issue_east(Room* r, int delta_n, int delta_s, int delta_e, int delta_w){
+    return
+        r->eastEdge >= eastEdge + delta_e &&
+        r->westEdge < eastEdge + delta_e &&
+        !(r->northEdge <= southEdge + delta_s || r->southEdge >= northEdge + delta_n);
+}
+
+bool Room::issue_west(Room* r, int delta_n, int delta_s, int delta_e, int delta_w){
+    return
+        r->westEdge <= westEdge + delta_w &&
+        r->eastEdge > westEdge + delta_w &&
+        !(r->northEdge <= southEdge + delta_s || r->southEdge >= northEdge + delta_n);
+}
+
+// strict lt. means no doors on corners
 bool Room::bordering(int x, int y){
     return
-        x == eastEdge ||
-        x == westEdge ||
-        y == northEdge ||
-        y == southEdge;
+        ((x == eastEdge || x == westEdge) && y < northEdge && y > southEdge)
+        ||
+        ((y == northEdge || y == southEdge) && x < eastEdge && x > westEdge);
 }
 
-bool Room::bordering(Door* d){
+bool Room::bordering(Door* d, int delta_x, int delta_y){
+    return bordering(d, delta_y, delta_y, delta_x, delta_x);
+}
+
+bool Room::bordering(Door* d, int delta_n, int delta_s, int delta_e, int delta_w){
     return
-        d->xPos == eastEdge ||
-        d->xPos == westEdge ||
-        d->yPos == northEdge ||
-        d->yPos == southEdge;
+        ((d->xPos == eastEdge + delta_e || d->xPos == westEdge + delta_w) && d->yPos < northEdge + delta_n && d->yPos > southEdge + delta_s)
+        ||
+        ((d->yPos == northEdge + delta_n || d->yPos == southEdge + delta_s) && d->xPos < eastEdge + delta_e && d->xPos > westEdge + delta_w);
 }

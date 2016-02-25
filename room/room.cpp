@@ -8,18 +8,21 @@ using namespace std;
 
 int Room::max_id = 0;
 
-
 Room* Room::connected(Door* d){
     return isFirstRoom(d) ? d->second : d->first;
 }
 
 
-Door* Room::get_door_on_wall(string input){
+Door* Room::get_door_on_wall(string input, bool use_first){
     int doorCopies = 0, doorNum = 0;
     for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
         if(contains(input, doors[i]->getWallString(this)) && !doors[i]->secret){
-            doorNum = i;
-            doorCopies++;
+            if(use_first){
+                return doors[i];
+            } else {
+                doorNum = i;
+                doorCopies++;
+            }
         }
     }
     if(doorCopies == 1)
@@ -68,9 +71,10 @@ Door* Room::get_door_on_wall(string input){
 
 ///@TODO: get doors properly spaced out along walls, so this works as expected
 int Room::get_door_id(Door* d){
-    for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
-        if(doors[i]->xPos == d->xPos && doors[i]->yPos == d->yPos) return i;
+    for(int i = 0; i < MAX_DOORS; i++){
+        if(doors[i] && doors[i]->id == d->id) return i;
     }
+    cout << "ERROR: Door #" << d->id << " @(" << d->xPos << "," << d->yPos << ") was not found in room #" << id << ".";
     return -1;
 }
 
@@ -158,7 +162,7 @@ void Room::printFullDescription(int doorNum){
 void Room::printDescription(int doorNum){
     //cout << "ROOM " << id << endl;
 
-    cout << "@@ S: " << southEdge << " / N: " << northEdge << " / W: " << westEdge << " / E: " << eastEdge << endl;
+    cout << "@@ " << location() << endl;
 
     ///TODO multi-monster support
     if(monsters[0] != NULL){
@@ -195,14 +199,14 @@ void Room::printDescription(int doorNum){
         if(doors[i]->second != NULL){
             cout << " (leading back to the ";
             if(isFirstRoom(doors[i]))
-                cout << doors[i]->second->purpose_short;
+                cout << doors[i]->second->get_purpose_short();
             else
-                cout << doors[i]->first->purpose_short;
+                cout << doors[i]->first->get_purpose_short();
             cout << ")";
         }
 
         //DEBUG
-        cout << "[" << doors[i]->xPos << "," << doors[i]->yPos << "]";
+        cout << "--[ID #" << doors[i]->id << " @(" << doors[i]->xPos << "," << doors[i]->yPos << ")]--";
 
         cout << ", ";
     }
@@ -219,15 +223,15 @@ void Room::printDescription(int doorNum){
     } else {
         cout << doors[doorNum]->getWallString(this) << " (leading back to the ";
         if(isFirstRoom(doors[doorNum]))
-            cout << doors[doorNum]->second->purpose_short;
+            cout << doors[doorNum]->second->get_purpose_short();
         else
-            cout << doors[doorNum]->first->purpose_short;
+            cout << doors[doorNum]->first->get_purpose_short();
     }
 
      cout << ") ";
 
      //DEBUG
-     cout << "[" << doors[doorNum]->xPos << "," << doors[doorNum]->yPos << "]";
+     cout << "--[ID #" << doors[doorNum]->id << " @(" << doors[doorNum]->xPos << "," << doors[doorNum]->yPos << ")]--";
 
      cout << "." << endl << endl;
 

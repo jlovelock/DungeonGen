@@ -17,14 +17,12 @@ void init(){
 int main(){
     init();
     run_all_tests();
-
-    while(1){
-//        Dungeon d;
-//        d.run();
-        Game* g = new Game;
-        g->run();
-        delete g;
-    }
+//
+//    while(1){
+//        Game* g = new Game;
+//        g->run();
+//        delete g;
+//    }
 
     return 0;
 }

@@ -9,6 +9,9 @@ class Room;
 
 class Door {
 
+    static int max_id; //starts at 0, increments with each room added
+    int id;
+
     friend class Room;
     friend class Dungeon;
     friend class Tests;
@@ -55,6 +58,7 @@ public:
     bool barred_from(Room*);
     int getWall(Room*);
     std::pair<int, int> get_position(){ return std::make_pair(xPos, yPos); }
+    void set_defaults();
 };
 
 #endif // DOOR_H

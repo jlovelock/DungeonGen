@@ -47,9 +47,12 @@ void Room::setExits(int entrance, bool large){
 
 ///For creating the starting area only!!
 Room::Room(){
+    max_id = 0;
     id = max_id++;
-    for(int i = 0; i < MAX_MONSTERS; i++)
+    for(int i = 0; i < MAX_MONSTERS; i++){
         monsters[i] = NULL;
+    }
+
     setPurpose("STRONGHOLD"); ///@TODO specify based on preferences
 
     int x = d10();
