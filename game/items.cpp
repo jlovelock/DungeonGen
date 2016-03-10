@@ -104,9 +104,24 @@ void Game::rollIndividualTreasure(string monster_name){
     }
 }
 
+bool Game::has_unidentified_items(){
+    for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
+        if(!(*it)->identified) return true;
+    }
+    for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
+        if(!(*it)->identified) return true;
+    }
+    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+        if(!(*it)->identified) return true;
+    }
+
+    return false;
+}
 
 
 void Game::identify_items(){
+    if(!has_unidentified_items()) return;
+
     bool first_item_identified = true;
     cout << "As you rest, you look over the items you have gathered more closely." << endl;
     for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){

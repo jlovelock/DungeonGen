@@ -31,6 +31,7 @@ class Game {
     bool combat(std::string);
     bool drink_potion();
     void drink_potion(int index);
+    bool has_unidentified_items();
     void identify_items();
     bool cast_spell();
 
