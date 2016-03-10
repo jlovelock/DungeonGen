@@ -88,7 +88,7 @@ void Character::generic_attack(Character* opponent){
     else if(off_hand->is_weapon()) w = (Weapon*)off_hand;
     else w = weapon_select(opponent);
 
-    if(is_monster) cout << "The " << PC_class << " attacks you with his " << w->name() << " drawn." << endl;
+    if(is_monster) cout << "The " << PC_class << " lashes out with a " << w->name() << "." << endl;
     else cout << "You attack the " << opponent->PC_class << " with your " << w->name() << " drawn." << endl;
 
     attack(opponent, attack_roll(w), damage(w));

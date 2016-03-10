@@ -74,6 +74,13 @@ void Character::printCharacterSheet(){
         cout << "\t - " << (*it)->get_weapon_description(this) << endl;
     }
 
+    cout << "\tWeapon proficiencies: simple weapons";
+    for(vector<string>::iterator it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it){
+        cout << ", " << (*it);
+        if((*it) == "martial") cout << " weapons";
+    }
+    cout << endl;
+
 //    cout << "\tMelee attack: " << melee_weapon << " +" << melee_atk_mod << ", d" << melee_weapon_die << "+" << melee_dmg_bonus << " damage" << endl;
 //    cout << "\tRanged attack: " << ranged_weapon << " +" << ranged_atk_mod << ", d" << ranged_weapon_die << "+" << ranged_dmg_bonus << " damage" << endl;
 
@@ -87,8 +94,16 @@ void Character::printCharacterSheet(){
     }
     cout << endl;
 
-    cout << "======================================================================================" << endl << endl;
+    cout << "\tFighting style";
+    if(fighting_styles.size() > 1) cout << "s";
+    cout << ": ";
+    for(vector<string>::iterator it = fighting_styles.begin(); it != fighting_styles.end(); ++it){
+        if(it != fighting_styles.begin()) cout << ", ";
+        cout << (*it);
+    }
+    cout << endl;
 
+    cout << "======================================================================================" << endl << endl;
 }
 
 bool Character::proficient_with(string weapon_type){

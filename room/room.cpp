@@ -214,14 +214,16 @@ void Room::printDescription(int doorNum){
     cout << "the ";
 
     if(doors[doorNum]->material == "empty" || doors[doorNum]->material == "passage")
-        cout << "opening to the corridor you entered from to the ";
+        cout << "opening to the corridor you entered to the ";
     else
-        cout << doors[doorNum]->material << " door you entered from to the ";
+        cout << doors[doorNum]->material << " door you entered to the ";
+
+    cout << doors[doorNum]->getWallString(this);
 
     if(doors[doorNum]->main_exit){
-        cout << doors[doorNum]->getWallString(this) << " (leading back outside";
+        cout << " (leading back outside";
     } else {
-        cout << doors[doorNum]->getWallString(this) << " (leading back to the ";
+        cout << " (leading back to the ";
         if(isFirstRoom(doors[doorNum]))
             cout << doors[doorNum]->second->get_purpose_short();
         else
@@ -245,7 +247,7 @@ void Room::search_for_secret_doors(Character* c, bool& found){
             //cur_room->doors[i]->secret = false;
             if(found) cout << "You also find a secret door along the ";
             else cout << "You find a secret door along the ";
-            cout << doors[i]->getWall(this) << " wall." << endl << endl;
+            cout << to_string(doors[i]->getWall(this)) << " wall." << endl << endl;
             found = true;
         }
     }

@@ -16,5 +16,5 @@ Object::Object(string name){
 
 
 bool Object::is_equipped_to(Character* c){
-    return _name == c->main_hand->name() || _name == c->off_hand->name();
+    return (c->main_hand && _name == c->main_hand->name()) || (c->off_hand && _name == c->off_hand->name());
 }

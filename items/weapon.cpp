@@ -139,13 +139,14 @@ int Weapon::proficiency(Character* c){
 
 //TODO: for finesse weapons, allow the user to choose whether they're attacking with STR or DEX,
 //  but set a default (so you don't ask every time if irrelevant)
-bool Weapon::attr_mod(Character* c){
-    if(_range > 10 && !_thrown)
+int Weapon::attr_mod(Character* c){
+    if(_range > 10 && !_thrown) {
         return c->attribute_mod("DEX");
-    else if(_finesse && c->attribute_mod("DEX") > c->attribute_mod("STR"))
+    } else if(_finesse && c->attribute_mod("DEX") > c->attribute_mod("STR")) {
         return c->attribute_mod("DEX");
-    else
+    } else {
         return c->attribute_mod("STR");
+    }
 }
 
 int Weapon::base_dmg(Character* c){
@@ -158,6 +159,8 @@ int Weapon::base_dmg(Character* c){
 
 int Weapon::misc_atk_mods(Character* c){
     int sum = 0;
+
+    // Nb: yes, the archery fighting style applies to thrown weapons by RAW.
     if(c->has_fighting_style("archery") && _range > 10){
         sum += 2;
     }
@@ -165,7 +168,16 @@ int Weapon::misc_atk_mods(Character* c){
 }
 int Weapon::misc_dmg_mods(Character* c){
     int sum = 0;
-    if(c->has_fighting_style("dueling") && c->equipped_weapon_type() == "one handed"){
+
+    /*
+     * Say you have a pair of unequipped shortswords. Do they both deal +2 damage, because you _could_ equip them individually?
+     * It's a strange question, and likely to be misleading whichever way you answer.
+     * Here, I've chosen to only give a weapon bonuses from the dueling fighting style if the weapon is actually equipped.
+     * In the future, I might try to print extra clarifying info: for now, just trust that naming the fighting style covers it.
+     */
+    if(c->has_fighting_style("dueling")
+       && c->equipped_weapon_type() == "one handed"
+       && is_equipped_to(c)){
         sum += 2;
     }
     return sum;
@@ -183,7 +195,7 @@ int Weapon::get_attack_mod(Character* c){
 
 string Weapon::get_weapon_description(Character* c){
     std::stringstream ss;
-    ss << _name << "+" << get_attack_mod(c) << ", d" << get_dmg_die() << "+" << get_dmg_bonus(c) << " " << _dtype << " damage";
+    ss << _name << " +" << get_attack_mod(c) << ", d" << get_dmg_die() << "+" << get_dmg_bonus(c) << " " << _dtype << " damage";
     return ss.str();
 }
 
@@ -208,4 +220,3 @@ int Weapon::get_dmg_bonus(Character* c){
 int Weapon::damage_roll(Character* c){
     return base_dmg(c) + get_dmg_bonus(c);
 }
-

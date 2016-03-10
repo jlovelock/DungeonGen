@@ -35,6 +35,9 @@ Character::Character(){
     xp = 0;
     main_hand = NULL; off_hand = NULL;
 
+
+    weapon_proficiencies.push_back("martial");
+
     ///@TODO: Class selection
     cout << "New character: default or custom? " << endl;
     string input;
@@ -51,6 +54,9 @@ Character::Character(){
         set_base_skill_mods();
         default_fighter();
     }
+
+    //debug
+    casting_stat = "INT";
 
     printCharacterSheet();
 }

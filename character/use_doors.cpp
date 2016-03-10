@@ -26,7 +26,7 @@ bool Character::break_down(Door* d){
 
 
 bool Character::use_locked_door(Door* d){
-    cout << "That door is locked. Try to lockpick, ram, or leave? ";
+    cout << "That door is locked. Try to lockpick, ram, or leave? " << endl;
     string input;
     read(input);
     if (input == "lockpick") {
@@ -40,7 +40,7 @@ bool Character::use_locked_door(Door* d){
 }
 
 bool Character::use_blocked_door(Door* d){
-        cout << "Something is blocking it from opening. Try to ram, or leave? ";
+        cout << "Something is blocking it from opening. Try to ram, or leave? " << endl;
         string input;
         read(input);
 

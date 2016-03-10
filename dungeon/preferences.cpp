@@ -5,7 +5,7 @@ using namespace std;
 void Dungeon::read_preferences(){
     ifstream sfile("save/settings.conf");
 
-    if(sfile == NULL){
+    if(!sfile.is_open()){
         cout << "Missing file settings.conf. Exiting." << endl;
         exit(EXIT_FAILURE);
     }
@@ -69,13 +69,18 @@ void Dungeon::read_preferences(){
 void Dungeon::write_preferences(){
     ofstream sfile("save/settings.conf");
 
+    if(!sfile.is_open()){
+        cout << "Missing file settings.conf. Exiting." << endl;
+        exit(EXIT_FAILURE);
+    }
+
     // Dungeon type: STRONGHOLD[0]
     if(dtype == "STRONGHOLD"){
         sfile.put('0');
     }
 
     // Monsters enabled: false[0], true[1]
-    if(m_ena)
+    if(!m_ena)
         sfile.put('0');
     else
         sfile.put('1');

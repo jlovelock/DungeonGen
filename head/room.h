@@ -95,6 +95,7 @@ public:
     Character* get_monster_char();
     std::string get_active_monster();
     void search_for_secret_doors(Character*, bool& found);
+    int num_active_monsters();
 
     void printFullDescription(int doorNum=0); ///@TODO doorNum should be the entrance door for initial room
     Door* get_door_on_wall(std::string wall, bool use_first=false);

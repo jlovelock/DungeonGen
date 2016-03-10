@@ -54,55 +54,39 @@ void Character::fighter(){
     hit_dice = level;
     hit_die_size = 10;
 
-    //skills
-    fighter_skills();
-
-    //attacks
-//    melee_atk_mod = attribute_mods["STR"] + prof;
-//    melee_dmg_bonus = attribute_mods["STR"];
-//    ranged_atk_mod = attribute_mods["DEX"] + prof;
-//    ranged_dmg_bonus = attribute_mods["DEX"];
-    init = attribute_mods["DEX"];
-
     //misc
+    fighter_skills();
     second_wind_available = true;
+    init = attribute_mods["DEX"];
 
     string input;
 
     cout << "4) ARMOR: Choose chainmail or leather. (Leather armor comes with a longbow.)" << endl;
     do {
-        cout << "\tArmor choice: ";
         read(input);
-        if(input == "chainmail"){
+        if(contains(input, "chainmail")){
             _AC = 16;
             Weapon* w = new Weapon("hand crossbow");
             weapons.push_back(w);
-            //ranged_weapon = "hand crossbow";
-            //ranged_weapon_die = 6;
             break;
-        } else if(input == "leather"){
+        } else if(contains(input, "leather")){
             _AC = 11+attribute_mods["DEX"];
             Weapon* w = new Weapon("longbow");
             weapons.push_back(w);
-//            ranged_weapon = "longbow";
-//            ranged_weapon_die = 8;
             break;
         } else cout << "\tInvalid selection." << endl;
     } while(true);
 
     cout << "6) WEAPON / SHIELD: Choose two-handed, one-handed, or dual-wielded weapon(s)." << endl;
     do {
-        cout << "\ttwo-handed, one-handed, or dual: ";
         read(input);
-        if(input == "two-handed"){
+        if(contains(input, "two")){
             cout << "\tGreataxe selected." << endl;
             Weapon* w = new Weapon("greataxe");
             weapons.push_back(w);
             equip(w);
-//            melee_weapon = "greataxe";
-//            melee_weapon_die = 12;
             break;
-        } else if(input == "one-handed"){
+        } else if(contains(input, "one")){
             cout << "\tFinesse weapon (dex to wield)? [y/n] ";
             read(input);
             if(input == "y"){
@@ -110,16 +94,11 @@ void Character::fighter(){
                Weapon* w = new Weapon("rapier");
                weapons.push_back(w);
                equip(w);
-//               melee_weapon = "rapier";
-//               melee_atk_mod = attribute_mods["DEX"] + prof;
-//               melee_weapon_die = 8;
             } else if(input == "n"){
-//                melee_weapon = "longsword";
                 cout << "\tLongsword selected." << endl;
                 Weapon* w = new Weapon("longsword");
                 weapons.push_back(w);
                 equip(w);
-//                melee_weapon_die = 8;
             }
             cout << "\tShield? [y/n] ";
             read(input);
@@ -134,7 +113,6 @@ void Character::fighter(){
             cout << "\tFinesse weapons (dex to wield)? [y/n] ";
             read(input);
             if(input == "y"){
-//                melee_weapon = "shortswords";
                 Weapon* s1 = new Weapon("shortsword");
                 Weapon* s2 = new Weapon("shortsword");
                 weapons.push_back(s1);
@@ -142,10 +120,7 @@ void Character::fighter(){
                 equip(s1);
                 equip(s2, true);
                 cout << "\tShortswords selected." << endl;
-//                melee_atk_mod = attribute_mods["DEX"] + prof;
-//                melee_weapon_die = 6;
             } else {
-//                melee_weapon = "handaxes";
                 cout << "\tHandaxes selected." << endl;
                 Weapon* s1 = new Weapon("handaxe");
                 Weapon* s2 = new Weapon("handaxe");
@@ -153,7 +128,6 @@ void Character::fighter(){
                 weapons.push_back(s2);
                 equip(s1);
                 equip(s2, true);
-//                melee_weapon_die = 6;
             }
             break;
         }
@@ -171,15 +145,6 @@ void Character::fighter(){
         if(input == "archery" || input == "defense" || input == "dueling") {
             fighting_styles.push_back(input);
             break;
-//        if(input == "archery"){
-//            ranged_atk_mod += 2;
-//            break;
-//        } else if(input == "defense") {
-//            AC++;
-//            break;
-//        } else if(input == "dueling") {
-//            melee_dmg_bonus += 2;
-//            break;
         } else {
             cout << "\tInvalid entry." << endl;
         }

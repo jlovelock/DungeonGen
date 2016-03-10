@@ -31,10 +31,10 @@ bool Character::find_secret_door(Door* d){
 
 bool Character::search_monster(bool print_err_msgs){
     if(is_alive()){
-        cout << "You can't do that while it's still alive!" << endl;
+        if(print_err_msgs) cout << "You can't do that while it's still alive!" << endl;
         return false;
     } else if (searched){
-        cout << "You've already done that." << endl;
+        if(print_err_msgs) cout << "You've already done that." << endl;
         return false;
     } else {
         searched = true;
@@ -58,13 +58,54 @@ bool Character::has_fighting_style(string style){
     return false;
 }
 
-void Character::equip(Object* o, bool equip_to_offhand){
+bool Character::equip(Object* o, bool equip_to_offhand){
+    string input;
+
+    if(o->is_equipped_to(this)){
+        cout << "You're already wielding the " << o->name();
+        if(!o->is_two_handed()){
+            if(main_hand && main_hand->name() == o->name()){
+                cout << " in your main hand.";
+                if(off_hand){
+                    cout << "Switch with the " << off_hand->name() << " in your off hand? [y/n]" << endl;
+                    read(input);
+                    if(input == "y"){
+                        Object* tmp = off_hand;
+                        off_hand = main_hand;
+                        main_hand = tmp;
+                        cout << "Equipped " << main_hand->name() << " to your main hand and " << off_hand->name() << " to your off hand." << endl;
+                    }
+                    cout << "Switch to your main hand? [y/n]" << endl;
+                    read(input);
+                    if(input == "y"){
+                        main_hand = off_hand;
+                        off_hand = NULL;
+                        cout << "Switched " << main_hand->name() << " to your main hand." << endl;
+                    }
+                }
+            } else {
+                cout << " in your off hand. ";
+                if(main_hand) {
+                    cout << "Switch with the " << main_hand->name() << " in your main hand? [y/n]" << endl;
+                    read(input);
+                    if(input == "y"){
+                        Object* tmp = off_hand;
+                        off_hand = main_hand;
+                        main_hand = tmp;
+                        cout << "Equipped " << main_hand->name() << " to your main hand and " << off_hand->name() << " to your off hand." << endl;
+                    }
+                }
+            }
+        } else { cout << "." << endl; }
+        return true;
+    }
+
     if(o->is_two_handed()){
         if(main_hand == NULL && off_hand == NULL){
-            cout << o->name() << " equipped." << endl;
+            cout << o->name() << " equipped." << endl << endl;
             main_hand = o;
             off_hand = o;
-            return;
+            return true;
         }
         else {
             cout << "Unequip the ";
@@ -76,15 +117,15 @@ void Character::equip(Object* o, bool equip_to_offhand){
                 cout << off_hand->name();
             cout << "? [y/n]" << endl;
 
-            string input;
             read(input);
             if(input == "y") {
-                cout << o->name() << " equipped." << endl;
+                cout << o->name() << " equipped." << endl << endl;
                 main_hand = o;
                 off_hand = o;
+                return true;
             }
             cout << endl;
-            return;
+            return false;
         }
 
     //One-handed
@@ -92,32 +133,31 @@ void Character::equip(Object* o, bool equip_to_offhand){
         if(!off_hand && equip_to_offhand){
             cout << o->name() << " equipped (off hand)." << endl;
             off_hand = o;
-            return;
+            return true;
         }
         else if(!main_hand){
             cout << o->name() << " equipped (main hand)." << endl;
             main_hand = o;
-            return;
+            return true;
         }
         else if(main_hand && !off_hand) {
             cout << o->name() << " and " << main_hand->name() << " equipped (main hand)." << endl;
             cout << "Which in main hand? " << endl;
-            string input;
-            read(input);
             while(true){
+                read(input);
                 if(input == o->name()){
                     off_hand = main_hand;
                     main_hand = o;
-                    return;
+                    return true;
                 } else if(input == main_hand->name()){
                     off_hand = o;
-                    return;
+                    return true;
                 } else {
                     cout << "Invalid entry, try again." << endl;
                 }
             }
         }
-        //TODO better wording here
+        ///@TODO better wording here
         else {
             cout << "You must unequip something first. The ";
             if(main_hand)
@@ -126,12 +166,10 @@ void Character::equip(Object* o, bool equip_to_offhand){
                 cout << ", the ";
             if(off_hand && !off_hand->is_two_handed())
                 cout << off_hand->name();
-            cout << ", or cancel?" << endl;
+            cout << ", or cancel?" << endl << endl;
 
-            string input;
-            cout << endl;
-            read(input);
             while(true){
+                read(input);
                 if(input == main_hand->name()){
                     cout << main_hand->name() << " unequipped, and " << o->name() << " equipped." << endl << endl;
                     if(main_hand->is_two_handed())
@@ -139,14 +177,14 @@ void Character::equip(Object* o, bool equip_to_offhand){
                     main_hand = o;
                     if(o->is_two_handed())
                         off_hand = o;
-                    return;
+                    return true;
                 } else if(input == off_hand->name()){
                     cout << off_hand->name() << " unequipped, and " << o->name() << " equipped." << endl << endl;
                     off_hand = o;
-                    return;
+                    return true;
                 } else if(input == "cancel"){
                     cout << endl;
-                    return;
+                    return false;
                 } else {
                     cout << "Invalid entry, try again." << endl;
                 }

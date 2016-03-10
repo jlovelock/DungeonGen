@@ -46,13 +46,14 @@ static const char* skargs[] = {
     "PERSUASION"
   };
 
+//there has got to be a better way to do this...
 static const std::vector<std::string> skills_list(skargs, skargs+sizeof(skargs)/sizeof(skargs[0]));
 
 bool is_skill(std::string s);
 
 void read(std::string& input);
 
-std::string to_string(int dir);
+std::string to_string(int dir); //converts NORTH to "north", eg
 
 #define GRID_SIZE 30
 #define TEST_REPETITION 10

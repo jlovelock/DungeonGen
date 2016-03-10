@@ -163,7 +163,7 @@ class Character {
     std::vector<Weapon*> weapons; //in inventory
     std::vector<Object*> objects;
 
-    void equip(Object*, bool equip_to_offhand=false);
+    bool equip(Object*, bool equip_to_offhand=false);
         bool can_open(Door*);
 
     std::pair<int, int> get_position();

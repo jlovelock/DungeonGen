@@ -48,7 +48,7 @@ class Weapon : public Object {
     bool _atk_mod;
     std::string _dtype;
 
-    bool attr_mod(Character* c);
+    int attr_mod(Character* c);
     int base_dmg(Character* c);
     int proficiency(Character* c);
     int misc_atk_mods(Character* c);

@@ -29,7 +29,10 @@ bool Game::getCommand() {
     read(input);
     cout << endl;
     if(contains(input, "new") || contains(input, "restart") || contains(input, "reset")){
-        return false;
+        cout << "Reset this dungeon and start a new game? [y/n]" << endl;
+        read(input);
+        if(input == "y") return false;
+        else return true;
     } else if(input == "special"){
         PC->special_action();
         return true;
@@ -44,7 +47,7 @@ bool Game::getCommand() {
         return true;
 
     //combat
-    } else if(contains(input, "attack")) {
+    } else if(contains(input, "attack") || contains(input, "fight")) {
         if(!combat(input)) return true;
 //    } else if(input == "melee"){
 //        cin >> input; //get monster name
@@ -58,13 +61,12 @@ bool Game::getCommand() {
 //        if(!combat()) return true;
 
     } else if(contains(input,"search") || contains(input, "loot")){
-        searching(input);
+        if(!searching(input)) return true;
     } else if(input == "inventory"){
         print_inventory();
         return true;
     } else if(contains(input, "drink") || contains(input, "potion")){
         if(!drink_potion()) return true;
-
     } else if(contains(input, "identify")){
         if(loot.empty() && potions.empty()) cout << "Sorry, not sure what you're referring to there." << endl << endl;
         else cout << "Inspecting things in that much detail takes a while. Maybe you should rest for a bit?" << endl << endl;
@@ -143,9 +145,24 @@ void Game::look(string input){
 //returns true iff fighting happened
 bool Game::combat(string input)
 {
+    // attack <monster> with <weapon>
+    // find and equip that weapon first
+    if(contains(input, "with")){
+        bool found = false, equipped = false;
+        for(vector<Weapon*>::iterator it = PC->weapons.begin(); it != PC->weapons.end(); ++it){
+            if(contains(input, (*it)->name())){
+                found = true;
+                equipped = PC->equip(*it);
+                break;
+            }
+        }
+        if(!found) cout << "That's not a weapon you can attack with." << endl << endl;
+        if(!equipped) return false;
+    }
+
     ///@TODO multi-monster support
     ///@TODO add more options here
-    if(contains(input, cur_room->get_active_monster())){
+    if(contains(input, cur_room->get_active_monster()) || cur_room->num_active_monsters() == 1){
         PC->generic_attack(cur_room->get_active_monster_char());
         return true;
 
@@ -161,6 +178,12 @@ bool Game::combat(string input)
 //            PC.melee_attack(cur_room->get_monster(input));
 //        }
 //        return true;
+
+    ///@TODO multi-monster support
+    } else if(cur_room->monsters[0]){
+        cout << "Uh, he's already dead, but go right ahead if you really want to." << endl << endl;
+        return false;
+
     } else {
         cout << "That's not something you can attack." << endl;
         return false;
@@ -179,7 +202,8 @@ bool Game::searching(string input){
         return false;
 
     //search the whole room
-    } else if(contains(input, "room") || contains(input, "area")){
+    // Default option (just "search" will go here")
+    } else if(contains(input, "room") || contains(input, "area") || input == "search"){
         if(cur_room->has_monsters()){
             cout << "You can't do that with the " << cur_room->get_active_monster() << " around!" << endl;
             return false;
@@ -188,8 +212,8 @@ bool Game::searching(string input){
         bool found = false, found_small = false;
 
         //search monster corpses
-        for(int i = 0; i < MAX_MONSTERS; i++){
-            if(cur_room->monsters[i]->search_monster()){
+        for(int i = 0; i < MAX_MONSTERS && cur_room->monsters[i] != NULL; i++){
+            if(cur_room->monsters[i]->search_monster(false)){
                 rollIndividualTreasure(cur_room->monsters[0]->get_name());
                 found_small = true;
             }
@@ -251,7 +275,7 @@ bool Game::cast_spell(){
                 cout << "Choose which scroll you would like to cast, or enter 'cancel' to exit this menu." << endl;
                 flag = false;
             }
-            cout << "\t(" << idx << "): " << (*it)->get_description() << endl;
+            cout << "\t- " << (*it)->get_description() << endl;
             ++idx;
         }
     }
@@ -261,26 +285,21 @@ bool Game::cast_spell(){
     }
 
     cout << endl;
-    char input;
-    cin.get(input);
+    string input;
+    read(input);
 
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        char idx = 'A';
-        if((*it)->identified){
-            if(idx == input){
-                PC->cast((*it)->spell, cur_room->get_active_monster_char());
-                (*it)->quantity--;
-                if((*it)->quantity == 0){
-                    delete *it;
-                    scrolls.erase(it);
-                }
-                return true;
+        if((*it)->identified && (contains(input, (*it)->get_description()) || contains((*it)->get_description(), input))){
+            PC->cast((*it)->spell, cur_room->get_active_monster_char());
+            (*it)->quantity--;
+            if((*it)->quantity == 0){
+                delete *it;
+                scrolls.erase(it);
             }
-            ++idx;
+            return true;
         }
     }
     return false;
-
 }
 
 
