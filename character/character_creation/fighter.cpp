@@ -109,7 +109,7 @@ void Character::fighter(){
                 equip(s, true);
             } else cout << "\tNo shield." << endl;
             break;
-        } else if(input == "dual"){
+        } else if(contains(input, "dual")){
             cout << "\tFinesse weapons (dex to wield)? [y/n] ";
             read(input);
             if(input == "y"){
@@ -139,7 +139,6 @@ void Character::fighter(){
     ///TODO add 'great-weapon' and 'two-weapon'
 
     do {
-        cout << "\tStyle: ";
         read(input);
 
         if(input == "archery" || input == "defense" || input == "dueling") {

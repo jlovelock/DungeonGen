@@ -15,7 +15,6 @@ string Character::get_name(){
 //For spawning monsters
 Character::Character(double CR){
     ///TODO add more monster options, random roll for one of the appropriate CR
-    xPos = 0; yPos = 0; ///TODO set properly
     is_monster = true;
     searched = false;
     prof = 2;
@@ -30,6 +29,7 @@ void Character::spawn_giant_rat(int group_size){
     short_name = "rat";
     _AC = 12;
     max_hp = d6()+d6();
+    speed = 30;
 
     if(group_size == 1) xp = 38;
     else if(group_size == 2) xp = 50;

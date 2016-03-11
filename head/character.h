@@ -169,6 +169,8 @@ class Character {
     std::pair<int, int> get_position();
     void set_position(int, int);
     void move_position(int, int);
+    void close_with(Character*);
+    bool in_melee_with(Character* opponent);
 };
 
 

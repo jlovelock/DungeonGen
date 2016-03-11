@@ -5,8 +5,11 @@
 
 using namespace std;
 
+int Object::max_id = 0;
+
 Object::Object(string name){
     _name = name;
+    _id = max_id++;
 
     if(name == "shield" || name == "focus"){
         _2h = false;
@@ -16,5 +19,5 @@ Object::Object(string name){
 
 
 bool Object::is_equipped_to(Character* c){
-    return (c->main_hand && _name == c->main_hand->name()) || (c->off_hand && _name == c->off_hand->name());
+    return (c->main_hand && _id == c->main_hand->_id) || (c->off_hand && _id == c->off_hand->_id);
 }

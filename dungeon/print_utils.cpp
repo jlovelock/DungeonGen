@@ -10,6 +10,7 @@ void Dungeon::print_map(pair<int,int> POI){
     const int DOOR = 1;
     const int WALL = 2;
     const int HERE = 3;
+    const int MONSTER = 4;
 
     for(int i = 0; i < GRID_SIZE; i++){
         for(int j = 0; j < GRID_SIZE; j++){
@@ -30,6 +31,10 @@ void Dungeon::print_map(pair<int,int> POI){
         for(int d = 0; d < MAX_DOORS && (*it)->doors[d] != NULL; d++){
             grid[(*it)->doors[d]->xPos/5][(*it)->doors[d]->yPos/5] = DOOR;
         }
+        for(int i = 0; i < MAX_MONSTERS && (*it)->monsters[i] != NULL; i++){
+            if((*it)->monsters[i]->is_alive())
+                grid[(*it)->monsters[i]->xPos/5][(*it)->monsters[i]->yPos/5] = MONSTER;
+        }
     }
 
 //    int xMid = cur_room->westEdge+cur_room->xDim/2;
@@ -43,6 +48,7 @@ void Dungeon::print_map(pair<int,int> POI){
             if(grid[j][i] == WALL) cout << "#";
             else if(grid[j][i] == DOOR) cout << " ";
             else if(grid[j][i] == HERE) cout << "*";
+            else if(grid[j][i] == MONSTER) cout << "M";
             else cout << " ";
         }
         cout << endl;

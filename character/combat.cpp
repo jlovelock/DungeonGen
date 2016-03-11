@@ -44,6 +44,7 @@ Weapon* Character::weapon_select(Character* target){
                 cout << "Invalid selection. Your choices are as follows: " << endl;
             } else {
                 cout << choice_matrix.at(choice)->name() << " selected." << endl;
+                equip(choice_matrix.at(choice));
                 return choice_matrix.at(choice);
             }
         }
@@ -77,6 +78,39 @@ void Character::attack(Character* opponent, int attack_roll, int dmg){
 
 }
 
+
+bool Character::in_melee_with(Character* opponent){
+    return     xPos - opponent->xPos <= 5
+            && xPos - opponent->xPos >= -5
+            && yPos - opponent->yPos <= 5
+            && yPos - opponent->yPos >= -5;
+}
+
+///@TODO dash actions
+void Character::close_with(Character* opponent){
+    int dX = opponent->xPos - xPos;
+    if(dX > 0) dX -= 5;
+    else if(dX < 0) dX += 5;
+
+    int dY = opponent->yPos - yPos;
+    if(dY > 0) dY -= 5;
+    else if(dY < 0) dY += 5;
+
+    float percentage = (float) speed / distance_to(opponent);
+    if(percentage < 1.0){
+        dX *= percentage;
+        dY *= percentage;
+    }
+
+    xPos += dX;
+    yPos += dY;
+
+    if(!in_melee_with(opponent)){
+        if(!is_monster) cout << "You are too far away to close this turn, but you move as much as you can." << endl;
+        else cout << "He charges towards you, but can't close in time to attack yet." << endl;
+    }
+}
+
 /*
  * Todos:
  *  - Enforce weapon ranges / character locations
@@ -88,10 +122,28 @@ void Character::generic_attack(Character* opponent){
     else if(off_hand->is_weapon()) w = (Weapon*)off_hand;
     else w = weapon_select(opponent);
 
+    if(!w->is_ranged() && !in_melee_with(opponent)){
+        close_with(opponent);
+    }
+    ///@TODO add thrown weapon support
+
+    if(!w->is_ranged() && !in_melee_with(opponent)){
+        if(is_monster) return;
+        else weapon_select(opponent);
+    }
+
     if(is_monster) cout << "The " << PC_class << " lashes out with a " << w->name() << "." << endl;
     else cout << "You attack the " << opponent->PC_class << " with your " << w->name() << " drawn." << endl;
 
-    attack(opponent, attack_roll(w), damage(w));
+    int atk;
+    if(w->is_ranged() && in_melee_with(opponent)){
+        if(!is_monster) cout << "However, you struggle to fire the " << w->name() << " from melee." << endl;
+        atk = w->attack_roll(this, "disadvantage");
+    } else {
+        atk = w->attack_roll(this);
+    }
+
+    attack(opponent, atk, damage(w));
 }
 
 

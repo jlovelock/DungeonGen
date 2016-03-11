@@ -65,7 +65,7 @@ bool Character::equip(Object* o, bool equip_to_offhand){
         cout << "You're already wielding the " << o->name();
         if(!o->is_two_handed()){
             if(main_hand && main_hand->name() == o->name()){
-                cout << " in your main hand.";
+                cout << " in your main hand." << endl;
                 if(off_hand){
                     cout << "Switch with the " << off_hand->name() << " in your off hand? [y/n]" << endl;
                     read(input);
@@ -84,7 +84,7 @@ bool Character::equip(Object* o, bool equip_to_offhand){
                     }
                 }
             } else {
-                cout << " in your off hand. ";
+                cout << " in your off hand. " << endl;
                 if(main_hand) {
                     cout << "Switch with the " << main_hand->name() << " in your main hand? [y/n]" << endl;
                     read(input);
@@ -166,7 +166,7 @@ bool Character::equip(Object* o, bool equip_to_offhand){
                 cout << ", the ";
             if(off_hand && !off_hand->is_two_handed())
                 cout << off_hand->name();
-            cout << ", or cancel?" << endl << endl;
+            cout << ", or cancel?" << endl;
 
             while(true){
                 read(input);

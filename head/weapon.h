@@ -18,6 +18,7 @@ class Weapon : public Object {
     bool is_thrown(){ return _thrown; }
     bool is_finesse(){ return _finesse; }
     bool is_versatile(){ return _versatile; }
+    bool is_ranged(){ return _range > 10 && !_thrown; }
     int range(){ return _range; }
     int max_range(){ return _range*3; } ///TODO fix this
     bool is_martial() { return _martial; }

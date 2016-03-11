@@ -275,7 +275,6 @@ void Game::rollTreasureHoard(){
         value = 50;
     }
 
-    ///**********REMOVE ME AFTER
     if(dungeon->magic_items_enabled() == "ALWAYS") {
         num_magic_items = d6();
         magic_item_table = 'A';

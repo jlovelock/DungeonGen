@@ -119,7 +119,7 @@ void Game::rest(){
 ///COME BACK HERE AND FIX THIS YOU DOLT
 void Game::look(string input){
     //room description
-    if(contains(input, "room") || contains(input, "around")){
+    if(contains(input, "room") || contains(input, "around") || input == "look"){
         cur_room->printFullDescription();
 
     //looking at a monster
@@ -194,7 +194,7 @@ bool Game::combat(string input)
 bool Game::searching(string input){
     //search a single monster
     ///TODO multi-monster support
-    if(contains(input, cur_room->get_monster())){
+    if(contains(input, cur_room->get_monster()) || input == "loot"){
         if(cur_room->monsters[0]->search_monster(true)){
             rollIndividualTreasure(cur_room->monsters[0]->get_name());
             return true;

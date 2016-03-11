@@ -18,6 +18,10 @@ class Object{
         std::string _name;
         bool _2h;
         bool _is_weapon;
+
+        static int max_id; //starts at 0, increments with each room added
+        int _id;
+
 };
 
 #endif // OBJECTS_H

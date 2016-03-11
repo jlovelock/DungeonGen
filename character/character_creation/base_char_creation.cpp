@@ -68,6 +68,7 @@ Character::Character(){
 
 void Character::default_attributes(){
     race = "Human";
+    speed = 30;
     attribute_scores["STR"] = 16;
     attribute_scores["DEX"] = 14;
     attribute_scores["CON"] = 14;
@@ -141,6 +142,11 @@ void Character::set_attributes(int str, int dex, int con, int intel, int wis, in
 void Character::set_base_skill_mods(){
     for (unsigned i = 0; i < skills_list.size(); i++){
         skill_mods[skills_list[i]] = attribute_mods[base_attribute(skills_list[i])];
+    }
+
+    if(race.find("elf") != string::npos){
+        cout << "\tKeen senses (elven racial trait) gives you free training in perception." << endl;
+        train("PERCEPTION");
     }
 }
 
@@ -287,9 +293,6 @@ void Character::selectRace(){
     } while(true);
 
     set_attribute_mods();
-    if(race.find("elf") != string::npos){
-        train("PERCEPTION");
-    }
 }
 
 
