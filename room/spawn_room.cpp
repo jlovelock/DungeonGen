@@ -4,46 +4,20 @@
 
 using namespace std;
 
-int rollExits(bool large){
-    int x = d20();
-    switch(x){
-        case 1: case 2: case 3:
-            return 0;
-        case 4: case 5:
-            return large ? 1 : 0;
-        case 6: case 7: case 8:
-            return 1;
-        case 9: case 10: case 11:
-            return large ? 2 : 1;
-        case 12: case 13:
-            return 2;
-        case 14: case 15:
-            return large ? 3 : 2;
-        case 16: case 17:
-            return 3;
-        case 18:
-            return large ? 4 : 3;
-        case 19:
-            return large ? 5 : 4;
-        case 20:
-            return large ? 6 : 4;
-    }
-    return -1;
-}
 
-///TODO place exits appropriately (ie not all south doors should be on top of each other!)
-void Room::setExits(int entrance, bool large){
-    int numExits = rollExits(large);
-
-    ///TODO some sort of sorting? (Don't want to say "door on the east, north, and east")
-    for(int i = 1; i < MAX_DOORS; i++){
-        if(i < numExits){
-            doors[i] = new Door(this, entrance);
-        }
-        else
-            doors[i] = NULL;
-    }
-}
+/////TODO place exits appropriately (ie not all south doors should be on top of each other!)
+//void Room::setExits(int entrance, bool large){
+//    int numExits = rollExits(large);
+//
+//    ///TODO some sort of sorting? (Don't want to say "door on the east, north, and east")
+//    for(int i = 1; i < MAX_DOORS; i++){
+//        if(i < numExits){
+//            doors[i] = new Door(this, entrance);
+//        }
+//        else
+//            doors[i] = NULL;
+//    }
+//}
 
 ///For creating the starting area only!!
 Room::Room(){
@@ -166,7 +140,6 @@ void Room::generateChamber(string dungeon_type, Door* d){
     set_contents();
 
     //set chamber size, shape, and exits
-    bool is_large = false;
     int x = d20();
     switch(x) {
         case 1: case 2:
@@ -206,7 +179,6 @@ void Room::generateChamber(string dungeon_type, Door* d){
             } else {
                 xDim = 50; yDim = 40;
             }
-            is_large = true;
             break;
         case 15:
             shape = "rectangular";
@@ -215,7 +187,6 @@ void Room::generateChamber(string dungeon_type, Door* d){
             } else {
                 xDim = 80; yDim = 50;
             }
-            is_large = true;
             break;
         case 16:
             shape = "circular";
@@ -224,17 +195,14 @@ void Room::generateChamber(string dungeon_type, Door* d){
         case 17:
             shape = "circular";
             xDim=50; yDim=50;
-            is_large = true;
             break;
         case 18:
             shape = "octagonal";
             xDim=40; yDim=40;
-            is_large = true;
             break;
         case 19:
             shape = "octagonal";
             xDim=60; yDim=60;
-            is_large = true;
             break;
         case 20:
             shape = "trapezoidal";
@@ -243,16 +211,19 @@ void Room::generateChamber(string dungeon_type, Door* d){
             } else {
                 xDim = 60; yDim = 40;
             }
-            is_large = true;
             break;
     }
 
     setEdgeCoords(opposite(d->firstWall),d->xPos,d->yPos);
-    setExits(d->firstWall, is_large);
+
+//    setExits(d->firstWall, is_large);
 }
 
 Room::Room(string type, Door* d, bool passage){
     id = max_id++;
+
+    for(int i = 1; i < MAX_DOORS; i++)
+        doors[i] = NULL;
 
     int x = d20();
 

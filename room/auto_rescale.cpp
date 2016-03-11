@@ -73,7 +73,7 @@ bool Room::try_shrink(int dir, Room* compare, Door* entry){
 
         // check if issue resolved
         if(!issue_shrink(compare, dir, delta)){
-            cout << "shrinking " << to_string(dir) << " by " << delta << "." << endl;
+            if(DEBUG) cout << "shrinking " << to_string(dir) << " by " << delta << "." << endl;
             shrink(dir, delta);
             return true;
         }
@@ -99,7 +99,7 @@ bool Room::try_shift(int dir, Room* compare, Door* entry){
 
         // check if issue resolved
         if(!issue_shift(compare, delta_x, delta_y)){
-            cout << "shifting (delta_x = " << delta_x << ", delta_y = " << delta_y << "." << endl;
+            if(DEBUG) cout << "shifting (delta_x = " << delta_x << ", delta_y = " << delta_y << "." << endl;
             shift(delta_x, delta_y);
             return true;
         }
@@ -155,14 +155,14 @@ int Room::find_overwrite_index(bool can_delete){
     for(cur_door = 0; cur_door < MAX_DOORS && doors[cur_door] != NULL; cur_door++){}
 
     if(doors[cur_door] == NULL){
-        cout << "\t- CASE 2: Adding door @ index " << cur_door << endl;
+        if(DEBUG) cout << "\t- CASE 2: Adding door @ index " << cur_door << endl;
     }
 
     // If we're already at MAX_DOORS, try to find an unconnected one to overwrite
     if(cur_door == MAX_DOORS){
         for(cur_door = 0; cur_door < MAX_DOORS; cur_door++){
             if(doors[cur_door]->second == NULL && (can_delete || doors[cur_door]->secret)) {
-                cout << "\t- CASE 2: Deleting/overwriting door @ index " << cur_door << endl;
+                if(DEBUG) cout << "\t- CASE 2: Deleting/overwriting door @ index " << cur_door << endl;
                 delete doors[cur_door];
                 doors[cur_door] = NULL;
                 break;
@@ -180,6 +180,7 @@ int Room::find_overwrite_index(bool can_delete){
     return cur_door;
 }
 
+// returns 0 if rooms are not adjacent, or, NORTH/SOUTH/EAST/WEST otherwise (whichever of the caller room's walls they share)
 int Room::shared_wall(Room* r){
     if(northEdge == r->southEdge && !(r->eastEdge <= westEdge || r->westEdge >= eastEdge))
         return NORTH;
@@ -195,21 +196,91 @@ int Room::shared_wall(Room* r){
 
 ///@TODO: Finish this function!
 // wall = from caller room
+//void Room::link_doors(Room* adjacent, int wall){
+//    if(wall == 0) return;
+//    cout << "-- Attempting to link room " << id << " with room " << adjacent->id << "!" << endl;
+//
+//    // Populate lists of all relevant doors for both rooms
+//    vector<Door*> new_rm_doors;
+//    vector<Door*> adj_rm_doors;
+//    for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
+//        if(doors[i]->firstWall == wall
+//           && adjacent->bordering(doors[i]->xPos, doors[i]->yPos)
+//           && doors[i]->within_bounds(adjacent)
+//           && doors[i]->second == NULL){
+//            new_rm_doors.push_back(doors[i]);
+//        }
+//    }
+//    for(int i = 0; i < MAX_DOORS && adjacent->doors[i] != NULL; i++){
+//        if(adjacent->doors[i]->getWall(adjacent) == opposite(wall)
+//           && bordering(adjacent->doors[i]->xPos, adjacent->doors[i]->yPos)
+//           && adjacent->doors[i]->within_bounds(this)
+//           && adjacent->doors[i]->second == NULL)
+//            {
+//                adj_rm_doors.push_back(adjacent->doors[i]);
+//            }
+//    }
+//
+//    // Case 0: Easy mode, bare wall between the two rooms
+//    if(new_rm_doors.empty() && adj_rm_doors.empty()) {
+//        cout << "\t- Easy mode: no doors to align =]" << endl;
+//        return;
+//    }
+//
+//    // Case 1: Both rooms have connected doors.
+//    //      - As long as both rooms have connected doors, replace ones from this room with ones from the adjacent room
+//    //      - If there's an unequal number, you'll run out of one early and be caught by one of the later cases
+//    while(!new_rm_doors.empty() && !adj_rm_doors.empty()){
+//        Door* cur = new_rm_doors.back();
+//        int idx;
+//        for(idx = 0; idx < MAX_DOORS; idx++){
+//            if(doors[idx]->xPos == cur->xPos && doors[idx]->yPos == cur->yPos){
+//                // remove the door from this room that would have gone along that wall
+//                cout << "\t- CASE 1: Cur door @(" << cur->xPos << ", " << cur->yPos
+//                     << ") replaced with adj door @(" << adj_rm_doors.back()->xPos << ", " << adj_rm_doors.back()->yPos << ")" << endl;
+//                delete doors[idx];
+//
+//                // add the connecting door from the adjacent room back into its spot
+//                doors[idx] = adj_rm_doors.back();
+//                adj_rm_doors.back()->second = this;
+//
+//                // clear those two from our list and move on
+//                new_rm_doors.pop_back();
+//                adj_rm_doors.pop_back();
+//                break;
+//            }
+//        }
+//    }
+//
+//    // Case 2: The other room has at least one door, but the newly added room doesn't (yet):
+//    //      just add it to this room's door list. (We'll be at one more door than originally intended... oh well)
+//    if(new_rm_doors.empty() && !adj_rm_doors.empty()){
+//        for(vector<Door*>::iterator it = adj_rm_doors.begin(); it != adj_rm_doors.end(); ++it){
+//            int idx = find_overwrite_index();
+//            doors[idx] = (*it);
+//            (*it)->second = this; //to get here, the door in question must have been unconnected before now
+//        }
+//    }
+//
+//    // Case 3: The new room has at least one door, but the other room doesn't.
+//    //      3a) If there's wallspace the rooms don't share, shift the door(s) down there.
+//    //      3b) If not, change each connected door's type to <secret>, and add them to the previous room as well (find_overwrite_index with can_delete=false).
+//    ///@TODO: IMPLEMENT THIS
+//    if(!new_rm_doors.empty() && adj_rm_doors.empty()){
+//        cout << "Shit! Haven't implemented this yet. Sorry. " << endl
+//             << "Short version is, your rooms got weirdly connected and the program can't handle that right now, so, exiting!" << endl
+//             << "Hope you had fun before now, at least =]" << endl << endl;
+//        exit(EXIT_FAILURE);
+//    }
+//}
+
+
 void Room::link_doors(Room* adjacent, int wall){
     if(wall == 0) return;
-    cout << "-- Attempting to link room " << id << " with room " << adjacent->id << "!" << endl;
+    if(DEBUG) cout << "-- Attempting to link room " << id << " with room " << adjacent->id << "!" << endl;
 
     // Populate lists of all relevant doors for both rooms
-    vector<Door*> new_rm_doors;
     vector<Door*> adj_rm_doors;
-    for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
-        if(doors[i]->firstWall == wall
-           && adjacent->bordering(doors[i]->xPos, doors[i]->yPos)
-           && doors[i]->within_bounds(adjacent)
-           && doors[i]->second == NULL){
-            new_rm_doors.push_back(doors[i]);
-        }
-    }
     for(int i = 0; i < MAX_DOORS && adjacent->doors[i] != NULL; i++){
         if(adjacent->doors[i]->getWall(adjacent) == opposite(wall)
            && bordering(adjacent->doors[i]->xPos, adjacent->doors[i]->yPos)
@@ -221,58 +292,20 @@ void Room::link_doors(Room* adjacent, int wall){
     }
 
     // Case 0: Easy mode, bare wall between the two rooms
-    if(new_rm_doors.empty() && adj_rm_doors.empty()) {
-        cout << "\t- Easy mode: no doors to align =]" << endl;
+    if(adj_rm_doors.empty()) {
+        if(DEBUG) cout << "\t- Easy mode: no doors to align =]" << endl;
         return;
     }
 
-    // Case 1: Both rooms have connected doors.
-    //      - As long as both rooms have connected doors, replace ones from this room with ones from the adjacent room
-    //      - If there's an unequal number, you'll run out of one early and be caught by one of the later cases
-    while(!new_rm_doors.empty() && !adj_rm_doors.empty()){
-        Door* cur = new_rm_doors.back();
-        int idx;
-        for(idx = 0; idx < MAX_DOORS; idx++){
-            if(doors[idx]->xPos == cur->xPos && doors[idx]->yPos == cur->yPos){
-                // remove the door from this room that would have gone along that wall
-                cout << "\t- CASE 1: Cur door @(" << cur->xPos << ", " << cur->yPos
-                     << ") replaced with adj door @(" << adj_rm_doors.back()->xPos << ", " << adj_rm_doors.back()->yPos << ")" << endl;
-                delete doors[idx];
-
-                // add the connecting door from the adjacent room back into its spot
-                doors[idx] = adj_rm_doors.back();
-                adj_rm_doors.back()->second = this;
-
-                // clear those two from our list and move on
-                new_rm_doors.pop_back();
-                adj_rm_doors.pop_back();
-                break;
-            }
-        }
-    }
 
     // Case 2: The other room has at least one door, but the newly added room doesn't (yet):
     //      just add it to this room's door list. (We'll be at one more door than originally intended... oh well)
-    if(new_rm_doors.empty() && !adj_rm_doors.empty()){
-        for(vector<Door*>::iterator it = adj_rm_doors.begin(); it != adj_rm_doors.end(); ++it){
-            int idx = find_overwrite_index();
-            doors[idx] = (*it);
-            (*it)->second = this; //to get here, the door in question must have been unconnected before now
-        }
-    }
-
-    // Case 3: The new room has at least one door, but the other room doesn't.
-    //      3a) If there's wallspace the rooms don't share, shift the door(s) down there.
-    //      3b) If not, change each connected door's type to <secret>, and add them to the previous room as well (find_overwrite_index with can_delete=false).
-    ///@TODO: IMPLEMENT THIS
-    if(!new_rm_doors.empty() && adj_rm_doors.empty()){
-        cout << "Shit! Haven't implemented this yet. Sorry. " << endl
-             << "Short version is, your rooms got weirdly connected and the program can't handle that right now, so, exiting!" << endl
-             << "Hope you had fun before now, at least =]" << endl << endl;
-        exit(EXIT_FAILURE);
+    for(vector<Door*>::iterator it = adj_rm_doors.begin(); it != adj_rm_doors.end(); ++it){
+        int idx = find_overwrite_index();
+        doors[idx] = (*it);
+        (*it)->second = this; //to get here, the door in question must have been unconnected before now
     }
 }
-
 
 /*
  * Returns true iff the caller room's xth edge is overlapped by the parameter room.

@@ -170,9 +170,7 @@ void run_all_tests(){
         t->shrink_room_advanced();
         t->shrink_room_sequential();
 
-        t->merge_doors_basic();
         t->extra_door_adj();
-        //t->extra_door_new();
     //...add more tests here
     delete t;
     }

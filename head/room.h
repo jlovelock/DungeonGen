@@ -10,6 +10,7 @@ class Room {
     friend class Dungeon;
     friend class Door;
     friend class Tests;
+    friend class DoorPlacementGuide;
 
     int level; ///TODO add multilevel support
 

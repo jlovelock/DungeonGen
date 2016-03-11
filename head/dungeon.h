@@ -8,6 +8,7 @@
 
 class Dungeon{
     friend class Tests;
+    friend class DoorPlacementGuide;
 
     std::vector<Room*> rooms;
     void adjust_room_position(Room* rm);

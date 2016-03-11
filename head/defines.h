@@ -57,6 +57,7 @@ std::string to_string(int dir); //converts NORTH to "north", eg
 
 #define GRID_SIZE 30
 #define TEST_REPETITION 10
+#define DEBUG 0
 
 #define NORTH 100
 #define SOUTH 200

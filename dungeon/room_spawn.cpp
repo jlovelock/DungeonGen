@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <dungeon.h>
+#include <dpg.h>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ using namespace std;
  */
 void Dungeon::adjust_room_position(Room* rm){
 
-    cout << "Adjusting position (original " << rm->location() << ")" << endl;
+    if(DEBUG) cout << "Adjusting position (original " << rm->location() << ")" << endl;
     int dir[] = {NORTH, SOUTH, EAST, WEST};
 
     map<int, bool> locked;
@@ -23,21 +24,21 @@ void Dungeon::adjust_room_position(Room* rm){
         adjustments_needed = false;
         for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
             if((*it)->id == rm->id) continue;
-            cout << "...checking room " << (*it)->id << ": ";
+            if(DEBUG) cout << "...checking room " << (*it)->id << ": ";
 
             // See which walls of the room to be adjusted (if any) are overlapped by *it
             bool issue_found = false;
             map<int, bool> overlap;
             for(int i = 0; i < 4; i++){
-                cout << " " << to_string(dir[i]);
+                if(DEBUG) cout << " " << to_string(dir[i]);
                 overlap[ dir[i] ] = rm->issue(dir[i], *it);
                 issue_found = issue_found || overlap[ dir[i] ];
 
-                if(overlap[dir[i]]) cout << "**";
+                if(DEBUG) if(overlap[dir[i]]) cout << "**";
             }
-            cout << " ";
+            if(DEBUG) cout << " ";
             if(!issue_found) {
-                cout << "OK" << endl;
+                if(DEBUG) cout << "OK" << endl;
                 continue;
             }
 
@@ -77,12 +78,15 @@ void Dungeon::adjust_room_position(Room* rm){
         } // end for (each room)
     } while(adjustments_needed);
 
-    cout << endl << "linking doors:" << endl;
     link_all_doors(rm);
-    cout << "...done" << endl;
+
 }
 
 void Dungeon::link_all_doors(Room* new_room){
+    for(int i = 1; i < MAX_DOORS; i++){
+        new_room->doors[i] = NULL;
+    }
+
     for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
         if(new_room->id == (*it)->id) continue;
         new_room->link_doors(*it, new_room->shared_wall(*it));
@@ -97,5 +101,17 @@ Room* Dungeon::add_room(Door* d, bool is_passage){
     next_rm->doors[0] = d;
     d->second = next_rm;
     adjust_room_position(next_rm);
+
+    ///@TODO multi-monster support
+    if(next_rm->monsters[0]){
+        next_rm->monsters[0]->xPos = next_rm->westEdge + rand()%(next_rm->eastEdge-next_rm->westEdge-1) + 1;
+        next_rm->monsters[0]->yPos = next_rm->southEdge + rand()%(next_rm->northEdge-next_rm->southEdge-1) + 1;
+        cout << "Room " << next_rm->id << " -- " << next_rm->location();
+        cout << " -- monster spawn @(" << next_rm->monsters[0]->xPos << "," << next_rm->monsters[0]->yPos << ")" << endl;
+    }
+
+    DoorPlacementGuide dpg(next_rm, this);
+    dpg.spawn_doors();
+
     return next_rm;
 }

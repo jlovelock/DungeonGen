@@ -162,7 +162,7 @@ void Room::printFullDescription(int doorNum){
 void Room::printDescription(int doorNum){
     //cout << "ROOM " << id << endl;
 
-    cout << "@@ " << location() << endl;
+    if(DEBUG) cout << "@@ " << location() << endl;
 
     ///TODO multi-monster support
     if(monsters[0] != NULL){
@@ -205,8 +205,7 @@ void Room::printDescription(int doorNum){
             cout << ")";
         }
 
-        //DEBUG
-        cout << "--[ID #" << doors[i]->id << " @(" << doors[i]->xPos << "," << doors[i]->yPos << ")]--";
+        if(DEBUG) cout << "--[ID #" << doors[i]->id << " @(" << doors[i]->xPos << "," << doors[i]->yPos << ")]--";
 
         cout << ", ";
     }
@@ -232,8 +231,7 @@ void Room::printDescription(int doorNum){
 
      cout << ") ";
 
-     //DEBUG
-     cout << "--[ID #" << doors[doorNum]->id << " @(" << doors[doorNum]->xPos << "," << doors[doorNum]->yPos << ")]--";
+     if(DEBUG) cout << "--[ID #" << doors[doorNum]->id << " @(" << doors[doorNum]->xPos << "," << doors[doorNum]->yPos << ")]--";
 
      cout << "." << endl << endl;
 
@@ -252,4 +250,5 @@ void Room::search_for_secret_doors(Character* c, bool& found){
         }
     }
 }
+
 

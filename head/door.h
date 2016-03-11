@@ -15,6 +15,7 @@ class Door {
     friend class Room;
     friend class Dungeon;
     friend class Tests;
+    friend class DoorPlacementGuide;
     std::string material;
     bool locked;
     bool secret;
@@ -35,6 +36,7 @@ class Door {
     bool isFirstRoom(Room*);
 
     Door(Room* room, int entrance);
+    Door(Room* room, int wall, int x, int y);
     std::string getWallString(Room*);
     Door(Room* room, int _wall, bool passage, bool main=false);
     void initialize_door(Room* room, int _wall, bool passage, bool main);

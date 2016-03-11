@@ -6,11 +6,11 @@
 //Starting room / testing
 Door::Door(Room* room, int _wall, bool passage, bool main){
     if(main) max_id = 0;
+    firstWall = _wall; set_position(room);
     initialize_door(room, _wall, passage, main);
 }
 
-//Currently used for all rooms except the starting room
-///TODO add actual passage support
+//Used for generating secret doors on the fly
 Door::Door(Room* room, int entrance){
 
     //position
@@ -21,6 +21,13 @@ Door::Door(Room* room, int entrance){
     else if (x < 18) wall = right(entrance);
     else wall = entrance;
 
+    initialize_door(room, wall, rand()%2, false);
+}
+
+//Used for all rooms generated on the fly. Called by DoorPlacementGuide.
+///TODO add actual passage support
+Door::Door(Room* room, int wall, int x, int y){
+    xPos = x; yPos = y; firstWall = wall;
     initialize_door(room, wall, rand()%2, false);
 }
 
@@ -66,10 +73,6 @@ void Door::initialize_door(Room* room, int _wall, bool is_passage, bool is_main)
     second = NULL;
 
     id = max_id++;
-
-    //position
-    firstWall = _wall;
-    set_position(room);
 
     //defaults
     secret = false;

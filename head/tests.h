@@ -34,8 +34,6 @@ public:
     void shrink_room_advanced();
     void shrink_room_sequential();
 
-    void merge_doors_basic();
-    void extra_door_new();
     void extra_door_adj();
 
 
