@@ -3,6 +3,8 @@
 #include <spells.h>
 #include <defines.h>
 
+using namespace std;
+
 
 int Spell::damage(){
     int dmg = 0;
@@ -12,9 +14,38 @@ int Spell::damage(){
     return dmg;
 }
 
-///TODO get some random tables going
+//eg. 1d4+5 fire
+void Spell::set_dmg(string specifier){
+    num_damage_dice = atoi(specifier.substr(0, specifier.find("d")).c_str());
+    damage_die = atoi(specifier.substr(specifier.find("d")+1,specifier.find("+")-specifier.find("d")-1).c_str());
+    damage_mod = atoi(specifier.substr(specifier.find("+")+1, specifier.find(" ")-specifier.find("+")-1).c_str());
+    damage_type = specifier.substr(specifier.find(" ")+1);
+}
+
+Spell::Spell(string specifier){
+    clr();
+    set_dmg(specifier);
+}
+
+void Spell::clr(){
+    name = "";
+    level = 0;
+    range = 10; ///@TODO FIXME
+    duration = 0;
+    casting_time = 0;
+    attack_roll_required = false;
+    save_negates = false;
+    save_half = false;
+    save_stat = "";
+    num_damage_dice = 0;
+    damage_die = 0;
+    damage_mod = 0;
+    damage_type = "";
+    save_DC = 0;
+}
+
 Spell::Spell(){
-    fire_bolt();
+    clr();
 }
 
 Spell::Spell(int lvl){
@@ -33,7 +64,8 @@ void Spell::magic_missile(){
     casting_time = ACTION;
 
     attack_roll_required = false;
-    save_allowed = false;
+    save_negates = false;
+    save_half = false;
     save_stat = "";
 
     num_damage_dice = 3;
@@ -50,7 +82,8 @@ void Spell::fire_bolt(){
     casting_time = ACTION;
 
     attack_roll_required = true;
-    save_allowed = false;
+    save_negates = false;
+    save_half = false;
     save_stat = "";
 
     num_damage_dice = 1;
@@ -68,7 +101,8 @@ void Spell::scorching_ray(){
     casting_time = ACTION;
 
     attack_roll_required = true;
-    save_allowed = false;
+    save_negates = false;
+    save_half = false;
     save_stat = "";
 
     num_damage_dice = 6;

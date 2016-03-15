@@ -11,9 +11,12 @@ class Monster : public Character {
     std::vector<std::string> features;
     void spawn_cultist(int group_size);
     void spawn_giant_rat(int group_size);
+    void spawn_poisonous_snake(int group_size);
+
     bool searched;
     std::string _short_name;
     std::string _full_name;
+    Spell* effect_on_hit; //template special abilities as spells
 
 public:
     Monster(double CR);
@@ -28,6 +31,8 @@ public:
     std::string name() { return _short_name; }
     std::string full_name() { return _full_name; }
 
+
+    void action_on_kill(Character*);
 
 };
 

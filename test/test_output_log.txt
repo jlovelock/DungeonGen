@@ -35,7 +35,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the sitting room) .
+There is the opening to the corridor you entered to the south (leading back to the guardroom) .
 
 ## north door opened.
 
@@ -43,7 +43,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the sitting room.
+You turn back to the guardroom.
 There is a dungeon exit door on the south wall, an opening to a corridor on the east wall, and an opening to a corridor on the west wall, as well as the opening to the corridor you entered to the north (leading back to the ) .
 
 ## south door opened.
@@ -53,7 +53,7 @@ There is a dungeon exit door on the south wall, an opening to a corridor on the 
 
 ## Opening door in east direction.
 You enter room 2.
-There is the opening to the corridor you entered to the west (leading back to the sitting room) .
+There is the opening to the corridor you entered to the west (leading back to the guardroom) .
 
 ## east door opened.
 
@@ -108,7 +108,7 @@ There is a wooden door on the west wall (leading back to the ), as well as the w
 You remove the bar on the door before opening it.
 
 You enter room 1.
-There is an opening to a corridor on the south wall (leading back to the sitting room), as well as the wooden door you entered to the east (leading back to the ) .
+There is an opening to a corridor on the south wall (leading back to the guardroom), as well as the wooden door you entered to the east (leading back to the ) .
 
                               
                               
@@ -223,7 +223,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in east direction.
 You enter room 1.
-There is the opening to the corridor you entered to the west (leading back to the gallery) .
+There is the opening to the corridor you entered to the west (leading back to the game room) .
 
 ## east door opened.
 
@@ -245,7 +245,7 @@ There is the wooden door you entered to the north (leading back to the ) .
 
 ## Opening door in north direction.
 You enter room 3.
-There is the opening to the corridor you entered to the south (leading back to the gallery) .
+There is the opening to the corridor you entered to the south (leading back to the game room) .
 
 ## north door opened.
 
@@ -257,7 +257,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 
 ## Opening door in east direction.
 You enter room 4.
-There is the wooden door you entered to the west (leading back to the ) .
+There is the hidden door you entered to the west (leading back to the ) .
 
 ## east door opened.
 
@@ -342,7 +342,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the waiting room) .
+There is the opening to the corridor you entered to the south (leading back to the study) .
 
 ## north door opened.
 
@@ -366,7 +366,7 @@ There is the wooden door you entered to the west (leading back to the ) .
 
 ## Opening door in south direction.
 You enter room 3.
-There is the iron door you entered to the north (leading back to the ) .
+There is the wooden door you entered to the north (leading back to the ) .
 
 ## south door opened.
 
@@ -376,7 +376,7 @@ There is the iron door you entered to the north (leading back to the ) .
 
 ## Opening door in east direction.
 You enter room 4.
-There is the opening to the corridor you entered to the west (leading back to the waiting room) .
+There is the opening to the corridor you entered to the west (leading back to the study) .
 
 ## east door opened.
 
@@ -473,7 +473,7 @@ There is the stone door you entered to the west (leading back to the ) .
 
 ## Opening door in east direction.
 You enter room 3.
-There is the wooden door you entered to the west (leading back to the ) .
+There is the hidden door you entered to the west (leading back to the ) .
 
 ## east door opened.
 
@@ -556,7 +556,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in east direction.
 You enter room 1.
-There is the opening to the corridor you entered to the west (leading back to the guardroom) .
+There is the opening to the corridor you entered to the west (leading back to the latrine) .
 
 ## east door opened.
 
@@ -568,7 +568,7 @@ There is the opening to the corridor you entered to the west (leading back to th
 
 ## Opening door in north direction.
 You enter room 2.
-There is the wooden door you entered to the south (leading back to the ) .
+There is the stone door you entered to the south (leading back to the ) .
 
 ## north door opened.
 
@@ -580,7 +580,7 @@ There is the wooden door you entered to the south (leading back to the ) .
 
 ## Opening door in west direction.
 You enter room 3.
-There is the wooden door you entered to the east (leading back to the ) .
+There is the hidden door you entered to the east (leading back to the ) .
 
 ## west door opened.
 
@@ -590,7 +590,7 @@ There is the wooden door you entered to the east (leading back to the ) .
 
 ## Opening door in west direction.
 You enter room 4.
-There is the opening to the corridor you entered to the east (leading back to the guardroom) .
+There is the opening to the corridor you entered to the east (leading back to the latrine) .
 
 ## west door opened.
 
@@ -602,7 +602,7 @@ There is the opening to the corridor you entered to the east (leading back to th
 
 ## Opening door in north direction.
 You enter room 5.
-There is the portcullis door you entered to the south (leading back to the ) .
+There is the wooden door you entered to the south (leading back to the ) .
 
 ## north door opened.
 
@@ -614,7 +614,7 @@ There is the portcullis door you entered to the south (leading back to the ) .
 
 ## Opening door in east direction.
 You enter room 6.
-There is the stone door you entered to the west (leading back to the ) .
+There is the portcullis door you entered to the west (leading back to the ) .
 
 ## east door opened.
 
@@ -624,7 +624,7 @@ There is the stone door you entered to the west (leading back to the ) .
 
 ## Opening door in north direction.
 You enter room 7.
-There is the opening to the corridor you entered to the south (leading back to the guardroom) .
+There is the opening to the corridor you entered to the south (leading back to the latrine) .
 
 ## north door opened.
 
@@ -697,7 +697,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the guardroom) .
+There is the opening to the corridor you entered to the south (leading back to the waiting room) .
 
 ## north door opened.
 
@@ -705,7 +705,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the guardroom.
+You turn back to the waiting room.
 There is a dungeon exit door on the south wall, an opening to a corridor on the east wall, and an opening to a corridor on the west wall, as well as the opening to the corridor you entered to the north (leading back to the ) .
 
 ## south door opened.
@@ -715,7 +715,7 @@ There is a dungeon exit door on the south wall, an opening to a corridor on the 
 
 ## Opening door in east direction.
 You enter room 2.
-There is the opening to the corridor you entered to the west (leading back to the guardroom) .
+There is the opening to the corridor you entered to the west (leading back to the waiting room) .
 
 ## east door opened.
 
@@ -727,7 +727,7 @@ There is the opening to the corridor you entered to the west (leading back to th
 
 ## Opening door in north direction.
 You enter room 3.
-There is a hidden door on the west wall (leading back to the ), as well as the stone door you entered to the south (leading back to the ) .
+There is a iron door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
 
 ## north door opened.
 

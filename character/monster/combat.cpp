@@ -39,11 +39,16 @@ void Monster::generic_attack(Character* opponent){
         attack(opponent, atk, damage(w));
 }
 
+///@TODO
+void Monster::action_on_kill(Character* opponent){
+}
+
 void Monster::attack(Character* opponent, int attack_roll, int dmg){
     if(attack_roll >= opponent->AC() || attack_roll == 20){
         cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of damage." << endl;
         if(attack_roll == 20) cout << "It's a critical hit!" << endl;
         opponent->take_damage(dmg);
+        cast(effect_on_hit, opponent);
     } else {
         cout << "His blow fails to connect." << endl << endl;
     }

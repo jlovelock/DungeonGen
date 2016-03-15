@@ -10,7 +10,9 @@ using namespace std;
 ///TODO add flavour
 ///TODO add support for enemy spellcasters (don't print the same messages based on is_enemy)
 ///TODO add support for non-damaging spells
-void PlayerChar::cast(Spell* spell, Character* target){
+void Character::cast(Spell* spell, Character* target){
+    if(!spell) return;
+
     if(!within_range(target, spell)){
         cout << "You're too far away to do that: "
         << spell->name << " only has a range of " << spell->range << " feet." << endl;
@@ -21,32 +23,41 @@ void PlayerChar::cast(Spell* spell, Character* target){
     if(spell->attack_roll_required){
         if(spell_attack() > target->AC()){
             int damage = spell->damage();
-            cout << "Your " << spell->name << " hits the " << target->full_name() << " for " << damage << " points of " << spell->damage_type << " damage." << endl;
+            if(!is_monster)
+                cout << "Your " << spell->name << " hits the " << target->full_name() << " for " << damage << " points of " << spell->damage_type << " damage." << endl;
+            else
+                cout << "The " << full_name() << "'s " << spell->name << " deals you " << damage << " points of " << spell->damage_type << " damage." << endl;
             target->take_damage(damage);
         } else {
-            cout << "The " << target->full_name() << " manages to avoid the effect." << endl;
+            if(!is_monster)
+                cout << "Unfortunately, the " << target->full_name() << " manages to avoid the effect." << endl;
+            else
+                cout << "Luckily, you manage to avoid the " << full_name() << "'s " << spell->name << "." << endl;
         }
-    } else if(spell->save_allowed){
-        if(target->saving_throw(spell) >= spell_save_DC()){
-            cout << "The " << target->full_name() << " manages to avoid the effect." << endl;
-        } else {
-            int damage = spell->damage();
-            cout << "Your " << spell->name << " hits the " << target->full_name() << " for " << damage << " points of " << spell->damage_type << " damage." << endl;
-            target->take_damage(damage);
-        }
+    }
+
+    int damage = spell->damage();
+    if(spell->save_negates && target->saving_throw(spell) >= spell_save_DC()){
+        if(!is_monster)
+            cout << "Unfortunately, the " << target->full_name() << " manages to avoid the effect." << endl;
+        else
+            cout << "Luckily, you manage to avoid the " << full_name() << "'s " << spell->name << "." << endl;
+    } else if(spell->save_half && target->saving_throw(spell) >= spell_save_DC()){
+        damage /= 2;
+        if(!is_monster)
+            cout << "The " << target->full_name() << " avoids the brunt of the effect, but your " << spell->name << " still hits him for " << damage << " points of " << spell->damage_type << " damage." << endl;
+        else
+            cout << "You avoid the brunt of the " << full_name() << "'s " << spell->name << " effect, but it still deals you " << damage << " points of " << spell->damage_type << " damage." << endl;
+        target->take_damage(damage);
     } else {
-        int damage = spell->damage();
-        cout << "Your " << spell->name << " hits the " << target->full_name() << " for " << damage << " points of " << spell->damage_type << " damage." << endl;
+        if(!is_monster)
+            cout << "Your " << spell->name << " hits the " << target->full_name() << " for " << damage << " points of " << spell->damage_type << " damage." << endl;
+        else
+            cout << "The " << full_name() << "'s " << spell->name << " hits deals you " << damage << " points of " << spell->damage_type << " damage." << endl;
         target->take_damage(damage);
     }
 
-    if(!target->is_alive()){
-        ///TODO: handle the rest of the cleanup. Delete opponent, set monster in room to false, etc.
-        xp += target->get_xp();
-        cout << "You have gained " << target->get_xp() << " experience points." << endl << endl;
-        if(xp > next_levelup()) levelup();
-        in_melee = false;
-    }
+    if(!target->is_alive()) action_on_kill(target);
 }
 
 int Character::saving_throw(Spell* spell){

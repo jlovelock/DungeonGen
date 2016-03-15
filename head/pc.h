@@ -39,13 +39,13 @@ public:
     bool can_open(Door*);
     bool find_secret_door(Door*);
 
-    void cast(Spell* spell, Character* target);
-
     void short_rest();
     void special_action();
 
     void printCharacterSheet();
     void print_status();
+
+    void action_on_kill(Character*);
 };
 
 

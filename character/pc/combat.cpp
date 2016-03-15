@@ -40,6 +40,14 @@ void PlayerChar::generic_attack(Character* opponent){
         attack(opponent, atk, damage(w));
 }
 
+void PlayerChar::action_on_kill(Character* opponent){
+    ///TODO: handle the rest of the cleanup. Delete opponent, set monster in room to false, etc.
+    xp += opponent->get_xp();
+    cout << "You have gained " << opponent->get_xp() << " experience points." << endl << endl;
+    if(xp > next_levelup()) levelup();
+    in_melee = false;
+}
+
 void PlayerChar::attack(Character* opponent, int attack_roll, int dmg){
     if(!opponent->is_alive()){
         cout << "Uh, he's already dead, but go right ahead if you really want to." << endl << endl;
@@ -51,13 +59,7 @@ void PlayerChar::attack(Character* opponent, int attack_roll, int dmg){
         if(attack_roll == 20) cout << "It's a critical hit!" << endl;
         opponent->take_damage(dmg);
 
-        if(!opponent->is_alive()){
-            ///TODO: handle the rest of the cleanup. Delete opponent, set monster in room to false, etc.
-            xp += opponent->get_xp();
-            cout << "You have gained " << opponent->get_xp() << " experience points." << endl << endl;
-            if(xp > next_levelup()) levelup();
-            in_melee = false;
-        }
+        if(!opponent->is_alive()) action_on_kill(opponent);
 
     } else {
         cout << "Your blow fails to connect." << endl << endl;

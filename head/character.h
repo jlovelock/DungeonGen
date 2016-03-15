@@ -118,7 +118,10 @@ class Character {
         virtual std::string name() { return ""; }
         virtual std::string full_name() { return ""; }
 
+        void cast(Spell* spell, Character* target);
+
         int get_xp(){ return xp; }
+        virtual void action_on_kill(Character*) {}
 
 };
 

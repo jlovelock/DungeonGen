@@ -11,6 +11,7 @@ class Spell {
     friend class Character;
     friend class PlayerChar;
     friend class Treasure;
+    friend class Monster;
 
     std::string name;
     int level; //cantrips are 0
@@ -19,8 +20,10 @@ class Spell {
     int casting_time; //#define'd as ACTION, BONUS_ACTION, or REACTION
     std::string casting_stat; //"INT", "WIS", or "CHA"
 
-    bool save_allowed;
+    bool save_half;
+    bool save_negates;
     std::string save_stat;
+    int save_DC;
 
     bool attack_roll_required;
 
@@ -33,8 +36,12 @@ class Spell {
     void magic_missile();
     void scorching_ray();
 
+    void set_dmg(std::string);
+    void clr();
+
 public:
     Spell();
+    Spell(std::string);
     Spell(int lvl);
 
 };

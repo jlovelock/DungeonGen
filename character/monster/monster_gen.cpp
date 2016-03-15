@@ -5,6 +5,7 @@
 
 #include <weapon.h>
 #include <monster.h>
+#include <spells.h>
 
 using namespace std;
 
@@ -14,10 +15,15 @@ Monster::Monster(double CR) : Character(){
     is_monster = true;
     searched = false;
     prof = 2;
-    if(rand()%2) spawn_cultist(1);
-    else spawn_giant_rat(1);
     cur_hp = max_hp;
     temp_hp = 0;
+
+    int n = rand()%3;
+    switch(n){
+        case 0: spawn_giant_rat(1); return;
+        case 1: spawn_cultist(1); return;
+        case 2: spawn_poisonous_snake(1); return;
+    }
 }
 
 ///TODO include keen senses, darkvision
@@ -41,6 +47,7 @@ void Monster::spawn_giant_rat(int group_size){
     race = "rat";
 
     features.push_back("pack tactics");
+    effect_on_hit = NULL;
 }
 
 //group size represents how many of this monster are in the same room
@@ -66,5 +73,34 @@ void Monster::spawn_cultist(int group_size){
     _short_name = "cultist"; /// TODO rename this variable to something more reasonable? =P
     _full_name = "cultist";
     race = "human"; //arbitrary
+
+    effect_on_hit = NULL;
 }
 
+void Monster::spawn_poisonous_snake(int group_size){
+    _AC = 13;
+    max_hp = d4();
+    speed = 30;
+    ///TODO add swim speed 30
+
+    if(group_size == 1) xp = 38;
+    else if(group_size == 2) xp = 50;
+
+    set_attributes(1, 16, 11, 1, 10, 3);
+
+    Weapon* w = new Weapon("bite","5/1d0+1 piercing"); //yes, 1d0. deals 1 dmg always (base).
+    weapons.push_back(w);
+    main_hand = w;
+    off_hand = NULL;
+
+    _short_name = "snake"; /// TODO rename this variable to something more reasonable? =P
+    _full_name = "poisonous snake";
+    race = "snake"; //arbitrary
+
+    effect_on_hit = new Spell("2d4+0 poison");
+    effect_on_hit->name = "venom";
+    effect_on_hit->save_half = true;
+    effect_on_hit->save_DC = 10;
+    effect_on_hit->save_stat = "CON";
+
+}

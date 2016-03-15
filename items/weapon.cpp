@@ -152,7 +152,9 @@ int Weapon::attr_mod(Character* c){
 }
 
 int Weapon::base_dmg(Character* c){
-    if(_versatile && c->has_free_hand())
+    if(_weapon_die == 0)
+        return 0;
+    else if(_versatile && c->has_free_hand())
         return rand()%(_weapon_die+2)+1;
     else
         return rand()%_weapon_die+1;
