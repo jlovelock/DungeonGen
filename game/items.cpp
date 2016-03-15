@@ -1,5 +1,8 @@
 
 #include <game.h>
+#include <weapon.h>
+#include <pc.h>
+
 using namespace std;
 
 

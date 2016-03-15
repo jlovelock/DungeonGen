@@ -3,8 +3,10 @@
 #include <string>
 #include <door.h>
 #include <defines.h>
-#include <character.h>
 
+
+class Monster;
+class PlayerChar;
 
 class Room {
     friend class Dungeon;
@@ -88,14 +90,14 @@ public:
     void loot_room(){ treasure = false; }
 
     //baddies!
-    Character* monsters[MAX_MONSTERS];
+    Monster* monsters[MAX_MONSTERS];
     bool has_monsters();
     std::string get_monster();
-    Character* get_monster(std::string name);
-    Character* get_active_monster_char();
-    Character* get_monster_char();
+    Monster* get_monster(std::string name);
+    Monster* get_active_monster_char();
+    Monster* get_monster_char();
     std::string get_active_monster();
-    void search_for_secret_doors(Character*, bool& found);
+    void search_for_secret_doors(PlayerChar*, bool& found);
     int num_active_monsters();
 
     void printFullDescription(int doorNum=0); ///@TODO doorNum should be the entrance door for initial room

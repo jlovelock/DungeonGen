@@ -26,112 +26,100 @@ void Character::train_saves(string save1, string save2){
 ///*********************************  INITIALIZERS  *************************************///
 ///**************************************************************************************///
 
-Character::Character(){
-    xPos = START_X; yPos = START_Y+5;
-    is_monster = false;
+void Character::initialize(){
     in_melee = false;
-    level = 1;
     prof = 2;
-    xp = 0;
     main_hand = NULL; off_hand = NULL;
-
-
-    weapon_proficiencies.push_back("martial");
-
-    ///@TODO: Class selection
-    cout << "New character: default or custom? " << endl;
-    string input;
-    read(input);
-    if(input == "custom"){
-        cout << "Custom character selected." << endl;
-        standard_array();
-        selectRace();
-        set_base_skill_mods();
-        fighter();
-    } else {
-        cout << "Standard character selected." << endl;
-        default_attributes();
-        set_base_skill_mods();
-        default_fighter();
-    }
-
-    //debug
-    casting_stat = "INT";
-
-    printCharacterSheet();
 }
+
+Character::Character(){
+    initialize();
+}
+
+//Character::Character(int lvl){
+//    initialize();
+//
+//    xPos = START_X; yPos = START_Y+5;
+//    is_monster = false;
+//    level = lvl;
+//    xp = 0;
+//
+//    ///@TODO change when more than fighter supported
+//    weapon_proficiencies.push_back("martial");
+//
+//    ///@TODO: Class selection
+//    cout << "New character: default or custom? " << endl;
+//    string mode;
+//    read(mode);
+//
+//    set_attributes(mode);
+//    select_race(mode);
+//    set_base_skill_mods();
+//    if(mode == "custom") fighter(); else default_fighter();
+//
+//    //debug
+//    casting_stat = "INT";
+//
+//    printCharacterSheet();
+//}
 
 
 ///**************************************************************************************///
 ///***********************************  ATTRIBUTES  *************************************///
 ///**************************************************************************************///
 
-void Character::default_attributes(){
-    race = "Human";
-    speed = 30;
-    attribute_scores["STR"] = 16;
-    attribute_scores["DEX"] = 14;
-    attribute_scores["CON"] = 14;
-    attribute_scores["INT"] = 10;
-    attribute_scores["WIS"] = 14;
-    attribute_scores["CHA"] = 9;
-    set_attribute_mods();
+/*
+ * Call this function instead of just updating attribute_scores values directly!
+ * If you don't, the mods won't be reflected.
+ *
+ * Possible TODO: instead of keeping mods in their own vector, just keep track of the scores
+ *   Then have a function that calculates/returns the mod 'live', instead.
+ */
+void Character::stat_boost(string stat, int amount){
+    attribute_scores[stat] += amount;
+    attribute_mods[stat] = (attribute_scores[stat]-10)/2;
 }
 
-void Character::standard_array(){
-    attribute_scores["STR"] = 0;
-    attribute_scores["DEX"] = 0;
-    attribute_scores["CON"] = 0;
-    attribute_scores["INT"] = 0;
-    attribute_scores["WIS"] = 0;
-    attribute_scores["CHA"] = 0;
-
-    cout << "1) ATTRIBUTES: ";
-    cout << "Choose scores ('STR', 'DEX', 'CON', 'INT', 'WIS', and 'CHA') from the standard array." << endl;
-    int i = 0;
-    string input;
-    int scores[] = {15, 14, 13, 12, 10, 8};
-    do {
-        cout << "\tChoose which stat to put your " << scores[i] << " into: ";
-        read(input);
-        convert_to_uppercase(input);
-
-        if(input == "STR" || input == "DEX" || input == "CON" || input == "INT" || input == "WIS" || input == "CHA"){
-            if(attribute_scores[input] == 0) attribute_scores[input] = scores[i];
-            else {
-                cout << "\t" << input << " already set to " << attribute_scores[input] << "." << endl;
-                continue;
-            }
-        } else {
-            cout << "Stat not recognized: re-enter?" << endl;
-            continue;
-        }
-        i++;
-
-    } while(i<6);
-
-}
-
-void Character::set_attribute_mods(){
-    attribute_mods["STR"] = (attribute_scores["STR"]-10)/2;
-    attribute_mods["DEX"] = (attribute_scores["DEX"]-10)/2;
-    attribute_mods["CON"] = (attribute_scores["CON"]-10)/2;
-    attribute_mods["INT"] = (attribute_scores["INT"]-10)/2;
-    attribute_mods["WIS"] = (attribute_scores["WIS"]-10)/2;
-    attribute_mods["CHA"] = (attribute_scores["CHA"]-10)/2;
-}
 
 void Character::set_attributes(int str, int dex, int con, int intel, int wis, int cha){
-    attribute_scores["STR"] = str;
-    attribute_scores["DEX"] = dex;
-    attribute_scores["CON"] = con;
-    attribute_scores["INT"] = intel;
-    attribute_scores["WIS"] = wis;
-    attribute_scores["CHA"] = cha;
-
-    set_attribute_mods();
+    stat_boost("STR", str);
+    stat_boost("DEX", dex);
+    stat_boost("CON", con);
+    stat_boost("INT", intel);
+    stat_boost("WIS", wis);
+    stat_boost("CHA", cha);
     set_base_skill_mods();
 }
+
+
+void Character::set_attributes(string mode){
+    if(mode == "custom"){
+        cout << "1) ATTRIBUTES: ";
+        cout << "Choose scores ('STR', 'DEX', 'CON', 'INT', 'WIS', and 'CHA') from the standard array." << endl;
+        int i = 0;
+        string input;
+        int scores[] = {15, 14, 13, 12, 10, 8};
+        do {
+            cout << "\tChoose which stat to put your " << scores[i] << " into: ";
+            read(input);
+            convert_to_uppercase(input);
+
+            if(input == "STR" || input == "DEX" || input == "CON" || input == "INT" || input == "WIS" || input == "CHA")
+                if(!attribute_scores[input])
+                    stat_boost(input, scores[i++]); //attribute_scores[input] = scores[i];
+                else
+                    cout << "\t" << input << " already set to " << attribute_scores[input] << "." << endl;
+
+            else
+                cout << "Stat not recognized: re-enter?" << endl;
+
+        } while(i<6);
+
+    } else {
+        set_attributes(15, 13, 13, 9, 13, 8);
+    }
+}
+
 
 
 
@@ -213,88 +201,5 @@ string Character::base_attribute(string skill){
     }
 
 }
-
-
-///**************************************************************************************///
-///*************************************  RACE  *****************************************///
-///**************************************************************************************///
-
-void Character::selectRace(){
-    cout << "2) RACES" << endl;
-    cout << "Select from the following races: " << endl;
-    cout << "\tdwarf (+2 CON, 25ft speed, darkvision, dwarven resilience)" << endl;
-    cout << "\telf (+2 DEX, 30-35ft speed, darkvision, keen senses, fey ancestry)" << endl;
-    cout << "\thuman (+1 to all stats, 30ft speed)" << endl;
-
-    cout << "\tRace: ";
-    string input;
-    read(input);
-
-    do {
-        if(input == "dwarf"){
-            attribute_scores["CON"] += 2;
-            speed = 25;
-            darkvision = true;
-            cout << "\tDwarf selected. Choose a subrace: hill (+1 WIS, +1hp/lvl) or mountain (+2 STR)." << endl;
-            do {
-                cout << "\tSubrace: ";
-                read(input);
-
-                if(input == "hill"){
-                    cout << "\tHill dwarf selected." << endl;
-                    race = "Hill dwarf";
-                    attribute_scores["WIS"] += 1;
-                    break;
-                } else if(input == "mountain"){
-                    cout << "\tMountain dwarf selected." << endl;
-                    race = "Mountain dwarf";
-                    attribute_scores["STR"] += 2;
-                    break;
-                } else { cout << "\tInvalid input." << endl; }
-            } while(true);
-            break;
-        } else if(input == "elf"){
-            attribute_scores["DEX"] += 2;
-            darkvision = true;
-            cout << "\tElf selected. Choose a subrace: high (+1 INT, +1 wizard cantrip, 30ft speed) or wood (+1 wis, 35ft speed)." << endl;
-            do {
-                cout << "\tSubrace: ";
-                read(input);
-
-                if(input == "high"){
-                    cout << "\tHigh elf selected." << endl;
-                    attribute_scores["INT"] += 1;
-                    ///TODO add cantrip
-                    race = "High elf";
-                    speed = 30;
-                    break;
-                } else if(input == "wood"){
-                    cout << "\tWood elf selected." << endl;
-                    attribute_scores["WIS"] += 1;
-                    speed = 35;
-                    race = "Wood elf";
-                    break;
-                } else cout << "\tInvalid input." << endl;
-            } while(true);
-            break;
-        } else if(input == "human"){
-            cout << "\tHuman selected." << endl;
-            attribute_scores["STR"]++;
-            attribute_scores["DEX"]++;
-            attribute_scores["CON"]++;
-            attribute_scores["INT"]++;
-            attribute_scores["WIS"]++;
-            attribute_scores["CHA"]++;
-            speed = 30;
-            race = "Human";
-            darkvision = false;
-            break;
-        }
-    } while(true);
-
-    set_attribute_mods();
-}
-
-
 
 

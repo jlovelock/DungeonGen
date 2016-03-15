@@ -1,6 +1,7 @@
 
 #include <iostream>
-#include <character.h>
+#include <pc.h>
+#include <weapon.h>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ using namespace std;
 ///**************************************************************************************///
 
 
-void Character::print_status(){
+void PlayerChar::print_status(){
     //sanity check -- this function is just for PCs
     if(is_monster) return;
 
@@ -38,7 +39,7 @@ void Character::print_status(){
     cout << endl;
 }
 
-void Character::printCharacterSheet(){
+void PlayerChar::printCharacterSheet(){
     cout << endl << "======================================================================================" << endl;
     cout << "Level " << level << " " << race << " " << PC_class << "  [" << xp << "/" << next_levelup() << " xp to level " << level + 1 << "]" << endl;
 
@@ -53,20 +54,6 @@ void Character::printCharacterSheet(){
     }
     cout << endl;
 
-//    cout << "\tSTR " << attribute_scores["STR"] << " (";
-//    if(str_mod >= 0) cout << "+";
-//    cout << str_mod << "), DEX " << dex_score << " (";
-//    if(dex_mod >= 0) cout << "+";
-//    cout << dex_mod << "), CON " << con_score << " (";
-//    if(con_mod >= 0) cout << "+";
-//    cout << con_mod << "), INT " << int_score << " (";
-//    if(int_mod >= 0) cout << "+";
-//    cout << int_mod << "), WIS " << wis_score << " (";
-//    if(wis_mod >= 0) cout << "+";
-//    cout << wis_mod << "), CHA " << cha_score << " (";
-//    if(cha_mod >= 0) cout << "+";
-//    cout << cha_mod << ")" << endl;
-
     cout << "\tAC " << AC() << ", " << cur_hp << "/" << max_hp << " hp" << endl;
 
     cout << "\tWeapons:" << endl;
@@ -80,9 +67,6 @@ void Character::printCharacterSheet(){
         if((*it) == "martial") cout << " weapons";
     }
     cout << endl;
-
-//    cout << "\tMelee attack: " << melee_weapon << " +" << melee_atk_mod << ", d" << melee_weapon_die << "+" << melee_dmg_bonus << " damage" << endl;
-//    cout << "\tRanged attack: " << ranged_weapon << " +" << ranged_atk_mod << ", d" << ranged_weapon_die << "+" << ranged_dmg_bonus << " damage" << endl;
 
 
     //trained skills
@@ -106,10 +90,5 @@ void Character::printCharacterSheet(){
     cout << "======================================================================================" << endl << endl;
 }
 
-bool Character::proficient_with(string weapon_type){
-    for(vector<string>::iterator it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it) {
-        if (*it == weapon_type) return true;
-    }
-    return false;
-}
+
 

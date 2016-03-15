@@ -1,8 +1,10 @@
 
-#include <character.h>
+#include <pc.h>
+#include <door.h>
+
 using namespace std;
 
-bool Character::pick_lock(Door* d){
+bool PlayerChar::pick_lock(Door* d){
     if(skill_check("THIEVES TOOLS") > LOCKPICK_DC){
         d->unlock();
         cout << "You successfully pick the lock." << endl << endl;
@@ -13,7 +15,7 @@ bool Character::pick_lock(Door* d){
     }
 }
 
-bool Character::break_down(Door* d){
+bool PlayerChar::break_down(Door* d){
     if(attribute_chk("STRENGTH") > d->break_DC()){
         cout << "You successfully break down the door." << endl << endl;
         d->break_down();
@@ -25,7 +27,7 @@ bool Character::break_down(Door* d){
 }
 
 
-bool Character::use_locked_door(Door* d){
+bool PlayerChar::use_locked_door(Door* d){
     cout << "That door is locked. Try to lockpick, ram, or leave? " << endl;
     string input;
     read(input);
@@ -39,7 +41,7 @@ bool Character::use_locked_door(Door* d){
     }
 }
 
-bool Character::use_blocked_door(Door* d){
+bool PlayerChar::use_blocked_door(Door* d){
         cout << "Something is blocking it from opening. Try to ram, or leave? " << endl;
         string input;
         read(input);
@@ -52,7 +54,7 @@ bool Character::use_blocked_door(Door* d){
 }
 
 // Checks various complications on the door to see if you actually go through it.
-bool Character::can_open(Door* d){
+bool PlayerChar::can_open(Door* d){
     if(d->is_locked()){
         return use_locked_door(d);
 
@@ -75,4 +77,12 @@ bool Character::can_open(Door* d){
     } else {
         return true;
     }
+}
+
+bool PlayerChar::find_secret_door(Door* d){
+    if (d && d->is_secret() && skill_check("INVESTIGATION") > SECRET_DOOR_DC){
+        d->find_door();
+        return true;
+    }
+    return false;
 }

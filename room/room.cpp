@@ -2,7 +2,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+
 #include <room.h>
+#include <monster.h>
+#include <pc.h>
 
 using namespace std;
 
@@ -169,7 +172,7 @@ void Room::printDescription(int doorNum){
         if(has_monsters())
             cout << "There is an angry " << get_active_monster() << " charging towards you!" << endl;
         else
-            cout << "The corpse of a " << monsters[0]->PC_class << " lies on the floor." << endl; ///TODO FIXME
+            cout << "The corpse of a " << monsters[0]->full_name() << " lies on the floor." << endl; ///TODO FIXME
     }
 
     if(!hazard.empty()){
@@ -238,7 +241,7 @@ void Room::printDescription(int doorNum){
 }
 
 
-void Room::search_for_secret_doors(Character* c, bool& found){
+void Room::search_for_secret_doors(PlayerChar* c, bool& found){
     for(int i = 0; i < MAX_DOORS; i++){
         if(c->find_secret_door(doors[i])){
         //if(cur_room->doors[i] != NULL && cur_room->doors[i]->secret && PC.skill_check("INVESTIGATION") > SECRET_DOOR_DC){

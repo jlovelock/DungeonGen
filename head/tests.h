@@ -21,7 +21,7 @@ private:
     void add_room(std::string wall, int x, int y, int doors_to_add[]);
     Door* add_door(std::string wall);
     void jump_to_rm(int rm);
-    void print_map(){ g->dungeon->print_map(g->PC->get_position()); }
+    void print_map();
 
 public:
     Tests();

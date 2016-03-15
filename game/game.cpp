@@ -1,9 +1,12 @@
 
 #include <game.h>
+#include <weapon.h>
+#include <pc.h>
+
 using namespace std;
 
 Game::Game(){
-    PC = new Character();
+    PC = new PlayerChar(1);
     dungeon = new Dungeon();
     cur_room = dungeon->starting_room();
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
@@ -196,7 +199,7 @@ bool Game::searching(string input){
     ///TODO multi-monster support
     if(contains(input, cur_room->get_monster()) || input == "loot"){
         if(cur_room->monsters[0]->search_monster(true)){
-            rollIndividualTreasure(cur_room->monsters[0]->get_name());
+            rollIndividualTreasure(cur_room->monsters[0]->full_name());
             return true;
         }
         return false;
@@ -214,7 +217,7 @@ bool Game::searching(string input){
         //search monster corpses
         for(int i = 0; i < MAX_MONSTERS && cur_room->monsters[i] != NULL; i++){
             if(cur_room->monsters[i]->search_monster(false)){
-                rollIndividualTreasure(cur_room->monsters[0]->get_name());
+                rollIndividualTreasure(cur_room->monsters[0]->full_name());
                 found_small = true;
             }
         }

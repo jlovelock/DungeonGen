@@ -2,6 +2,7 @@
 #include <dungeon.h>
 #include <defines.h>
 #include <tests.h>
+#include <pc.h>
 
 using namespace std;
 
@@ -156,6 +157,9 @@ void Tests::go(string direction, int x, int y){
     go(direction);
 }
 
+void Tests::print_map(){
+    g->dungeon->print_map(g->PC->get_position());
+}
 
 void run_all_tests(){
 

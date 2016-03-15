@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <dungeon.h>
+#include <monster.h>
 
 using namespace std;
 

@@ -2,6 +2,7 @@
 #include <character.h>
 #include <treasure.h>
 #include <vector>
+#include <monster.h>
 
 #ifndef DUNGEON_H
 #define DUNGEON_H

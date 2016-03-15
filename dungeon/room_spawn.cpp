@@ -2,6 +2,7 @@
 #include <iostream>
 #include <dungeon.h>
 #include <dpg.h>
+#include <monster.h>
 
 using namespace std;
 

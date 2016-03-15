@@ -1,5 +1,6 @@
 #include <string>
 #include <room.h>
+#include <monster.h>
 
 using namespace std;
 
@@ -18,9 +19,9 @@ bool Room::has_monsters(){
     return false;
 }
 
-Character* Room::get_monster(string name){
+Monster* Room::get_monster(string name){
     for(int i = 0; i < MAX_MONSTERS && monsters[i] != NULL; i++){
-        if(contains(name, monsters[i]->short_name) || contains(name, monsters[i]->race))
+        if(contains(name, monsters[i]->name()) || contains(name, monsters[i]->race))
             return monsters[i];
     }
     return NULL;
@@ -28,7 +29,7 @@ Character* Room::get_monster(string name){
 
 string Room::get_monster(){
     if(monsters[0])
-        return monsters[0]->short_name;
+        return monsters[0]->name();
     else
         return "N/A";
 }
@@ -44,17 +45,17 @@ int Room::num_active_monsters(){
 }
 
 //redo when multi-monster support gets implemented
-Character* Room::get_monster_char(){
+Monster* Room::get_monster_char(){
     return monsters[0];
 }
 
 string Room::get_active_monster(){
     for(int i = 0; i < MAX_MONSTERS && monsters[i] != NULL; i++){
-        if(monsters[i]->is_alive()) return monsters[i]->short_name;
+        if(monsters[i]->is_alive()) return monsters[i]->name();
     }
     return "N/A";
 }
 
-Character* Room::get_active_monster_char(){
+Monster* Room::get_active_monster_char(){
     return get_monster(get_active_monster());
 }

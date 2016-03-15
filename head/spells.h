@@ -9,6 +9,7 @@ class Character;
 
 class Spell {
     friend class Character;
+    friend class PlayerChar;
     friend class Treasure;
 
     std::string name;

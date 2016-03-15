@@ -1,6 +1,7 @@
 #include <room.h>
 #include <string>
 #include <iostream>
+#include <monster.h>
 
 using namespace std;
 
@@ -82,9 +83,9 @@ void Room::setEdgeCoords(int entry_wall, int entry_x, int entry_y){
 void Room::set_contents(){
     int x = d100();
     if(x < 9){
-        monsters[0] = new Character(0);
+        monsters[0] = new Monster(0);
     } else if(x < 16){
-        monsters[0] = new Character(0);
+        monsters[0] = new Monster(0);
         treasure = true;
     } else if(x < 28){
         ///pet or allied creature
@@ -92,9 +93,9 @@ void Room::set_contents(){
         ///pet or allied creature
         treasure = true;
     } else if(x < 43){
-        monsters[0] = new Character(0);
+        monsters[0] = new Monster(0);
     } else if(x < 51){
-        monsters[0] = new Character(0);
+        monsters[0] = new Monster(0);
         treasure = true;
     } else if(x < 59){
         int y = d20();

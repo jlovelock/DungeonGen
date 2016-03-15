@@ -1,8 +1,10 @@
 
-#include <character.h>
 #include <vector>
 #include <string>
 #include <sstream>
+
+#include <weapon.h>
+#include <character.h>
 
 using namespace std;
 
@@ -217,6 +219,9 @@ int Weapon::get_dmg_bonus(Character* c){
 }
 
 
-int Weapon::damage_roll(Character* c){
-    return base_dmg(c) + get_dmg_bonus(c);
+int Weapon::damage_roll(Character* c, string mode){
+    if(mode == "crit")
+        return base_dmg(c) + base_dmg(c) + get_dmg_bonus(c);
+    else
+        return base_dmg(c) + get_dmg_bonus(c);
 }

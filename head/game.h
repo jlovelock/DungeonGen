@@ -7,11 +7,13 @@
 #include <treasure.h>
 #include <dungeon.h>
 
+class PlayerChar;
+
 class Game {
     friend class Tests;
 
     Dungeon* dungeon;
-    Character* PC;
+    PlayerChar* PC;
     Room* cur_room; //where the player is
 
     bool parse_open_door(std::string);

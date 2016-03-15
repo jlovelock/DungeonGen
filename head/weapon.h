@@ -12,7 +12,7 @@ class Weapon : public Object {
     Weapon(){ /* This keeps getting called by the weapon select map thing. It shouldn't be. TODO Debug */ }
     Weapon(std::string name);
     Weapon(std::string name, std::string specifier);
-    int damage_roll(Character* c);
+    int damage_roll(Character* c, std::string mode);
     int attack_roll(Character* c, std::string special = "");
 
     bool is_thrown(){ return _thrown; }

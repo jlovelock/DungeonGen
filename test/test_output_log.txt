@@ -15,8 +15,7 @@
 
 New character: default or custom? 
 
->> Standard character selected.
-greataxe equipped.
+>> greataxe equipped.
 
 
 ======================================================================================
@@ -36,7 +35,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the latrine) .
+There is the opening to the corridor you entered to the south (leading back to the sitting room) .
 
 ## north door opened.
 
@@ -44,7 +43,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the latrine.
+You turn back to the sitting room.
 There is a dungeon exit door on the south wall, an opening to a corridor on the east wall, and an opening to a corridor on the west wall, as well as the opening to the corridor you entered to the north (leading back to the ) .
 
 ## south door opened.
@@ -54,7 +53,7 @@ There is a dungeon exit door on the south wall, an opening to a corridor on the 
 
 ## Opening door in east direction.
 You enter room 2.
-There is the opening to the corridor you entered to the west (leading back to the latrine) .
+There is the opening to the corridor you entered to the west (leading back to the sitting room) .
 
 ## east door opened.
 
@@ -66,12 +65,12 @@ There is the opening to the corridor you entered to the west (leading back to th
 
 ## Opening door in north direction.
 You enter room 3.
-There is a stone door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
+There is a wooden door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
 
 ## north door opened.
 
 You are in a 20 by 20 foot rectangular , 
-There is a stone door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
+There is a wooden door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
 
                               
                               
@@ -109,7 +108,7 @@ There is a stone door on the west wall (leading back to the ), as well as the wo
 You remove the bar on the door before opening it.
 
 You enter room 1.
-There is an opening to a corridor on the south wall (leading back to the latrine), as well as the stone door you entered to the east (leading back to the ) .
+There is an opening to a corridor on the south wall (leading back to the sitting room), as well as the wooden door you entered to the east (leading back to the ) .
 
                               
                               
@@ -165,8 +164,7 @@ Reset this dungeon and start a new game? [y/n]
 ## NOTE: using default instruction file.
 New character: default or custom? 
 
->> Standard character selected.
-greataxe equipped.
+>> greataxe equipped.
 
 
 ======================================================================================
@@ -205,8 +203,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ## NOTE: using default instruction file.
 New character: default or custom? 
 
->> Standard character selected.
-greataxe equipped.
+>> greataxe equipped.
 
 
 ======================================================================================
@@ -226,7 +223,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in east direction.
 You enter room 1.
-There is the opening to the corridor you entered to the west (leading back to the pantry) .
+There is the opening to the corridor you entered to the west (leading back to the gallery) .
 
 ## east door opened.
 
@@ -248,7 +245,7 @@ There is the wooden door you entered to the north (leading back to the ) .
 
 ## Opening door in north direction.
 You enter room 3.
-There is the opening to the corridor you entered to the south (leading back to the pantry) .
+There is the opening to the corridor you entered to the south (leading back to the gallery) .
 
 ## north door opened.
 
@@ -325,8 +322,7 @@ There is the wooden door you entered to the north (leading back to the ) .
 ## NOTE: using default instruction file.
 New character: default or custom? 
 
->> Standard character selected.
-greataxe equipped.
+>> greataxe equipped.
 
 
 ======================================================================================
@@ -346,7 +342,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the sitting room) .
+There is the opening to the corridor you entered to the south (leading back to the waiting room) .
 
 ## north door opened.
 
@@ -370,7 +366,7 @@ There is the wooden door you entered to the west (leading back to the ) .
 
 ## Opening door in south direction.
 You enter room 3.
-There is the wooden door you entered to the north (leading back to the ) .
+There is the iron door you entered to the north (leading back to the ) .
 
 ## south door opened.
 
@@ -380,7 +376,7 @@ There is the wooden door you entered to the north (leading back to the ) .
 
 ## Opening door in east direction.
 You enter room 4.
-There is the opening to the corridor you entered to the west (leading back to the sitting room) .
+There is the opening to the corridor you entered to the west (leading back to the waiting room) .
 
 ## east door opened.
 
@@ -433,8 +429,7 @@ There is the opening to the corridor you entered to the west (leading back to th
 ## NOTE: using default instruction file.
 New character: default or custom? 
 
->> Standard character selected.
-greataxe equipped.
+>> greataxe equipped.
 
 
 ======================================================================================
@@ -454,7 +449,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the storage room) .
+There is the opening to the corridor you entered to the south (leading back to the waiting room) .
 
 ## north door opened.
 
@@ -466,7 +461,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 
 ## Opening door in east direction.
 You enter room 2.
-There is the wooden door you entered to the west (leading back to the ) .
+There is the stone door you entered to the west (leading back to the ) .
 
 ## east door opened.
 
@@ -488,7 +483,7 @@ There is the wooden door you entered to the west (leading back to the ) .
 
 ## Opening door in east direction.
 You enter room 4.
-There is the opening to the corridor you entered to the west (leading back to the storage room) .
+There is the opening to the corridor you entered to the west (leading back to the waiting room) .
 
 ## east door opened.
 
@@ -541,8 +536,7 @@ There is the opening to the corridor you entered to the west (leading back to th
 ## NOTE: using default instruction file.
 New character: default or custom? 
 
->> Standard character selected.
-greataxe equipped.
+>> greataxe equipped.
 
 
 ======================================================================================
@@ -608,7 +602,7 @@ There is the opening to the corridor you entered to the east (leading back to th
 
 ## Opening door in north direction.
 You enter room 5.
-There is the wooden door you entered to the south (leading back to the ) .
+There is the portcullis door you entered to the south (leading back to the ) .
 
 ## north door opened.
 
@@ -620,7 +614,7 @@ There is the wooden door you entered to the south (leading back to the ) .
 
 ## Opening door in east direction.
 You enter room 6.
-There is the wooden door you entered to the west (leading back to the ) .
+There is the stone door you entered to the west (leading back to the ) .
 
 ## east door opened.
 
@@ -683,8 +677,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## NOTE: using default instruction file.
 New character: default or custom? 
 
->> Standard character selected.
-greataxe equipped.
+>> greataxe equipped.
 
 
 ======================================================================================
@@ -704,7 +697,7 @@ Level 1 Human fighter  [0/300 xp to level 2]
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the sitting room) .
+There is the opening to the corridor you entered to the south (leading back to the guardroom) .
 
 ## north door opened.
 
@@ -712,7 +705,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the sitting room.
+You turn back to the guardroom.
 There is a dungeon exit door on the south wall, an opening to a corridor on the east wall, and an opening to a corridor on the west wall, as well as the opening to the corridor you entered to the north (leading back to the ) .
 
 ## south door opened.
@@ -722,7 +715,7 @@ There is a dungeon exit door on the south wall, an opening to a corridor on the 
 
 ## Opening door in east direction.
 You enter room 2.
-There is the opening to the corridor you entered to the west (leading back to the sitting room) .
+There is the opening to the corridor you entered to the west (leading back to the guardroom) .
 
 ## east door opened.
 
@@ -734,7 +727,7 @@ There is the opening to the corridor you entered to the west (leading back to th
 
 ## Opening door in north direction.
 You enter room 3.
-There is a wooden door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
+There is a hidden door on the west wall (leading back to the ), as well as the stone door you entered to the south (leading back to the ) .
 
 ## north door opened.
 

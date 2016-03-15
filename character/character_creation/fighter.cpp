@@ -3,12 +3,12 @@
 #include <string>
 
 #include <weapon.h>
-#include <character.h>
+#include <pc.h>
 
 using namespace std;
 
 
-void Character::default_fighter(){
+void PlayerChar::default_fighter(){
     PC_class = "fighter";
 
     //saves
@@ -40,7 +40,7 @@ void Character::default_fighter(){
 }
 
 
-void Character::fighter(){
+void PlayerChar::fighter(){
     PC_class = "fighter";
 
     //saves
@@ -153,7 +153,7 @@ void Character::fighter(){
 }
 
 
-void Character::fighter_skills(){
+void PlayerChar::fighter_skills(){
     string input;
 
     int skills = 2;
