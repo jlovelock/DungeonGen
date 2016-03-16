@@ -31,11 +31,16 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ======================================================================================
 
 ## Adding room north with dimensions (20,20).
+Adjusting position (original W40 E60 S70 N90)
+...checking room 0:  north south east west OK
+-- Attempting to link room 1 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=1, location=(W40 E60 S70 N90)
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the guardroom) .
+@@ W40 E60 S70 N90
+There is the opening to the corridor you entered to the south (leading back to the storage room) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -43,17 +48,24 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the guardroom.
-There is a dungeon exit door on the south wall, an opening to a corridor on the east wall, and an opening to a corridor on the west wall, as well as the opening to the corridor you entered to the north (leading back to the ) .
+You turn back to the storage room.
+@@ W40 E60 S50 N70
+There is a dungeon exit door on the south wall--[ID #0 @(50,50)]--, an opening to a corridor on the east wall--[ID #1 @(60,60)]--, and an opening to a corridor on the west wall--[ID #3 @(40,60)]--, as well as the opening to the corridor you entered to the north (leading back to the ) --[ID #2 @(50,70)]--.
 
 ## south door opened.
 
 ## Adding room east with dimensions (20,20).
+Adjusting position (original W60 E80 S50 N70)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+-- Attempting to link room 2 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=2, location=(W60 E80 S50 N70)
 
 ## Opening door in east direction.
 You enter room 2.
-There is the opening to the corridor you entered to the west (leading back to the guardroom) .
+@@ W60 E80 S50 N70
+There is the opening to the corridor you entered to the west (leading back to the storage room) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -61,16 +73,26 @@ There is the opening to the corridor you entered to the west (leading back to th
 ## Door added: ID=5, position=(70,70).
 
 ## Adding room north with dimensions (20,20).
+Adjusting position (original W60 E80 S70 N90)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+-- Attempting to link room 3 with room 1!
+	- CASE 2: Adding door @ index 1
+-- Attempting to link room 3 with room 2!
+	- Easy mode: no doors to align =]
 ## Room added: ID=3, location=(W60 E80 S70 N90)
 
 ## Opening door in north direction.
 You enter room 3.
-There is a wooden door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
+@@ W60 E80 S70 N90
+There is a wooden door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the wooden door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
 
 ## north door opened.
 
 You are in a 20 by 20 foot rectangular , 
-There is a wooden door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
+@@ W60 E80 S70 N90
+There is a wooden door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the wooden door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
 
                               
                               
@@ -108,7 +130,8 @@ There is a wooden door on the west wall (leading back to the ), as well as the w
 You remove the bar on the door before opening it.
 
 You enter room 1.
-There is an opening to a corridor on the south wall (leading back to the guardroom), as well as the wooden door you entered to the east (leading back to the ) .
+@@ W40 E60 S70 N90
+There is an opening to a corridor on the south wall (leading back to the storage room)--[ID #2 @(50,70)]--, as well as the wooden door you entered to the east (leading back to the ) --[ID #4 @(60,80)]--.
 
                               
                               
@@ -180,9 +203,22 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ======================================================================================
 
 ## Adding room north with dimensions (50,50).
+Adjusting position (original W25 E75 S70 N120)
+...checking room 0:  north south east west OK
+-- Attempting to link room 1 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=1, location=(W25 E75 S70 N120)
 
 ## Adding room east with dimensions (30,30).
+Adjusting position (original W60 E90 S45 N75)
+...checking room 0:  north south east west OK
+...checking room 1:  north** south east west** shifting (delta_x = 0, delta_y = -5.
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+-- Attempting to link room 2 with room 0!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 2 with room 1!
+	- Easy mode: no doors to align =]
 ## Room added: ID=2, location=(W60 E90 S40 N70)
 
 
@@ -219,11 +255,16 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ======================================================================================
 
 ## Adding room east with dimensions (20,20).
+Adjusting position (original W60 E80 S50 N70)
+...checking room 0:  north south east west OK
+-- Attempting to link room 1 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=1, location=(W60 E80 S50 N70)
 
 ## Opening door in east direction.
 You enter room 1.
-There is the opening to the corridor you entered to the west (leading back to the game room) .
+@@ W60 E80 S50 N70
+There is the opening to the corridor you entered to the west (leading back to the guardroom) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -231,21 +272,36 @@ There is the opening to the corridor you entered to the west (leading back to th
 ## Door added: ID=4, position=(70,50).
 
 ## Adding room south with dimensions (30,20).
+Adjusting position (original W55 E85 S30 N50)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+-- Attempting to link room 2 with room 0!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 2 with room 1!
+	- Easy mode: no doors to align =]
 ## Room added: ID=2, location=(W55 E85 S30 N50)
 
 ## Opening door in south direction.
 You enter room 2.
-There is the wooden door you entered to the north (leading back to the ) .
+@@ W55 E85 S30 N50
+There is the hidden door you entered to the north (leading back to the ) --[ID #4 @(70,50)]--.
 
 ## south door opened.
 
 ## Jumping to room 0.
 ## Adding room north with dimensions (20,20).
+Adjusting position (original W40 E60 S70 N90)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+-- Attempting to link room 3 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=3, location=(W40 E60 S70 N90)
 
 ## Opening door in north direction.
 You enter room 3.
-There is the opening to the corridor you entered to the south (leading back to the game room) .
+@@ W40 E60 S70 N90
+There is the opening to the corridor you entered to the south (leading back to the guardroom) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -253,11 +309,21 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=5, position=(60,80).
 
 ## Adding room east with dimensions (70,20).
+Adjusting position (original W60 E130 S70 N90)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+-- Attempting to link room 4 with room 1!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 4 with room 3!
+	- Easy mode: no doors to align =]
 ## Room added: ID=4, location=(W60 E130 S70 N90)
 
 ## Opening door in east direction.
 You enter room 4.
-There is the hidden door you entered to the west (leading back to the ) .
+@@ W60 E130 S70 N90
+There is the stone door you entered to the west (leading back to the ) --[ID #5 @(60,80)]--.
 
 ## east door opened.
 
@@ -265,11 +331,27 @@ There is the hidden door you entered to the west (leading back to the ) .
 ## Door added: ID=6, position=(95,70).
 
 ## Adding room south with dimensions (40,30).
+Adjusting position (original W75 E115 S40 N70)
+...checking room 0:  north south east west OK
+...checking room 1:  north** south east west** shifting (delta_x = 5, delta_y = 0.
+...checking room 2:  north south** east west** shifting (delta_x = 5, delta_y = 0.
+...checking room 3:  north south east west OK
+...checking room 4:  north south east west OK
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+...checking room 4:  north south east west OK
+-- Attempting to link room 5 with room 2!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 5 with room 4!
+	- Easy mode: no doors to align =]
 ## Room added: ID=5, location=(W85 E125 S40 N70)
 
 ## Opening door in south direction.
 You enter room 5.
-There is the wooden door you entered to the north (leading back to the ) .
+@@ W85 E125 S40 N70
+There is the hidden door you entered to the north (leading back to the ) --[ID #6 @(95,70)]--.
 
 ## south door opened.
 
@@ -338,11 +420,16 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ======================================================================================
 
 ## Adding room north with dimensions (20,60).
+Adjusting position (original W40 E60 S70 N130)
+...checking room 0:  north south east west OK
+-- Attempting to link room 1 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=1, location=(W40 E60 S70 N130)
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the study) .
+@@ W40 E60 S70 N130
+There is the opening to the corridor you entered to the south (leading back to the storage room) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -350,11 +437,17 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,100).
 
 ## Adding room east with dimensions (60,20).
+Adjusting position (original W60 E120 S90 N110)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+-- Attempting to link room 2 with room 1!
+	- Easy mode: no doors to align =]
 ## Room added: ID=2, location=(W60 E120 S90 N110)
 
 ## Opening door in east direction.
 You enter room 2.
-There is the wooden door you entered to the west (leading back to the ) .
+@@ W60 E120 S90 N110
+There is the stone door you entered to the west (leading back to the ) --[ID #4 @(60,100)]--.
 
 ## east door opened.
 
@@ -362,21 +455,42 @@ There is the wooden door you entered to the west (leading back to the ) .
 ## Door added: ID=5, position=(90,90).
 
 ## Adding room south with dimensions (20,60).
+Adjusting position (original W80 E100 S30 N90)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+-- Attempting to link room 3 with room 2!
+	- Easy mode: no doors to align =]
 ## Room added: ID=3, location=(W80 E100 S30 N90)
 
 ## Opening door in south direction.
 You enter room 3.
-There is the wooden door you entered to the north (leading back to the ) .
+@@ W80 E100 S30 N90
+There is the wooden door you entered to the north (leading back to the ) --[ID #5 @(90,90)]--.
 
 ## south door opened.
 
 ## Jumping to room 0.
 ## Adding room east with dimensions (40,10).
+Adjusting position (original W60 E100 S55 N65)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north** south** east** west shrinking west by 20.
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+-- Attempting to link room 4 with room 0!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 4 with room 3!
+	- Easy mode: no doors to align =]
 ## Room added: ID=4, location=(W60 E80 S55 N65)
 
 ## Opening door in east direction.
 You enter room 4.
-There is the opening to the corridor you entered to the west (leading back to the study) .
+@@ W60 E80 S55 N65
+There is the opening to the corridor you entered to the west (leading back to the storage room) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -445,11 +559,16 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ======================================================================================
 
 ## Adding room north with dimensions (20,60).
+Adjusting position (original W40 E60 S70 N130)
+...checking room 0:  north south east west OK
+-- Attempting to link room 1 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=1, location=(W40 E60 S70 N130)
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the waiting room) .
+@@ W40 E60 S70 N130
+There is the opening to the corridor you entered to the south (leading back to the guardroom) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -457,11 +576,17 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,100).
 
 ## Adding room east with dimensions (20,20).
+Adjusting position (original W60 E80 S90 N110)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+-- Attempting to link room 2 with room 1!
+	- Easy mode: no doors to align =]
 ## Room added: ID=2, location=(W60 E80 S90 N110)
 
 ## Opening door in east direction.
 You enter room 2.
-There is the stone door you entered to the west (leading back to the ) .
+@@ W60 E80 S90 N110
+There is the portcullis door you entered to the west (leading back to the ) --[ID #4 @(60,100)]--.
 
 ## east door opened.
 
@@ -469,21 +594,44 @@ There is the stone door you entered to the west (leading back to the ) .
 ## Door added: ID=5, position=(80,100).
 
 ## Adding room east with dimensions (20,110).
+Adjusting position (original W80 E100 S45 N155)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+-- Attempting to link room 3 with room 2!
+	- Easy mode: no doors to align =]
 ## Room added: ID=3, location=(W80 E100 S45 N155)
 
 ## Opening door in east direction.
 You enter room 3.
-There is the hidden door you entered to the west (leading back to the ) .
+@@ W80 E100 S45 N155
+There is the stone door you entered to the west (leading back to the ) --[ID #5 @(80,100)]--.
 
 ## east door opened.
 
 ## Jumping to room 0.
 ## Adding room east with dimensions (30,40).
+Adjusting position (original W60 E90 S40 N80)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north** south east** west shrinking west by 10.
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+-- Attempting to link room 4 with room 0!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 4 with room 1!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 4 with room 3!
+	- Easy mode: no doors to align =]
 ## Room added: ID=4, location=(W60 E80 S40 N80)
 
 ## Opening door in east direction.
 You enter room 4.
-There is the opening to the corridor you entered to the west (leading back to the waiting room) .
+@@ W60 E80 S40 N80
+There is the opening to the corridor you entered to the west (leading back to the guardroom) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -552,11 +700,16 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ======================================================================================
 
 ## Adding room east with dimensions (40,20).
+Adjusting position (original W60 E100 S50 N70)
+...checking room 0:  north south east west OK
+-- Attempting to link room 1 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=1, location=(W60 E100 S50 N70)
 
 ## Opening door in east direction.
 You enter room 1.
-There is the opening to the corridor you entered to the west (leading back to the latrine) .
+@@ W60 E100 S50 N70
+There is the opening to the corridor you entered to the west (leading back to the bedroom) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -564,11 +717,17 @@ There is the opening to the corridor you entered to the west (leading back to th
 ## Door added: ID=4, position=(80,70).
 
 ## Adding room north with dimensions (20,40).
+Adjusting position (original W70 E90 S70 N110)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+-- Attempting to link room 2 with room 1!
+	- Easy mode: no doors to align =]
 ## Room added: ID=2, location=(W70 E90 S70 N110)
 
 ## Opening door in north direction.
 You enter room 2.
-There is the stone door you entered to the south (leading back to the ) .
+@@ W70 E90 S70 N110
+There is the wooden door you entered to the south (leading back to the ) --[ID #4 @(80,70)]--.
 
 ## north door opened.
 
@@ -576,21 +735,36 @@ There is the stone door you entered to the south (leading back to the ) .
 ## Door added: ID=5, position=(70,90).
 
 ## Adding room west with dimensions (10,10).
+Adjusting position (original W60 E70 S85 N95)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+-- Attempting to link room 3 with room 2!
+	- Easy mode: no doors to align =]
 ## Room added: ID=3, location=(W60 E70 S85 N95)
 
 ## Opening door in west direction.
 You enter room 3.
-There is the hidden door you entered to the east (leading back to the ) .
+@@ W60 E70 S85 N95
+There is the wooden door you entered to the east (leading back to the ) --[ID #5 @(70,90)]--.
 
 ## west door opened.
 
 ## Jumping to room 0.
 ## Adding room west with dimensions (20,20).
+Adjusting position (original W20 E40 S50 N70)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+-- Attempting to link room 4 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=4, location=(W20 E40 S50 N70)
 
 ## Opening door in west direction.
 You enter room 4.
-There is the opening to the corridor you entered to the east (leading back to the latrine) .
+@@ W20 E40 S50 N70
+There is the opening to the corridor you entered to the east (leading back to the bedroom) --[ID #3 @(40,60)]--.
 
 ## west door opened.
 
@@ -598,11 +772,20 @@ There is the opening to the corridor you entered to the east (leading back to th
 ## Door added: ID=6, position=(30,70).
 
 ## Adding room north with dimensions (10,70).
+Adjusting position (original W25 E35 S70 N140)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+...checking room 4:  north south east west OK
+-- Attempting to link room 5 with room 4!
+	- Easy mode: no doors to align =]
 ## Room added: ID=5, location=(W25 E35 S70 N140)
 
 ## Opening door in north direction.
 You enter room 5.
-There is the wooden door you entered to the south (leading back to the ) .
+@@ W25 E35 S70 N140
+There is the wooden door you entered to the south (leading back to the ) --[ID #6 @(30,70)]--.
 
 ## north door opened.
 
@@ -610,21 +793,60 @@ There is the wooden door you entered to the south (leading back to the ) .
 ## Door added: ID=7, position=(35,105).
 
 ## Adding room east with dimensions (10,20).
+Adjusting position (original W35 E45 S95 N115)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+...checking room 4:  north south east west OK
+...checking room 5:  north south east west OK
+-- Attempting to link room 6 with room 5!
+	- Easy mode: no doors to align =]
 ## Room added: ID=6, location=(W35 E45 S95 N115)
 
 ## Opening door in east direction.
 You enter room 6.
-There is the portcullis door you entered to the west (leading back to the ) .
+@@ W35 E45 S95 N115
+There is the wooden door you entered to the west (leading back to the ) --[ID #7 @(35,105)]--.
 
 ## east door opened.
 
 ## Jumping to room 0.
 ## Adding room north with dimensions (20,30).
+Adjusting position (original W40 E60 S70 N100)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+...checking room 4:  north south east west OK
+...checking room 5:  north south east west OK
+...checking room 6:  north** south east west** shifting (delta_x = 5, delta_y = 0.
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east** west shrinking south by 15.
+...checking room 4:  north south east west OK
+...checking room 5:  north south east west OK
+...checking room 6:  north south east west OK
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+...checking room 3:  north south east west OK
+...checking room 4:  north south east west OK
+...checking room 5:  north south east west OK
+...checking room 6:  north south east west OK
+-- Attempting to link room 7 with room 0!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 7 with room 1!
+	- Easy mode: no doors to align =]
+-- Attempting to link room 7 with room 3!
+	- Easy mode: no doors to align =]
 ## Room added: ID=7, location=(W45 E65 S70 N85)
 
 ## Opening door in north direction.
 You enter room 7.
-There is the opening to the corridor you entered to the south (leading back to the latrine) .
+@@ W45 E65 S70 N85
+There is the opening to the corridor you entered to the south (leading back to the bedroom) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -693,11 +915,16 @@ Level 1 Human fighter  [0/300 xp to level 2]
 ======================================================================================
 
 ## Adding room north with dimensions (20,20).
+Adjusting position (original W40 E60 S70 N90)
+...checking room 0:  north south east west OK
+-- Attempting to link room 1 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=1, location=(W40 E60 S70 N90)
 
 ## Opening door in north direction.
 You enter room 1.
-There is the opening to the corridor you entered to the south (leading back to the waiting room) .
+@@ W40 E60 S70 N90
+There is the opening to the corridor you entered to the south (leading back to the bedroom) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -705,17 +932,24 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the waiting room.
-There is a dungeon exit door on the south wall, an opening to a corridor on the east wall, and an opening to a corridor on the west wall, as well as the opening to the corridor you entered to the north (leading back to the ) .
+You turn back to the bedroom.
+@@ W40 E60 S50 N70
+There is a dungeon exit door on the south wall--[ID #0 @(50,50)]--, an opening to a corridor on the east wall--[ID #1 @(60,60)]--, and an opening to a corridor on the west wall--[ID #3 @(40,60)]--, as well as the opening to the corridor you entered to the north (leading back to the ) --[ID #2 @(50,70)]--.
 
 ## south door opened.
 
 ## Adding room east with dimensions (20,20).
+Adjusting position (original W60 E80 S50 N70)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+-- Attempting to link room 2 with room 0!
+	- Easy mode: no doors to align =]
 ## Room added: ID=2, location=(W60 E80 S50 N70)
 
 ## Opening door in east direction.
 You enter room 2.
-There is the opening to the corridor you entered to the west (leading back to the waiting room) .
+@@ W60 E80 S50 N70
+There is the opening to the corridor you entered to the west (leading back to the bedroom) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -723,11 +957,20 @@ There is the opening to the corridor you entered to the west (leading back to th
 ## Door added: ID=5, position=(70,70).
 
 ## Adding room north with dimensions (20,20).
+Adjusting position (original W60 E80 S70 N90)
+...checking room 0:  north south east west OK
+...checking room 1:  north south east west OK
+...checking room 2:  north south east west OK
+-- Attempting to link room 3 with room 1!
+	- CASE 2: Adding door @ index 1
+-- Attempting to link room 3 with room 2!
+	- Easy mode: no doors to align =]
 ## Room added: ID=3, location=(W60 E80 S70 N90)
 
 ## Opening door in north direction.
 You enter room 3.
-There is a iron door on the west wall (leading back to the ), as well as the wooden door you entered to the south (leading back to the ) .
+@@ W60 E80 S70 N90
+There is a wooden door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the wooden door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
 
 ## north door opened.
 

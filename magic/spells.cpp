@@ -5,6 +5,8 @@
 
 using namespace std;
 
+Spell::~Spell(){}
+
 
 int Spell::damage(){
     int dmg = 0;
@@ -28,7 +30,7 @@ Spell::Spell(string specifier){
 }
 
 void Spell::clr(){
-    name = "";
+    _name = "";
     level = 0;
     range = 10; ///@TODO FIXME
     duration = 0;
@@ -57,7 +59,7 @@ Spell::Spell(int lvl){
 
 ///TODO should be able to choose different targets for each dart
 void Spell::magic_missile(){
-    name = "magic missile";
+    _name = "magic missile";
     level = 1;
     range = 120;
     duration = 0;
@@ -75,7 +77,7 @@ void Spell::magic_missile(){
 }
 
 void Spell::fire_bolt(){
-    name = "fire bolt";
+    _name = "fire bolt";
     level = 0;
     range = 120;
     duration = 0;
@@ -94,7 +96,7 @@ void Spell::fire_bolt(){
 
 ///TODO separate attack rolls for each ray
 void Spell::scorching_ray(){
-    name = "scorching ray";
+    _name = "scorching ray";
     level = 2;
     range = 120;
     duration = 0;

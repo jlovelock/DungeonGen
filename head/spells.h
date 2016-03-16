@@ -13,7 +13,7 @@ class Spell {
     friend class Treasure;
     friend class Monster;
 
-    std::string name;
+    std::string _name;
     int level; //cantrips are 0
     int range; //in feet
     int duration; //in rounds: 1 round = 6 seconds
@@ -43,6 +43,8 @@ public:
     Spell();
     Spell(std::string);
     Spell(int lvl);
+    ~Spell();
+    std::string name(){ return _name; }
 
 };
 

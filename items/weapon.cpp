@@ -28,6 +28,7 @@ Weapon::Weapon(string name): Object(name){
     _override = false;
     _is_weapon = true;
     effect_on_hit = NULL;
+    identified = true;
 
     if(name == "greataxe"){
         _n_dice = 1;
@@ -42,6 +43,7 @@ Weapon::Weapon(string name): Object(name){
         _finesse = false;
         _versatile = false;
         _loading = false;
+        _value = 30;
     }
 
     else if(name == "hand crossbow"){
@@ -57,6 +59,7 @@ Weapon::Weapon(string name): Object(name){
         _finesse = false;
         _versatile = false;
         _loading = false;
+        _value = 75;
     }
 
     else if(name == "longbow"){
@@ -72,6 +75,7 @@ Weapon::Weapon(string name): Object(name){
         _finesse = false;
         _versatile = false;
         _loading = false;
+        _value = 50;
     }
 
     else if(name == "rapier"){
@@ -87,6 +91,7 @@ Weapon::Weapon(string name): Object(name){
         _finesse = true;
         _versatile = false;
         _loading = false;
+        _value = 25;
     }
 
     else if(name == "longsword"){
@@ -102,6 +107,7 @@ Weapon::Weapon(string name): Object(name){
         _finesse = false;
         _versatile = true;
         _loading = false;
+        _value = 15;
     }
 
     else if(name == "shortsword"){
@@ -117,6 +123,7 @@ Weapon::Weapon(string name): Object(name){
         _finesse = true;
         _versatile = false;
         _loading = false;
+        _value = 10;
     }
 
     else if(name == "handaxe"){
@@ -132,6 +139,7 @@ Weapon::Weapon(string name): Object(name){
         _finesse = false;
         _versatile = false;
         _loading = false;
+        _value = 5;
     }
 
 }

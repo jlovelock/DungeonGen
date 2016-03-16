@@ -247,11 +247,7 @@ bool Game::searching(string input){
 
 
 void Game::drink_potion(int index){
-    potions.at(index)->quantity--;
-    if(!PC->is_injured())
-        cout << "Nothing appears to happen." << endl << endl;
-    else
-        PC->heal(potions.at(index)->healing_amount());
+    potions.at(index)->use(PC);
 
     if(potions.at(index)->quantity == 0){
         delete potions.at(index);
@@ -273,7 +269,7 @@ bool Game::cast_spell(){
     bool flag = true;
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
         char idx = 'A';
-        if((*it)->identified){
+        if((*it)->is_identified()){
             if(flag){
                 cout << "Choose which scroll you would like to cast, or enter 'cancel' to exit this menu." << endl;
                 flag = false;
@@ -292,9 +288,9 @@ bool Game::cast_spell(){
     read(input);
 
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        if((*it)->identified && (contains(input, (*it)->get_description()) || contains((*it)->get_description(), input))){
-            PC->cast((*it)->spell, cur_room->get_active_monster_char());
-            (*it)->quantity--;
+        if((*it)->is_identified() && (contains(input, (*it)->get_description()) || contains((*it)->get_description(), input))){
+//            PC->cast((*it)->spell, cur_room->get_active_monster_char());
+            (*it)->use(PC, cur_room->get_active_monster_char());
             if((*it)->quantity == 0){
                 delete *it;
                 scrolls.erase(it);
@@ -315,9 +311,7 @@ bool Game::drink_potion(){
     }
     string input;
     if(potions.size() == 1){
-        if(potions.front()->identified) cout << "Drink the " << potions.front()->name << " potion? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
-        else cout << "Drink the unidentified " << potions.front()->description << " potion? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
-
+        cout << "Drink the " << potions.front()->get_description() << "? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
 
         read(input);
         if(input == "y"){
@@ -335,8 +329,7 @@ bool Game::drink_potion(){
             char idx = 'A';
             for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
                 cout << "\t(" << idx << "): ";
-                if((*it)->identified) cout << (*it)->name << " potion" << endl;
-                else cout << "unidentified " << (*it)->description << " potion" << endl;
+                cout << (*it)->get_description() << endl;
                 idx++;
             }
             cout << endl;

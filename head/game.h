@@ -37,6 +37,8 @@ class Game {
     void identify_items();
     bool cast_spell();
 
+    void add(Treasure* item, std::vector<Treasure*>& v);
+
 public:
     Game();
     ~Game();

@@ -2,19 +2,44 @@
 #include <objects.h>
 #include <string>
 #include <character.h>
+#include <spells.h>
 
 using namespace std;
 
 int Object::max_id = 0;
 
-Object::Object(string name){
-    _name = name;
+Object::~Object(){
+    if(effect_on_hit){
+        delete effect_on_hit;
+    }
+}
+
+Object::Object(){
+    _name = "??";
+    _description = "N/A";
     _id = max_id++;
 
-    if(name == "shield" || name == "focus"){
-        _2h = false;
-        _is_weapon = false;
-    }
+    _value = 0;
+    identified = true;
+    consumable = false;
+    _is_weapon = false;
+    _2h = false;
+    effect_on_hit = NULL;
+    rarity = "mundane";
+}
+
+Object::Object(string name){
+    _name = name;
+    _description = name; ///@TODO placeholder here
+    _id = max_id++;
+
+    _value = 0;
+    identified = true;
+    consumable = false;
+    _is_weapon = false;
+    _2h = false;
+    effect_on_hit = NULL;
+    rarity = "mundane";
 }
 
 

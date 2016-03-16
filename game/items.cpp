@@ -40,7 +40,7 @@ void Game::print_inventory(){
         cout << "SPELL SCROLLS:" << endl;
         int num_unidentified_scrolls = 0;
         for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-            if(!(*it)->identified)
+            if(!(*it)->is_identified())
                 num_unidentified_scrolls++;
             else
                 cout << "\t- " << (*it)->quantity << " " << (*it)->get_description() << "." << endl;
@@ -109,13 +109,13 @@ void Game::rollIndividualTreasure(string monster_name){
 
 bool Game::has_unidentified_items(){
     for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
-        if(!(*it)->identified) return true;
+        if(!(*it)->is_identified()) return true;
     }
     for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
-        if(!(*it)->identified) return true;
+        if(!(*it)->is_identified()) return true;
     }
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        if(!(*it)->identified) return true;
+        if(!(*it)->is_identified()) return true;
     }
 
     return false;
@@ -128,27 +128,27 @@ void Game::identify_items(){
     bool first_item_identified = true;
     cout << "As you rest, you look over the items you have gathered more closely." << endl;
     for(vector<Treasure*>::iterator it = loot.begin(); it != loot.end(); ++it){
-        if(!(*it)->identified && PC->attribute_chk("INT") > LOOT_IDENTIFY_DC){
+        if(!(*it)->is_identified() && PC->attribute_chk("INT") > LOOT_IDENTIFY_DC){
             if(first_item_identified) cout << "You are able to identify the following:" << endl;
             first_item_identified = false;
             cout << "\t- Your " << (*it)->get_description();
-            if((*it)->type=="art"){
+            if((*it)->type()=="art"){
                 if((*it)->quantity == 1) cout << " is";
                 else cout << " are";
             }
             else if((*it)->quantity == 1)
-                cout << " is a " << (*it)->name;
+                cout << " is a " << (*it)->name();
             else
-                cout << " are " << (*it)->name << "s";
-            cout << " worth " << (*it)->value << "gp";
+                cout << " are " << (*it)->name() << "s";
+            cout << " worth " << (*it)->value() << "gp";
             if((*it)->quantity > 1) cout << " each";
             cout << "." << endl;
-            (*it)->identified = true;
+            (*it)->identify();
         }
     }
 
     for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
-        if(!(*it)->identified && PC->skill_check("ARCANA") > POTION_IDENTIFY_DC){
+        if(!(*it)->is_identified() && PC->skill_check("ARCANA") > POTION_IDENTIFY_DC){
             if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
             first_item_identified = false;
             cout << "\t- Your " << (*it)->get_description();
@@ -156,13 +156,13 @@ void Game::identify_items(){
                 cout << " is a potion of ";
             else
                 cout << " are potions of ";
-            cout << (*it)->name << "." << endl;
-            (*it)->identified = true;
+            cout << (*it)->name() << "." << endl;
+            (*it)->identify();
         }
     }
 
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        if(!(*it)->identified && PC->skill_check("ARCANA") > SCROLL_IDENTIFY_DC){
+        if(!(*it)->is_identified() && PC->skill_check("ARCANA") > SCROLL_IDENTIFY_DC){
             if(first_item_identified) cout << "Looking over the items you have gathered in more detail, you are able to identify the following:" << endl;
             first_item_identified = false;
             cout << "\t- " << (*it)->quantity << " of your scrolls";
@@ -170,8 +170,8 @@ void Game::identify_items(){
                 cout << " is a scroll of ";
             else
                 cout << " are scrolls of ";
-            cout << (*it)->name << "." << endl;
-            (*it)->identified = true;
+            cout << (*it)->name() << "." << endl;
+            (*it)->identify();
         }
     }
 
@@ -180,11 +180,24 @@ void Game::identify_items(){
     cout << endl;
 }
 
+void Game::add(Treasure* item, vector<Treasure*>& v){
+    if(DEBUG) cout << "$$\tadding " << item->name() << "...";
+    for(vector<Treasure*>::iterator it = v.begin(); it != v.end(); ++it){
+        if(item->name() == (*it)->name()){
+            (*it)->quantity += item->quantity;
+            delete item;
+            if(DEBUG) cout << "updated existing.";
+            return;
+        }
+    }
+    v.push_back(item);
+    if(DEBUG) cout << "done." << endl;
+}
+
 
 void Game::rollTreasureHoard(){
     vector<Treasure*> hoard;
 
-    int num_objects, value;
     string type;
 
     //Roll money
@@ -197,125 +210,129 @@ void Game::rollTreasureHoard(){
     sp += silver;
     gp += gold;
 
-    int num_magic_items;
-    char magic_item_table;
+    bool no_magic = (dungeon->magic_items_enabled() == "NEVER");
+    bool force_magic = (dungeon->magic_items_enabled() == "ALWAYS");
 
     //Roll item category/quantities
-    ///TODO add magic items!
+    ///TODO add more magic items / item tables!
     int x = d100();
     if(x < 7) {
         cout << endl;
         return;
     } else if(x < 17){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 10;
+        add(new Gemstone(10, d6()), hoard);
+        add(new Gemstone(10, d6()), hoard);
+        if(force_magic){
+            int N = d6();
+            for(int i = 0; i < N; i++){
+                hoard.push_back(magic_item('A'));
+            }
+        }
     } else if(x < 27){
-        type = "art";
-        num_objects = d4()+d4();
-        value = 25;
+        add(new Art(25, d4()), hoard);
+        add(new Art(25, d4()), hoard);
+        if(force_magic){
+            int N = d6();
+            for(int i = 0; i < N; i++){
+                hoard.push_back(magic_item('A'));
+            }
+        }
     } else if(x < 37){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 50;
+        add(new Gemstone(50, d6()), hoard);
+        add(new Gemstone(50, d6()), hoard);
+        if(force_magic){
+            int N = d6();
+            for(int i = 0; i < N; i++){
+                add(magic_item('A'), hoard);
+            }
+        }
     } else if(x < 45){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 10;
-        num_magic_items = d6();
-        magic_item_table = 'A';
+        add(new Gemstone(10, d6()), hoard);
+        add(new Gemstone(10, d6()), hoard);
+        int N = no_magic ? 0 : d6();
+        for(int i = 0; i < N; i++){
+            add(magic_item('A'), hoard);
+        }
     } else if(x < 53){
-        type = "art";
-        num_objects = d4()+d4();
-        value = 25;
-        num_magic_items = d6();
-        magic_item_table = 'A';
+        add(new Art(25, d4()), hoard);
+        add(new Art(25, d4()), hoard);
+        int N = no_magic ? 0 : d6();
+        for(int i = 0; i < N; i++){
+            add(magic_item('A'), hoard);
+        }
     } else if(x < 61){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 50;
-        num_magic_items = d6();
-        magic_item_table = 'A';
+        add(new Gemstone(50, d6()), hoard);
+        add(new Gemstone(50, d6()), hoard);
+        int N = no_magic ? 0 : d6();
+        for(int i = 0; i < N; i++){
+            add(magic_item('A'), hoard);
+        }
     } else if(x < 66){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 10;
+        add(new Gemstone(10, d6()), hoard);
+        add(new Gemstone(10, d6()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('B'), hoard);
+        }
     } else if(x < 71) {
-        type = "art";
-        num_objects = d4()+d4();
-        value = 25;
+        add(new Art(25, d4()), hoard);
+        add(new Art(25, d4()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('B'), hoard);
+        }
     } else if(x < 76){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 50;
+        add(new Gemstone(50, d6()), hoard);
+        add(new Gemstone(50, d6()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('B'), hoard);
+        }
     } else if(x < 79){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 10;
+        add(new Gemstone(10, d6()), hoard);
+        add(new Gemstone(10, d6()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('C'), hoard);
+        }
     } else if(x < 81){
-        type = "art";
-        num_objects = d4()+d4();
-        value = 25;
+        add(new Art(25, d4()), hoard);
+        add(new Art(25, d4()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('C'), hoard);
+        }
     } else if(x < 86){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 50;
+        add(new Gemstone(50, d6()), hoard);
+        add(new Gemstone(50, d6()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('C'), hoard);
+        }
     } else if(x < 93){
-        type = "art";
-        num_objects = d4()+d4();
-        value = 25;
+        add(new Art(25, d4()), hoard);
+        add(new Art(25, d4()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('F'), hoard);
+        }
     } else if(x < 98){
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 50;
+        add(new Gemstone(50, d6()), hoard);
+        add(new Gemstone(50, d6()), hoard);
+        int N = no_magic ? 0 : d4();
+        for(int i = 0; i < N; i++){
+            add(magic_item('F'), hoard);
+        }
     } else if(x < 100){
-        type = "art";
-        num_objects = d4()+d4();
-        value = 25;
+        add(new Art(25, d4()), hoard);
+        add(new Art(25, d4()), hoard);
+        if(!no_magic) add(magic_item('G'), hoard);
     } else {
-        type = "gemstones";
-        num_objects = d6()+d6();
-        value = 50;
+        add(new Gemstone(50, d6()), hoard);
+        add(new Gemstone(50, d6()), hoard);
+        if(!no_magic) add(magic_item('G'), hoard);
     }
 
-    if(dungeon->magic_items_enabled() == "ALWAYS") {
-        num_magic_items = d6();
-        magic_item_table = 'A';
-    } else if(dungeon->magic_items_enabled() == "NEVER"){
-        num_magic_items = 0;
-    }
-
-
-
-    //Roll each mundane item
-    for(int i = 0; i < num_objects; i++){
-        Treasure* next = new Treasure (type, 1, value);
-        bool found = false;
-        for(vector<Treasure*>::iterator it = hoard.begin(); it != hoard.end(); ++it){
-            if((*it)->name == next->name){
-                delete next;
-                found = true;
-                (*it)->quantity++;
-                break;
-            }
-        }
-        if(!found) hoard.push_back(next);
-    }
-
-    //roll each magical item
-    for(int i = 0; i < num_magic_items; i++){
-        Treasure* next = new Treasure (magic_item_table);
-        bool found = false;
-        for(vector<Treasure*>::iterator it = hoard.begin(); it != hoard.end(); ++it){
-            if((*it)->name == next->name){
-                delete next;
-                found = true;
-                (*it)->quantity++;
-                break;
-            }
-        }
-        if(!found) hoard.push_back(next);
-    }
     //Print loot table
     cout << "You have also received the following:" << endl;
     for(vector<Treasure*>::iterator it = hoard.begin(); it != hoard.end(); ++it){
@@ -324,52 +341,19 @@ void Game::rollTreasureHoard(){
     cout << endl << endl;
 
 
-    //Merge duplicate items from hoard to dungeon loot / potion inventory
-    bool flag = false;
-    for(vector<Treasure*>::iterator h_it = hoard.begin(); h_it != hoard.end(); ++h_it){
-        if(flag){
-            flag = false;
-            --h_it;
-        }
-        for(vector<Treasure*>::iterator l_it = loot.begin(); l_it != loot.end(); ++l_it){
-            if((*h_it)->name == (*l_it)->name){
-                (*l_it)->quantity += (*h_it)->quantity;
-                delete *h_it;
-                h_it = hoard.erase(h_it);
-                flag = true;
-                break;
-            }
-        }
-        for(vector<Treasure*>::iterator p_it = potions.begin(); p_it != potions.end(); ++p_it){
-            if((*h_it)->name == (*p_it)->name){
-                (*p_it)->quantity += (*h_it)->quantity;
-                delete *h_it;
-                h_it = hoard.erase(h_it);
-                flag = true;
-                break;
-            }
-        }
-        for(vector<Treasure*>::iterator s_it = scrolls.begin(); s_it != scrolls.end(); ++s_it){
-            if((*h_it)->name == (*s_it)->name){
-                (*s_it)->quantity += (*h_it)->quantity;
-                delete *h_it;
-                h_it = hoard.erase(h_it);
-                flag = true;
-                break;
-            }
-        }
+    //Add to inventory
+    while(!hoard.empty()){
+        Treasure* t = hoard.front();
+        if(t->type() == "potion")
+            add(t, potions);
+        else if(t->type() == "scroll")
+            add(t, scrolls);
+        else
+            add(t, loot);
+
+        hoard.erase(hoard.begin());
     }
 
-    //Transfer non-duplicate items from hoard to dungeon loot
-    while(!hoard.empty()){
-        if(hoard.back()->type == "potion")
-            potions.push_back(hoard.back());
-        else if(hoard.back()->type == "scroll")
-            scrolls.push_back(hoard.back());
-        else
-            loot.push_back(hoard.back());
-        hoard.pop_back();
-    }
 }
 
 //TODO check if item is already equipped, being careful of items with duplicate names (ie equipping a second offhand shortsword is OK)
