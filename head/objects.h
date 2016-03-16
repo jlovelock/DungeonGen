@@ -3,6 +3,8 @@
 
 #include <string>
 
+class Spell;
+
 class Character;
 
 class Object{
@@ -13,6 +15,7 @@ class Object{
         bool is_two_handed(){ return _2h; }
         bool is_weapon(){ return _is_weapon; }
         bool is_equipped_to(Character*);
+        Spell* effect_on_hit; //template special abilities as spells
 
     protected:
         std::string _name;

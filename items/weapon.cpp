@@ -15,7 +15,9 @@ using namespace std;
 Weapon::Weapon(string name, string specifier) : Object(name){
     _is_weapon = true;
     _override = true;
+    effect_on_hit = NULL;
     _atk_mod = atoi(specifier.substr(0,specifier.find("/")).c_str());
+    cout << atoi(specifier.substr(0,specifier.find("/")).c_str()) << endl;
     _n_dice = atoi(specifier.substr(specifier.find("/")+1, specifier.find("d")-specifier.find("/")-1).c_str());
     _weapon_die = atoi(specifier.substr(specifier.find("d")+1,specifier.find("+")-specifier.find("d")-1).c_str());
     _dmg_mod = atoi(specifier.substr(specifier.find("+")+1, specifier.find(" ")-specifier.find("+")-1).c_str());
@@ -25,6 +27,7 @@ Weapon::Weapon(string name, string specifier) : Object(name){
 Weapon::Weapon(string name): Object(name){
     _override = false;
     _is_weapon = true;
+    effect_on_hit = NULL;
 
     if(name == "greataxe"){
         _n_dice = 1;

@@ -15,15 +15,15 @@ Monster::Monster(double CR) : Character(){
     is_monster = true;
     searched = false;
     prof = 2;
-    cur_hp = max_hp;
-    temp_hp = 0;
 
     int n = rand()%3;
     switch(n){
-        case 0: spawn_giant_rat(1); return;
-        case 1: spawn_cultist(1); return;
-        case 2: spawn_poisonous_snake(1); return;
+        case 0: spawn_giant_rat(1); break;
+        case 1: spawn_cultist(1); break;
+        case 2: spawn_poisonous_snake(1); break;
     }
+    cur_hp = max_hp;
+    temp_hp = 0;
 }
 
 ///TODO include keen senses, darkvision
@@ -47,7 +47,6 @@ void Monster::spawn_giant_rat(int group_size){
     race = "rat";
 
     features.push_back("pack tactics");
-    effect_on_hit = NULL;
 }
 
 //group size represents how many of this monster are in the same room
@@ -70,11 +69,9 @@ void Monster::spawn_cultist(int group_size){
     main_hand = w;
     off_hand = NULL;
 
-    _short_name = "cultist"; /// TODO rename this variable to something more reasonable? =P
+    _short_name = "cultist";
     _full_name = "cultist";
     race = "human"; //arbitrary
-
-    effect_on_hit = NULL;
 }
 
 void Monster::spawn_poisonous_snake(int group_size){
@@ -89,18 +86,16 @@ void Monster::spawn_poisonous_snake(int group_size){
     set_attributes(1, 16, 11, 1, 10, 3);
 
     Weapon* w = new Weapon("bite","5/1d0+1 piercing"); //yes, 1d0. deals 1 dmg always (base).
+    w->effect_on_hit = new Spell("2d4+0 poison");
+    w->effect_on_hit->name = "venom";
+    w->effect_on_hit->save_half = true;
+    w->effect_on_hit->save_DC = 10;
+    w->effect_on_hit->save_stat = "CON";
     weapons.push_back(w);
     main_hand = w;
     off_hand = NULL;
 
-    _short_name = "snake"; /// TODO rename this variable to something more reasonable? =P
+    _short_name = "snake";
     _full_name = "poisonous snake";
     race = "snake"; //arbitrary
-
-    effect_on_hit = new Spell("2d4+0 poison");
-    effect_on_hit->name = "venom";
-    effect_on_hit->save_half = true;
-    effect_on_hit->save_DC = 10;
-    effect_on_hit->save_stat = "CON";
-
 }

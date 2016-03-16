@@ -33,22 +33,38 @@ void Monster::generic_attack(Character* opponent){
         atk = w->attack_roll(this);
     }
 
-    if(atk == 20)
-        attack(opponent, atk, damage(w, "crit"));
-    else
-        attack(opponent, atk, damage(w));
+    int dmg = 0;
+    if(atk == 20){
+        cout << "Critical hit!" << endl;
+        dmg = damage(w, "crit");
+    } else if(atk >= opponent->AC()){
+        dmg = damage(w);
+    } else {
+        cout << "His blow fails to connect." << endl << endl;
+    }
+
+    if(dmg > 0){
+        cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of damage." << endl;
+        opponent->take_damage(dmg);
+        cast(w->effect_on_hit, opponent);
+    }
+
+//    if(atk == 20)
+//        attack(opponent, atk, damage(w, "crit"));
+//    else
+//        attack(opponent, atk, damage(w));
 }
 
 ///@TODO
 void Monster::action_on_kill(Character* opponent){
 }
-
+//
 void Monster::attack(Character* opponent, int attack_roll, int dmg){
     if(attack_roll >= opponent->AC() || attack_roll == 20){
         cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of damage." << endl;
         if(attack_roll == 20) cout << "It's a critical hit!" << endl;
         opponent->take_damage(dmg);
-        cast(effect_on_hit, opponent);
+//        cast(effect_on_hit, opponent);
     } else {
         cout << "His blow fails to connect." << endl << endl;
     }

@@ -8,9 +8,18 @@
 #include <door.h>
 #include <spells.h>
 #include <objects.h>
+#include <weapon.h>
+
 
 using namespace std;
 
+
+Character::~Character(){
+    for(vector<Weapon*>::iterator it = weapons.begin(); it != weapons.end(); ++it){
+        delete *it;
+    }
+    weapons.clear();
+}
 
 bool Character::proficient_with(string weapon_type){
     for(vector<string>::iterator it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it) {

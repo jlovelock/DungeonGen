@@ -80,7 +80,7 @@ class Character {
 
     public:
         Character(int lvl);
-        virtual ~Character(){}
+        virtual ~Character();
 
         int attribute_mod(std::string att){ return attribute_mods[att]; }
         int proficiency_bonus(){ return prof; }

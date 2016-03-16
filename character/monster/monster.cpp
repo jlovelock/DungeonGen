@@ -4,6 +4,11 @@
 using namespace std;
 
 
+Monster::~Monster(){
+
+}
+
+
 bool Monster::search_monster(bool print_err_msgs){
     if(is_alive()){
         if(print_err_msgs) cout << "You can't do that while it's still alive!" << endl;

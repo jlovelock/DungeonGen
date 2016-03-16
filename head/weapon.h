@@ -45,8 +45,8 @@ class Weapon : public Object {
     int _n_dice;
 
     bool _override;
-    bool _dmg_mod;
-    bool _atk_mod;
+    int _dmg_mod;
+    int _atk_mod;
     std::string _dtype;
 
     int attr_mod(Character* c);

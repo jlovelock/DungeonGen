@@ -16,11 +16,10 @@ class Monster : public Character {
     bool searched;
     std::string _short_name;
     std::string _full_name;
-    Spell* effect_on_hit; //template special abilities as spells
 
 public:
     Monster(double CR);
-    ~Monster(){}
+    ~Monster();
 
     void generic_attack(Character*);
     void attack(Character* opponent, int attack_roll, int dmg);
