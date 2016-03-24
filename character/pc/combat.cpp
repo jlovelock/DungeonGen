@@ -24,19 +24,32 @@ void PlayerChar::generic_attack(Character* opponent){
         weapon_select(opponent);
     }
 
-    cout << "You attack the " << opponent->full_name() << " with your " << w->name() << " drawn." << endl;
-
     int atk;
-    if(w->is_ranged() && in_melee_with(opponent)){
+    bool has_advantage = false, has_disadvantage = false;
+
+    cout << "You attack the " << opponent->full_name() << " with your " << w->name() << " drawn." << endl;
+    if(is("blinded")) {
+        cout << "Blind and unable to see, you are forced to strike out randomly." << endl;
+        has_disadvantage = true;
+    } else if(opponent->is("blinded")){
+        cout << "Blinded, the " << opponent->name() << " can't dodge out of the way of your attack nearly as easily." << endl;
+        has_advantage = true;
+    } else if(w->is_ranged() && in_melee_with(opponent)){
         cout << "However, you struggle to fire the " << w->name() << " from melee." << endl;
-        atk = w->attack_roll(this, "disadvantage");
-    } else {
-        atk = w->attack_roll(this);
+        has_disadvantage = true;
     }
 
-    if(atk == 20)
-        attack(opponent, atk, damage(w, "crit"));
+    if(has_advantage && !has_disadvantage)
+        atk = w->attack_roll(this, "advantage");
+    else if(has_disadvantage && !has_advantage)
+        atk = w->attack_roll(this, "disadvantage");
     else
+        atk = w->attack_roll(this);
+
+    if(atk == 20){
+        cout << "Critical hit!" << endl;
+        attack(opponent, atk, damage(w, "crit"));
+    } else
         attack(opponent, atk, damage(w));
 }
 
@@ -49,14 +62,8 @@ void PlayerChar::action_on_kill(Character* opponent){
 }
 
 void PlayerChar::attack(Character* opponent, int attack_roll, int dmg){
-    if(!opponent->is_alive()){
-        cout << "Uh, he's already dead, but go right ahead if you really want to." << endl << endl;
-        return;
-    }
-
     if(attack_roll >= opponent->AC() || attack_roll == 20){
         cout << "Your attack connects, dealing " << dmg << " points of damage to the " << opponent->full_name() << "." << endl;
-        if(attack_roll == 20) cout << "It's a critical hit!" << endl;
         opponent->take_damage(dmg);
 
         if(!opponent->is_alive()) action_on_kill(opponent);

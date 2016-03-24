@@ -2,6 +2,7 @@
 #include <iostream>
 #include <pc.h>
 #include <weapon.h>
+#include <conditions.h>
 
 using namespace std;
 
@@ -31,10 +32,10 @@ void PlayerChar::print_status(){
     if(second_wind_available) cout << "You have your Second Wind available ('special' command)." << endl;
     else cout << "You must take a short rest before you can use your Second Wind feature again." << endl;
 
-    cout << endl << "Print character sheet? [y/n] ";
-    char input;
-    cin.get(input);
-    if(input == 'y') printCharacterSheet();
+    cout << endl << "Print character sheet? [y/n]" << endl;
+    string input;
+    read(input);
+    if(input == "y") printCharacterSheet();
 
     cout << endl;
 }
@@ -86,6 +87,14 @@ void PlayerChar::printCharacterSheet(){
         cout << (*it);
     }
     cout << endl;
+
+    if(conditions.size() > 0){
+        cout << "\tCurrent conditions:" << endl;
+        for(vector<Condition*>::iterator it = conditions.begin(); it != conditions.end(); ++it){
+            cout << "\t- " << (*it)->name() << " -- max time remaining = " << (*it)->time_remaining() << "." << endl;
+        }
+        cout << endl;
+    }
 
     cout << "======================================================================================" << endl << endl;
 }

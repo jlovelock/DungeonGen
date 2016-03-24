@@ -29,6 +29,13 @@ bool Character::in_melee_with(Character* opponent){
             && yPos - opponent->yPos >= -5;
 }
 
+int Character::adjusted_speed(){
+    int modifiers = 0;
+    if(is("buffed by longstrider")) modifiers += 10;
+
+    return speed + modifiers;
+}
+
 ///@TODO dash actions
 void Character::close_with(Character* opponent){
     int dX = opponent->xPos - xPos;
@@ -39,7 +46,7 @@ void Character::close_with(Character* opponent){
     if(dY > 0) dY -= 5;
     else if(dY < 0) dY += 5;
 
-    float percentage = (float) speed / distance_to(opponent);
+    float percentage = (float) adjusted_speed() / distance_to(opponent);
     if(percentage < 1.0){
         dX *= percentage;
         dY *= percentage;

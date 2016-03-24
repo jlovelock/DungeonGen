@@ -35,7 +35,8 @@ class Game {
     void drink_potion(int index);
     bool has_unidentified_items();
     void identify_items();
-    bool cast_spell();
+    bool cast_spell(std::string);
+    Scroll* select_scroll();
 
     void add(Treasure* item, std::vector<Treasure*>& v);
 

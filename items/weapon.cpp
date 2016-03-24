@@ -216,6 +216,12 @@ string Weapon::get_weapon_description(Character* c){
 
 int Weapon::attack_roll(Character* c, string mode){
     int roll;
+
+    if(c->is("blinded")){
+        if(mode == "advantage") mode = "";
+        else mode = "disadvantage";
+    }
+
     if(mode == "advantage")
         roll = max(d20(), d20());
     else if(mode == "disadvantage")

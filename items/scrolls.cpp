@@ -7,7 +7,15 @@
 using namespace std;
 
 void Scroll::use(Character* user, Character* target){
-    user->cast(spell, target);
+    cout << "You attempt to cast ";
+    if(quantity > 0) cout << "one of ";
+    cout << "your " << get_description();
+    if(target)
+        cout << " on the " << target->full_name() << "." << endl;
+    else
+        cout << " on yourself." << endl;
+    spell->cast(user, target);
+    //user->cast(spell, target);
     quantity--;
 }
 
@@ -69,4 +77,8 @@ Scroll::Scroll(int lvl, int num) : Treasure("scroll", num, magic_item_cost(scrol
     consumable = true;
     rarity = scroll_rarity(lvl);
     identified = false;
+}
+
+Scroll::~Scroll(){
+    delete spell;
 }

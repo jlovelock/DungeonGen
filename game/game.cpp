@@ -10,6 +10,11 @@ Game::Game(){
     dungeon = new Dungeon();
     cur_room = dungeon->starting_room();
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
+
+// ------------ Testing ---------------
+//    Scroll* s = new Scroll(1, 10);
+//    s->identify();
+//    add(s, scrolls);
 }
 
 Game::~Game(){
@@ -21,6 +26,7 @@ void Game::run() {
     cur_room->printFullDescription(0);
     dungeon->print_map(PC->get_position());
     while (cur_room && getCommand()){
+        PC->end_of_turn_cleanup();
         dungeon->print_map(PC->get_position());
         dungeon->check_completion();
     }
@@ -75,7 +81,7 @@ bool Game::getCommand() {
         else cout << "Inspecting things in that much detail takes a while. Maybe you should rest for a bit?" << endl << endl;
         return true;
     } else if(contains(input, "cast") || contains(input, "read")){
-        if(!cast_spell()) return true;
+        if(!cast_spell(input)) return true;
 
     } else if(contains(input, "settings") || contains(input, "preferences")){
         dungeon->edit_preferences();
@@ -100,6 +106,9 @@ bool Game::getCommand() {
     ///TODO FIXME multiple monster support
         cout << "The " << cur_room->get_active_monster() << " turns to attack you!" << endl;
         cur_room->get_active_monster_char()->generic_attack(PC);
+
+        if(cur_room->has_monsters())
+            cur_room->get_active_monster_char()->end_of_turn_cleanup();
     }
 
     if(!PC->is_alive()) return false;
@@ -255,32 +264,20 @@ void Game::drink_potion(int index){
     }
 }
 
-//returns true iff a spell was cast
-bool Game::cast_spell(){
-    if(scrolls.empty()){
-        cout << "You have no scrolls from which to cast." << endl << endl;
-        return false;
-    }
-    if(!cur_room->has_monsters()){
-        cout << "There are no enemies in the room to cast spells at." << endl << endl;
-        return false;
-    }
-
+Scroll* Game::select_scroll(){
     bool flag = true;
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        char idx = 'A';
         if((*it)->is_identified()){
             if(flag){
                 cout << "Choose which scroll you would like to cast, or enter 'cancel' to exit this menu." << endl;
                 flag = false;
             }
-            cout << "\t- " << (*it)->get_description() << endl;
-            ++idx;
+            cout << "\t- " << (*it)->name() << endl;
         }
     }
     if(flag){
         cout << "You can't cast a scroll you haven't identified. You can attempt to identify them while you rest." << endl;
-        return false;
+        return NULL;
     }
 
     cout << endl;
@@ -288,17 +285,54 @@ bool Game::cast_spell(){
     read(input);
 
     for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
-        if((*it)->is_identified() && (contains(input, (*it)->get_description()) || contains((*it)->get_description(), input))){
-//            PC->cast((*it)->spell, cur_room->get_active_monster_char());
-            (*it)->use(PC, cur_room->get_active_monster_char());
+        if((*it)->is_identified() && (contains(input, (*it)->name()))){
+           return (Scroll*) *it;
+        }
+    }
+    return NULL;
+
+}
+
+//returns true iff a spell was cast
+bool Game::cast_spell(string input){
+    if(scrolls.empty()){
+        cout << "You have no scrolls from which to cast." << endl << endl;
+        return false;
+    }
+
+    Scroll* to_cast = NULL;
+    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+        if(contains(input, (*it)->name()) && (*it)->is_identified()){
+            to_cast = (Scroll*) *it;
+            break;
+        }
+    }
+
+    if(!to_cast)
+        to_cast = select_scroll();
+
+    if(!to_cast)
+        return false;
+
+    if(to_cast->targets_enemy() && !cur_room->has_monsters()){
+        cout << "There are no enemies in the room to cast that at." << endl << endl;
+        return false;
+    }
+
+    to_cast->use(PC, cur_room->get_active_monster_char());
+    cout << "The scroll crumbles to dust as the magic leaves it." << endl << endl;
+    //cout << "$$ HAS LONGSTRIDER=" << PC->is("buffed by longstrider") << endl;
+    if(to_cast->quantity == 0){
+        for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
             if((*it)->quantity == 0){
                 delete *it;
                 scrolls.erase(it);
+                break;
             }
-            return true;
         }
     }
-    return false;
+    //cout << "$$ HAS LONGSTRIDER=" << PC->is("buffed by longstrider") << endl;
+    return true;
 }
 
 

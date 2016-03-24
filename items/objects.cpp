@@ -42,6 +42,12 @@ Object::Object(string name){
     rarity = "mundane";
 }
 
+void Object::action_on_hit(Character* target, Character* attacker){
+    if(effect_on_hit){
+        effect_on_hit->cast(attacker, target);
+    }
+}
+
 
 bool Object::is_equipped_to(Character* c){
     return (c->main_hand && _id == c->main_hand->_id) || (c->off_hand && _id == c->off_hand->_id);

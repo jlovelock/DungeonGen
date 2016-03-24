@@ -57,5 +57,6 @@ string Room::get_active_monster(){
 }
 
 Monster* Room::get_active_monster_char(){
-    return get_monster(get_active_monster());
+    if(!has_monsters()) return NULL;
+    else return get_monster(get_active_monster());
 }

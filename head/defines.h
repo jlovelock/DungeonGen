@@ -25,6 +25,8 @@ extern bool test_mode;
 extern std::ifstream testfile_input;
 extern unsigned num_tests_run;
 
+int scroll_save_DC(int lvl);
+
 static const char* skargs[] = {
     "ATHLETICS",
     "ACROBATICS",

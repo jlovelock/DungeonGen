@@ -86,11 +86,12 @@ void Monster::spawn_poisonous_snake(int group_size){
     set_attributes(1, 16, 11, 1, 10, 3);
 
     Weapon* w = new Weapon("bite","5/1d0+1 piercing"); //yes, 1d0. deals 1 dmg always (base).
-    w->effect_on_hit = new Spell("2d4+0 poison");
-    w->effect_on_hit->_name = "venom";
-    w->effect_on_hit->save_half = true;
-    w->effect_on_hit->save_DC = 10;
-    w->effect_on_hit->save_stat = "CON";
+    Spell* s = new Spell("2d4+0 poison");
+    s->_name = "venom";
+    s->save_half = true;
+    s->save_DC = 10;
+    s->save_stat = "CON";
+    w->set_effect_on_hit(s);
     weapons.push_back(w);
     main_hand = w;
     off_hand = NULL;

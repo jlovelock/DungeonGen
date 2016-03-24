@@ -13,6 +13,7 @@ class Weapon;
 class Spell;
 class Door;
 class Object;
+class Condition;
 
 class Character {
     friend class Dungeon;
@@ -29,6 +30,7 @@ class Character {
         bool is_monster;
         int prof;
         int speed;
+        int adjusted_speed();
         int xp;
 
         //Special
@@ -44,7 +46,6 @@ class Character {
 
         //Saving throws
         std::map<std::string, int> save_mods;
-        int save(std::string stat){ return d20() + save_mods[stat]; }
 
         //Skills
         std::map<std::string, int> skill_mods;
@@ -78,14 +79,20 @@ class Character {
         void set_base_skill_mods();
         void train_saves(std::string save1="", std::string save2="");
 
+        //ongoing effects
+        std::vector<Condition*> conditions;
+        void add_condition(std::string name, int duration, int DC=0, std::string check="");
+        void remove_condition(std::string);
+        void update_conditions();
+
     public:
         Character(int lvl);
         virtual ~Character();
 
         int attribute_mod(std::string att){ return attribute_mods[att]; }
         int proficiency_bonus(){ return prof; }
-        int skill_check(std::string skill){ return d20()+skill_mods[skill]; }
-        int attribute_chk(std::string att){ return d20() + attribute_mods[att]; }
+        int skill_check(std::string skill);
+        int attribute_chk(std::string att);
         bool has_fighting_style(std::string);
 
         //Combat functions
@@ -93,6 +100,7 @@ class Character {
         virtual void generic_attack(Character*) {}
         bool is_hit(int attack_roll){ return attack_roll >= AC(); }
         int saving_throw(Spell*);
+        int save(std::string stat){ return d20() + save_mods[stat]; }
         int AC();
 
         void take_damage(int dmg);
@@ -122,6 +130,14 @@ class Character {
 
         int get_xp(){ return xp; }
         virtual void action_on_kill(Character*) {}
+
+        void add_condition(Condition*);
+        bool is(std::string);
+
+        bool is_PC(){ return !is_monster; }
+
+        void end_of_turn_cleanup();
+
 
 };
 

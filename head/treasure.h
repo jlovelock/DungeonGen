@@ -17,6 +17,7 @@ public:
     int quantity;
     std::string type(){ return _type; }
     virtual std::string get_description();
+    virtual void use(Character* user=NULL, Character* target=NULL){}
 };
 
 class Gemstone : public Treasure {
@@ -42,9 +43,11 @@ class Scroll : public Treasure {
         Spell* spell;
     public:
         Scroll(int lvl, int num=1);
-        ~Scroll(){}
+        ~Scroll();
         std::string get_description();
         void use(Character* user, Character* target);
+        bool targets_self(){ return spell->targets_self(); }
+        bool targets_enemy(){ return !spell->targets_self(); }
 };
 
 

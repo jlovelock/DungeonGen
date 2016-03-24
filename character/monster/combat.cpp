@@ -1,6 +1,7 @@
 
 #include <monster.h>
 #include <weapon.h>
+#include <spells.h>
 
 using namespace std;
 
@@ -11,6 +12,7 @@ using namespace std;
  *  - Distinguish between melee / ranged / etc in flavour
  */
 void Monster::generic_attack(Character* opponent){
+
     ///@TODO opponents with multiple weapon options
     Weapon* w = (Weapon*)main_hand;
 
@@ -25,13 +27,26 @@ void Monster::generic_attack(Character* opponent){
     }
 
     int atk;
-    if(w->is_ranged() && in_melee_with(opponent)){
-        cout << "The " << full_name() << " struggles to fire his " << w->name() << " from melee." << endl;
-        atk = w->attack_roll(this, "disadvantage");
-    } else {
-        cout << "The " << full_name() << " lashes out with a " << w->name() << "." << endl;
-        atk = w->attack_roll(this);
+    bool has_advantage = false, has_disadvantage = false;
+
+    cout << "The " << full_name() << " lashes out with a " << w->name() << "." << endl;
+    if(is("blinded")){
+        cout << "Blinded, he can't target you nearly as effectively." << endl;
+        has_disadvantage = true;
+    } else if(opponent->is("blinded")){
+        cout << "Unable to see your opponent lashing out with their " << w->name() << ", you struggle to avoid the attack." << endl;
+        has_advantage = true;
+    } else if(w->is_ranged() && in_melee_with(opponent)){
+        cout << "However, he struggles to fire his " << w->name() << " from melee." << endl;
+        has_disadvantage = true;
     }
+
+    if(has_advantage && !has_disadvantage)
+        atk = w->attack_roll(this, "advantage");
+    else if(has_disadvantage && !has_advantage)
+        atk = w->attack_roll(this, "disadvantage");
+    else
+        atk = w->attack_roll(this);
 
     int dmg = 0;
     if(atk == 20){
@@ -46,23 +61,17 @@ void Monster::generic_attack(Character* opponent){
     if(dmg > 0){
         cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of damage." << endl;
         opponent->take_damage(dmg);
-        cast(w->effect_on_hit, opponent);
+        w->action_on_hit(opponent, this);
     }
-
-//    if(atk == 20)
-//        attack(opponent, atk, damage(w, "crit"));
-//    else
-//        attack(opponent, atk, damage(w));
 }
 
 ///@TODO
 void Monster::action_on_kill(Character* opponent){
 }
-//
+
 void Monster::attack(Character* opponent, int attack_roll, int dmg){
     if(attack_roll >= opponent->AC() || attack_roll == 20){
         cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of damage." << endl;
-        if(attack_roll == 20) cout << "It's a critical hit!" << endl;
         opponent->take_damage(dmg);
 //        cast(effect_on_hit, opponent);
     } else {

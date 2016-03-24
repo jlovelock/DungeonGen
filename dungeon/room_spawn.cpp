@@ -107,8 +107,8 @@ Room* Dungeon::add_room(Door* d, bool is_passage){
     if(next_rm->monsters[0]){
         next_rm->monsters[0]->xPos = next_rm->westEdge + rand()%(next_rm->eastEdge-next_rm->westEdge-1) + 1;
         next_rm->monsters[0]->yPos = next_rm->southEdge + rand()%(next_rm->northEdge-next_rm->southEdge-1) + 1;
-        cout << "Room " << next_rm->id << " -- " << next_rm->location();
-        cout << " -- monster spawn @(" << next_rm->monsters[0]->xPos << "," << next_rm->monsters[0]->yPos << ")" << endl;
+        if(DEBUG) cout << "Room " << next_rm->id << " -- " << next_rm->location();
+        if(DEBUG) cout << " -- monster spawn @(" << next_rm->monsters[0]->xPos << "," << next_rm->monsters[0]->yPos << ")" << endl;
     }
 
     DoorPlacementGuide dpg(next_rm, this);

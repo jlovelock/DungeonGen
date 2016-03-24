@@ -16,11 +16,12 @@ class Object{
         bool is_weapon(){ return _is_weapon; }
         bool is_equipped_to(Character*);
         virtual std::string get_description() { return _description; }
-        Spell* effect_on_hit; //template special abilities as spells
         bool is_identified(){ return identified; }
         void identify(){ identified = true; }
         int value(){ return _value; }
         virtual void use(Character* user=NULL, void* target=NULL){}
+        void action_on_hit(Character* target, Character* attacker=NULL);
+        void set_effect_on_hit(Spell* s){ if(!effect_on_hit) effect_on_hit = s; }
 
     protected:
         std::string _name;
@@ -33,6 +34,8 @@ class Object{
         bool identified;
         bool consumable;
         std::string rarity;
+
+        Spell* effect_on_hit; //template special abilities as spells
 
         static int max_id; //starts at 0, increments with each room added
         int _id;

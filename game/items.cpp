@@ -217,8 +217,15 @@ void Game::rollTreasureHoard(){
     ///TODO add more magic items / item tables!
     int x = d100();
     if(x < 7) {
-        cout << endl;
-        return;
+        if(force_magic){
+            int N = d6();
+            for(int i = 0; i < N; i++){
+                hoard.push_back(magic_item('A'));
+            }
+        } else {
+            cout << endl;
+            return;
+        }
     } else if(x < 17){
         add(new Gemstone(10, d6()), hoard);
         add(new Gemstone(10, d6()), hoard);

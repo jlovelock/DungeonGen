@@ -2,10 +2,14 @@
 #include <stdlib.h>
 #include <spells.h>
 #include <defines.h>
+#include <conditions.h>
+#include <character.h>
 
 using namespace std;
 
-Spell::~Spell(){}
+Spell::~Spell(){
+    if(condition) delete condition;
+}
 
 
 int Spell::damage(){
@@ -14,6 +18,52 @@ int Spell::damage(){
         dmg += rand()%damage_die+1;
     }
     return dmg;
+}
+
+void Spell::cast(Character* caster, Character* target){
+
+    bool is_PC = !caster->is_monster;
+    int dmg = damage();
+    if(beneficial) target = caster;
+
+    // Check range
+    if(caster->distance_to(target) > range){
+        cout << "You're too far away to do that: " << _name << " only has a range of " << range << " feet." << endl;
+        //cout << "You are << sqrt(pow(xPos-target->xPos, 2)+pow(yPos-target->yPos, 2)) << " feet away from the " << target->full_name() << "." << endl;
+        return;
+    }
+
+    // Effect negated
+    if( ( attack_roll_required && caster->spell_attack() < target->AC()  ) ||
+        ( save_negates         && target->saving_throw(this) >= save_DC  ) )  {
+        if(is_PC) cout << "Unfortunately, the " << target->full_name() << " manages to avoid the effect." << endl;
+        else      cout << "Luckily, you manage to avoid the " << target->full_name() << "'s " << _name << "." << endl;
+        return;
+    }
+
+    // Save for half damage
+    if(save_half && target->saving_throw(this) >= caster->spell_save_DC()){
+        dmg /= 2;
+        if(is_PC) cout << "The " << target->full_name() << " avoids the brunt of the effect, but it still hits." << endl;
+        else      cout << "You avoid the brunt of the " << caster->full_name() << "'s " << _name << " effect, but it still hits." << endl;
+    }
+
+    // Deal damage
+    if(dmg > 0) {
+        if(is_PC) cout << "Your " << _name << " hits the " << target->full_name() << " for " << dmg << " points of " << damage_type << " damage." << endl;
+        else      cout << "The " << caster->full_name() << "'s " << _name << " deals you " << dmg << " points of " << damage_type << " damage." << endl;
+        target->take_damage(dmg);
+    }
+
+    // Apply conditions
+    if(condition){
+        target->add_condition(condition);
+    }
+
+    cout << endl;
+
+    if(!target->is_alive())
+        caster->action_on_kill(target);
 }
 
 //eg. 1d4+5 fire
@@ -32,83 +82,58 @@ Spell::Spell(string specifier){
 void Spell::clr(){
     _name = "";
     level = 0;
-    range = 10; ///@TODO FIXME
-    duration = 0;
-    casting_time = 0;
+    range = 10; ///TODO FIXME. Default should be adjacency.
+    casting_time = ACTION;
+    concentration = false;
+    beneficial = false;
     attack_roll_required = false;
     save_negates = false;
     save_half = false;
     save_stat = "";
+    save_DC = 0;
     num_damage_dice = 0;
     damage_die = 0;
     damage_mod = 0;
     damage_type = "";
-    save_DC = 0;
+    condition = NULL;
+    condition_save = false;
+    condition_save_stat = "";
 }
 
 Spell::Spell(){
     clr();
 }
 
+// random scroll of the specified level
 Spell::Spell(int lvl){
-    if(lvl == 0) fire_bolt();
-    else if(lvl == 1) magic_missile();
-    else if(lvl == 2) scorching_ray();
+    clr();
+    save_DC = scroll_save_DC(lvl);
 
+    int x;
+    switch(lvl){
+        case 0:
+            x = rand() % 2;
+            switch(x){
+                case 0: fire_bolt(); return;
+                case 1: poison_spray(); return;
+            }
+
+        case 1:
+            x = rand() % 3;
+
+            switch(x){
+                case 0: magic_missile(); return;
+                case 1: inflict_wounds(); return;
+                case 2: longstrider(); return;
+            }
+
+        case 2:
+            x = rand() % 2;
+
+            switch(x){
+                case 0: scorching_ray(); return;
+                case 1: blindness(); return;
+            }
+        }
 }
 
-///TODO should be able to choose different targets for each dart
-void Spell::magic_missile(){
-    _name = "magic missile";
-    level = 1;
-    range = 120;
-    duration = 0;
-    casting_time = ACTION;
-
-    attack_roll_required = false;
-    save_negates = false;
-    save_half = false;
-    save_stat = "";
-
-    num_damage_dice = 3;
-    damage_die = 4;
-    damage_mod = 3;
-    damage_type = "force";
-}
-
-void Spell::fire_bolt(){
-    _name = "fire bolt";
-    level = 0;
-    range = 120;
-    duration = 0;
-    casting_time = ACTION;
-
-    attack_roll_required = true;
-    save_negates = false;
-    save_half = false;
-    save_stat = "";
-
-    num_damage_dice = 1;
-    damage_die = 10;
-    damage_mod = 0;
-    damage_type = "fire";
-}
-
-///TODO separate attack rolls for each ray
-void Spell::scorching_ray(){
-    _name = "scorching ray";
-    level = 2;
-    range = 120;
-    duration = 0;
-    casting_time = ACTION;
-
-    attack_roll_required = true;
-    save_negates = false;
-    save_half = false;
-    save_stat = "";
-
-    num_damage_dice = 6;
-    damage_die = 6;
-    damage_mod = 0;
-    damage_type = "fire";
-}
