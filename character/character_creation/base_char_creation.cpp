@@ -30,6 +30,7 @@ void Character::initialize(){
     in_melee = false;
     prof = 2;
     main_hand = NULL; off_hand = NULL;
+    concentrating_on = NULL;
 }
 
 Character::Character(){

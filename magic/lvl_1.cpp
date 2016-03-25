@@ -38,4 +38,11 @@ void Spell::longstrider(){
     beneficial = true;
 }
 
+void Spell::armor_of_agathys(){
+    _name = "armor of agathys";
+    level = 1;
+    range = 0;
 
+    condition = new Condition("enchanted with armor of agathys", 600);
+    beneficial = true;
+}

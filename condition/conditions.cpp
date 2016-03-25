@@ -44,13 +44,13 @@ Condition::Condition(Condition* c){
 
 Condition::~Condition(){}
 
-bool Condition::advance(Character* c){
+bool Condition::advance(Character* c, bool quiet){
     if(--rounds_remaining <= 0 || test_each_turn){
-        return test(c);
+        return test(c, quiet);
     } else return false;
 }
 
-bool Condition::test(Character* c){
+bool Condition::test(Character* c, bool quiet){
     if(autopass) {
         if(c->is_PC())
             cout << "You are no longer " << _name << "." << endl;
@@ -72,14 +72,14 @@ bool Condition::test(Character* c){
             else
                 cout << "The " << c->full_name() << " manages to shrug off being " << _name << "." << endl;
             return true;
-        } else {
+        } else if(!quiet) {
             if(c->is_PC())
                 cout << "You are still " << _name << "." << endl;
             else
                 cout << "The " << c->full_name() << " is still " << _name << "." << endl;
-            return false;
         }
     }
+    return false;
 }
 
 void Condition::set_DC(int value){

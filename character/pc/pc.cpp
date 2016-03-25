@@ -9,14 +9,8 @@ void PlayerChar::short_rest(){
     //sanity check -- this function is just for PCs
     //if(is_monster) return;
 
-    bool changed = false;
-    if(second_wind_available == false){
-        second_wind_available = true;
-        cout << "You have regained the use of your Second Wind class feature." << endl;
-    }
     if(hit_dice > 0){
-        if(changed) cout << "Additionally, you"; else cout << "You";
-        cout << " may spend any number of your remaining hit dice; each will restore 1d" << hit_die_size << "+" << attribute_mods["CON"] << " hp." << endl;
+        cout << "You may spend any number of your remaining hit dice; each will restore 1d" << hit_die_size << "+" << attribute_mods["CON"] << " hp." << endl;
         cout << " You have " << hit_dice << " hit ";
         if(hit_dice == 1) cout << "die "; else cout << "dice ";
         cout << "remaining. How many would you like to spend?" << endl;
@@ -57,6 +51,20 @@ void PlayerChar::short_rest(){
         }
 
     } else cout << "You have no remaining hit dice to spend." << endl << endl;
+
+    int n_changes = 0;
+    cout << "You rest here for a full hour." << endl;
+
+    if(second_wind_available == false){
+        second_wind_available = true;
+        cout << "You have regained the use of your Second Wind class feature." << endl;
+        n_changes++;
+    }
+
+    for(int i = 0; i < 600; i++){
+        end_of_turn_cleanup(true);
+    }
+    cout << endl;
 }
 
 int PlayerChar::next_levelup(){

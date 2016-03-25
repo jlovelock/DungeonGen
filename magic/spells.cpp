@@ -26,6 +26,12 @@ void Spell::cast(Character* caster, Character* target){
     int dmg = damage();
     if(beneficial) target = caster;
 
+    // specifics
+    if(_name == "hold person" && target->race != "humanoid"){
+        cout << "The spell fails: hold PERSON can't affect a " << convert_to_uppercase(target->race) << "." << endl;
+        return;
+    }
+
     // Check range
     if(caster->distance_to(target) > range){
         cout << "You're too far away to do that: " << _name << " only has a range of " << range << " feet." << endl;
@@ -50,14 +56,19 @@ void Spell::cast(Character* caster, Character* target){
 
     // Deal damage
     if(dmg > 0) {
+        target->adjust_for_resistances(dmg, damage_type);
         if(is_PC) cout << "Your " << _name << " hits the " << target->full_name() << " for " << dmg << " points of " << damage_type << " damage." << endl;
         else      cout << "The " << caster->full_name() << "'s " << _name << " deals you " << dmg << " points of " << damage_type << " damage." << endl;
         target->take_damage(dmg);
     }
 
     // Apply conditions
-    if(condition){
-        target->add_condition(condition);
+    if(condition) target->add_condition(condition);
+    if(concentration) caster->concentrate_on(this);
+
+    // Check specific cases
+    if(_name == "armor of agathys"){
+        target->temp_hp += 5*level;
     }
 
     cout << endl;
@@ -112,27 +123,29 @@ Spell::Spell(int lvl){
     int x;
     switch(lvl){
         case 0:
-            x = rand() % 2;
+            x = rand() % 3;
             switch(x){
                 case 0: fire_bolt(); return;
                 case 1: poison_spray(); return;
+                case 2: blade_ward(); return;
             }
 
         case 1:
-            x = rand() % 3;
-
+            x = rand() % 4;
             switch(x){
                 case 0: magic_missile(); return;
                 case 1: inflict_wounds(); return;
                 case 2: longstrider(); return;
+                case 3: armor_of_agathys(); return;
             }
 
         case 2:
-            x = rand() % 2;
+            x = rand() % 3;
 
             switch(x){
                 case 0: scorching_ray(); return;
                 case 1: blindness(); return;
+                case 2: hold_person(); return;
             }
         }
 }

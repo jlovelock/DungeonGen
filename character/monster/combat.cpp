@@ -21,10 +21,7 @@ void Monster::generic_attack(Character* opponent){
     }
     ///@TODO add thrown weapon support
 
-    if(!w->is_ranged() && !in_melee_with(opponent)){
-        cout << "The " << full_name() << " begins to move toward you, but is still too far away to attack." << endl;
-        return;
-    }
+    if(!w->is_ranged() && !in_melee_with(opponent)) return;
 
     int atk;
     bool has_advantage = false, has_disadvantage = false;
@@ -39,6 +36,9 @@ void Monster::generic_attack(Character* opponent){
     } else if(w->is_ranged() && in_melee_with(opponent)){
         cout << "However, he struggles to fire his " << w->name() << " from melee." << endl;
         has_disadvantage = true;
+    } else if(opponent->is("paralyzed")){
+        cout << "Paralyzed, you can't stop him from lining up a devastating blow!" << endl;
+        has_advantage = true;
     }
 
     if(has_advantage && !has_disadvantage)
@@ -49,7 +49,7 @@ void Monster::generic_attack(Character* opponent){
         atk = w->attack_roll(this);
 
     int dmg = 0;
-    if(atk == 20){
+    if(atk == 20 || (opponent->is("paralyzed") && in_melee_with(opponent))){
         cout << "Critical hit!" << endl;
         dmg = damage(w, "crit");
     } else if(atk >= opponent->AC()){
@@ -59,9 +59,21 @@ void Monster::generic_attack(Character* opponent){
     }
 
     if(dmg > 0){
+        opponent->adjust_for_resistances(dmg, w->get_dtype());
         cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of damage." << endl;
         opponent->take_damage(dmg);
         w->action_on_hit(opponent, this);
+
+        if(in_melee_with(opponent) && opponent->is("enchanted with armor of agathys")){
+            cout << "As the " << name() << "'s attack hits you, your armor of agathys hits back, chilling him for 5 points of cold damage." << endl;
+            int x = 5;
+            adjust_for_resistances(x, "cold");
+            take_damage(x);
+            if(opponent->temp_hp == 0){
+                opponent->remove_condition("enchanted with armor of agathys");
+            }
+            if(!is_alive()) opponent->action_on_kill(this);
+        }
     }
 }
 

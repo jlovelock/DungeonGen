@@ -12,9 +12,13 @@ Game::Game(){
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
 
 // ------------ Testing ---------------
-//    Scroll* s = new Scroll(1, 10);
-//    s->identify();
-//    add(s, scrolls);
+    for(int lvl = 0; lvl <= 2; lvl++){
+        for(int i = 0; i < 20; i++){
+            Scroll* s = new Scroll(lvl, 2);
+            s->identify();
+            add(s, scrolls);
+        }
+    }
 }
 
 Game::~Game(){
@@ -26,7 +30,6 @@ void Game::run() {
     cur_room->printFullDescription(0);
     dungeon->print_map(PC->get_position());
     while (cur_room && getCommand()){
-        PC->end_of_turn_cleanup();
         dungeon->print_map(PC->get_position());
         dungeon->check_completion();
     }
@@ -97,18 +100,26 @@ bool Game::getCommand() {
 //        return true;
     } else {
         parse_open_door(input);
+        PC->end_of_turn_cleanup();
         return true;
     }
+
+    PC->end_of_turn_cleanup();
 
     //moneter's turn to attack
     if(cur_room->has_monsters()){
     ///TODO robustness here
     ///TODO FIXME multiple monster support
-        cout << "The " << cur_room->get_active_monster() << " turns to attack you!" << endl;
-        cur_room->get_active_monster_char()->generic_attack(PC);
+        Character* m = cur_room->get_active_monster_char();
+        if(m->is("paralyzed")){
+            cout << "The " << m->full_name() << " tries to attack, you, but can't move!" << endl;
+        } else {
+            cout << "The " << m->full_name() << " turns to attack you!" << endl;
+            m->generic_attack(PC);
+        }
 
-        if(cur_room->has_monsters())
-            cur_room->get_active_monster_char()->end_of_turn_cleanup();
+        if(m->is_alive())
+            m->end_of_turn_cleanup();
     }
 
     if(!PC->is_alive()) return false;

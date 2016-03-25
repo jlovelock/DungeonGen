@@ -37,6 +37,9 @@ void PlayerChar::generic_attack(Character* opponent){
     } else if(w->is_ranged() && in_melee_with(opponent)){
         cout << "However, you struggle to fire the " << w->name() << " from melee." << endl;
         has_disadvantage = true;
+    } else if(opponent->is("paralyzed")){
+        cout << "Paralyzed, he can't stop you from lining up a devastating blow!" << endl;
+        has_advantage = true;
     }
 
     if(has_advantage && !has_disadvantage)
@@ -46,11 +49,15 @@ void PlayerChar::generic_attack(Character* opponent){
     else
         atk = w->attack_roll(this);
 
-    if(atk == 20){
+    int dmg;
+    if(atk == 20 || (opponent->is("paralyzed") && in_melee_with(opponent))){
         cout << "Critical hit!" << endl;
-        attack(opponent, atk, damage(w, "crit"));
-    } else
-        attack(opponent, atk, damage(w));
+        dmg = damage(w, "crit");
+    } else {
+        dmg = damage(w);
+    }
+    opponent->adjust_for_resistances(dmg, w->get_dtype());
+    attack(opponent, atk, dmg);
 }
 
 void PlayerChar::action_on_kill(Character* opponent){

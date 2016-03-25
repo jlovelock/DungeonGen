@@ -40,15 +40,18 @@ class Spell {
     // cantrips
     void fire_bolt();
     void poison_spray();
+    void blade_ward();
 
     // lvl 1
     void magic_missile();
     void inflict_wounds();
     void longstrider();
+    void armor_of_agathys();
 
     // lvl 2
     void scorching_ray();
     void blindness();
+    void hold_person();
 
     void set_dmg(std::string);
     void clr();

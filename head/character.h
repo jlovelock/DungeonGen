@@ -60,7 +60,7 @@ class Character {
         bool in_melee;
 
         int _AC;
-        int max_hp, cur_hp, temp_hp;
+        int max_hp, cur_hp;
         int hit_dice, hit_die_size;
         int init;
 
@@ -69,6 +69,7 @@ class Character {
         int spell_attack();
         int spell_save_DC();
         bool within_range(Character* target, Spell* spell);
+        Spell* concentrating_on;
 
         //Character creation
         Character();
@@ -82,8 +83,7 @@ class Character {
         //ongoing effects
         std::vector<Condition*> conditions;
         void add_condition(std::string name, int duration, int DC=0, std::string check="");
-        void remove_condition(std::string);
-        void update_conditions();
+        void update_conditions(bool quiet=false);
 
     public:
         Character(int lvl);
@@ -100,7 +100,7 @@ class Character {
         virtual void generic_attack(Character*) {}
         bool is_hit(int attack_roll){ return attack_roll >= AC(); }
         int saving_throw(Spell*);
-        int save(std::string stat){ return d20() + save_mods[stat]; }
+        int save(std::string stat);
         int AC();
 
         void take_damage(int dmg);
@@ -136,9 +136,15 @@ class Character {
 
         bool is_PC(){ return !is_monster; }
 
-        void end_of_turn_cleanup();
+        void end_of_turn_cleanup(bool quiet=false);
 
+        void adjust_for_resistances(int& dmg, std::string dtype);
+        int temp_hp;
+        void remove_condition(std::string);
 
+        bool concentrating(){ return concentrating_on != NULL; }
+        void drop_concentration();
+        void concentrate_on(Spell* s){ drop_concentration(); concentrating_on = s;}
 };
 
 

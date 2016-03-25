@@ -27,6 +27,10 @@ void Character::remove_condition(string name){
         if((*it)->name() == name) {
             delete *it;
             conditions.erase(it);
+            if(is_PC())
+                cout << "You are no longer " << name << "." << endl;
+            else
+                cout << "The " << full_name() << " is no longer " << name << "." << endl;
             return;
         }
     }
@@ -39,9 +43,9 @@ bool Character::is(string effect){
     return false;
 }
 
-void Character::update_conditions(){
+void Character::update_conditions(bool quiet){
     for(int i = 0; i < (int)conditions.size(); i++){
-        if(conditions.at(i)->advance(this)){
+        if(conditions.at(i)->advance(this, quiet)){
             delete conditions.at(i);
             conditions.erase(conditions.begin()+i);
             i--;

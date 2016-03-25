@@ -44,7 +44,7 @@ void Monster::spawn_giant_rat(int group_size){
 
     _short_name = "rat";
     _full_name = "giant rat";
-    race = "rat";
+    race = "beast";
 
     features.push_back("pack tactics");
 }
@@ -71,7 +71,7 @@ void Monster::spawn_cultist(int group_size){
 
     _short_name = "cultist";
     _full_name = "cultist";
-    race = "human"; //arbitrary
+    race = "humanoid";
 }
 
 void Monster::spawn_poisonous_snake(int group_size){
@@ -98,5 +98,5 @@ void Monster::spawn_poisonous_snake(int group_size){
 
     _short_name = "snake";
     _full_name = "poisonous snake";
-    race = "snake"; //arbitrary
+    race = "beast";
 }

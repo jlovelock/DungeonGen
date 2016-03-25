@@ -24,5 +24,15 @@ void Spell::blindness(){
     range = 30;
 
     // Note: save occurs at the end of each of the affected creature's turns.
-    condition = new Condition("blinded", save_DC, "CON", save_DC, true);
+    condition = new Condition("blinded", 10, "CON", save_DC, true);
+}
+
+void Spell::hold_person(){
+    _name = "hold person";
+    level = 2;
+    range = 60;
+    concentration = true;
+
+    // Note: save occurs at the end of each of the affected creature's turns.
+    condition = new Condition("paralyzed", 10, "WIS", save_DC, true);
 }

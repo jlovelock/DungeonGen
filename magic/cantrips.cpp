@@ -1,6 +1,7 @@
 
 #include <spells.h>
 #include <defines.h>
+#include <conditions.h>
 
 using namespace std;
 
@@ -29,4 +30,14 @@ void Spell::poison_spray(){
     num_damage_dice = 1;
     damage_die = 12;
     damage_type = "poison";
+}
+
+void Spell::blade_ward(){
+    _name = "blade ward";
+    level = 0;
+    range = 0;
+
+    /// Should last until end of your next turn.
+    condition = new Condition("protected by blade ward", 2);
+    beneficial = true;
 }

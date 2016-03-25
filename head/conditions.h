@@ -20,8 +20,8 @@ public:
     Condition(Condition*);
     ~Condition();
     std::string name(){ return _name; }
-    bool advance(Character*);
-    bool test(Character*);
+    bool advance(Character*, bool quiet=false);
+    bool test(Character*, bool);
     void set_DC(int);
     std::string time_remaining();
 };

@@ -84,6 +84,21 @@ void Character::close_with(Character* opponent){
 //    opponent->in_melee = false;
 //}
 
+void Character::adjust_for_resistances(int& dmg, string dtype){
+    if(dmg <= 0) return;
+
+    if(is("protected by blade ward") && (dtype == "piercing" || dtype == "bludgeoning" || dtype == "slashing")){
+        if(is_monster) cout << "His blade ward deflects part of your blow." << endl;
+        else cout << "Your blade ward deflects part of his blow." << endl;
+        dmg /= 2;
+    }
+
+    if((race == "Hill dwarf" || race == "Mountain dwarf") && dtype == "poison"){
+        if(!is_monster) cout << "Your dwarven resilience helps you partially resist the poison." << endl;
+        dmg /= 2;
+    }
+}
+
 void Character::take_damage(int dmg){
     ///TODO make this whole section more flavourful!
     if(is_monster){
@@ -92,9 +107,21 @@ void Character::take_damage(int dmg){
             if((float)cur_hp/max_hp > 0.5) cout << "He still looks ready to fight." << endl << endl;
             else if((float)cur_hp/max_hp > 0.25) cout << "He's not in very good shape." << endl << endl;
             else cout << "He's barely alive at this point." << endl << endl;
+
+            if(concentrating()){
+                int DC = dmg / 2;
+                if (DC < 10) DC = 10;
+                if(save("CON") >= DC) cout << "Somehow, he manages to keep concentrating on his spell." << endl;
+                else {
+                    cout << "The blow distracts him, and he loses concentration on his spell." << endl;
+                    drop_concentration();
+                }
+            }
+
         } else {
             cur_hp = 0;
             cout << "He collapses on the ground, dead." << endl;
+            drop_concentration();
         }
         return;
     }
@@ -103,16 +130,15 @@ void Character::take_damage(int dmg){
         if(temp_hp >= dmg){
             temp_hp -= dmg;
             cout << "Fortunately, your temporary hitpoints absorb the entire blow. (You have " << temp_hp << " temp hp remaining)." << endl;
-            return;
         } else {
             cout << "Fortunately, your temporary hitpoints absorb " << temp_hp << " points of damage, but ";
             dmg -= temp_hp;
+            temp_hp = 0;
             cout << dmg << " points of damage are still dealt directly to you. " << endl;
             cur_hp -= dmg;
 
             if(cur_hp > 0){
                 cout << "You have " << cur_hp << "/" << max_hp << " hitpoints remaining." << endl << endl;
-                return;
             } else {
                 ///TODO implement death saves, stabilizing, etc
                 cur_hp = 0;
@@ -120,15 +146,35 @@ void Character::take_damage(int dmg){
                 return;
             }
         }
+
+            if(concentrating()){
+                int DC = dmg / 2;
+                if (DC < 10) DC = 10;
+                if(save("CON") >= DC) cout << "Thankfully, you manage to keep concentrating on your spell." << endl;
+                else {
+                    cout << "Reeling from the blow, you lose concentration on your spell." << endl;
+                    drop_concentration();
+                }
+            }
+
+        return;
     } else {
         if(dmg < cur_hp){
             cur_hp -= dmg;
             cout << "You have " << cur_hp << "/" << max_hp << " hitpoints remaining." << endl << endl;
-            return;
+
+            if(concentrating()){
+                int DC = dmg / 2;
+                if (DC < 10) DC = 10;
+                if(save("CON") >= DC) cout << "Thankfully, you manage to keep concentrating on your spell." << endl;
+                else {
+                    cout << "Reeling from the blow, you lose concentration on your spell." << endl;
+                    drop_concentration();
+                }
+            }
         } else { ///TODO same as above
             cur_hp = 0;
             cout << "You have died." << endl << endl;
-            return;
         }
     }
 }

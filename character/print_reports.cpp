@@ -55,7 +55,9 @@ void PlayerChar::printCharacterSheet(){
     }
     cout << endl;
 
-    cout << "\tAC " << AC() << ", " << cur_hp << "/" << max_hp << " hp" << endl;
+    cout << "\tAC " << AC() << ", " << cur_hp << "/" << max_hp << " hp";
+    if(temp_hp > 0) cout << " [+" << temp_hp << " temp hp]";
+    cout << endl;
 
     cout << "\tWeapons:" << endl;
     for(vector<Weapon*>::iterator it = weapons.begin(); it != weapons.end(); ++it){

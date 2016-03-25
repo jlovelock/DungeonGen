@@ -42,9 +42,19 @@ int Character::attribute_chk(std::string att){
     return d20() + attribute_mods[att];
 }
 
-void Character::end_of_turn_cleanup(){
+int Character::save(string stat){
+    if(is("paralyzed") && (stat == "STR" || stat == "DEX")){
+        cout << "Paralyzed and helpless, ";
+        if(is_monster) cout << "he is"; else cout << "you are";
+        cout << " entirely unable to avoid the effect." << endl;
+        return 0;
+    }
+    return d20() + save_mods[stat];
+}
+
+void Character::end_of_turn_cleanup(bool quiet){
     if(DEBUG) cout << "$$ EOT: " << name() << "...";
-    update_conditions();
+    update_conditions(quiet);
     if(DEBUG) cout << "done" << endl;
 }
 
