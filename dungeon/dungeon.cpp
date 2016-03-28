@@ -13,7 +13,7 @@ Dungeon::Dungeon(){
 }
 
 Dungeon::~Dungeon(){
-    for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
+    for(auto it = rooms.begin(); it != rooms.end(); ++it){
         delete *it;
     }
     rooms.clear();
@@ -22,7 +22,7 @@ Dungeon::~Dungeon(){
 void Dungeon::check_completion(){
 
     if(completed_known) return;
-    for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
+    for(auto it = rooms.begin(); it != rooms.end(); ++it){
     //for(Room* r = first_room; r != NULL; r = r->next){
         for(int i = 0; i < MAX_DOORS && (*it)->doors[i] != NULL; i++){
             if((*it)->doors[i]->main_exit) continue;

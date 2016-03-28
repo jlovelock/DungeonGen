@@ -23,7 +23,7 @@ void Dungeon::adjust_room_position(Room* rm){
     bool adjustments_needed;
     do {
         adjustments_needed = false;
-        for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
+        for(auto it = rooms.begin(); it != rooms.end(); ++it){
             if((*it)->id == rm->id) continue;
             if(DEBUG) cout << "...checking room " << (*it)->id << ": ";
 
@@ -88,7 +88,7 @@ void Dungeon::link_all_doors(Room* new_room){
         new_room->doors[i] = NULL;
     }
 
-    for(vector<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it){
+    for(auto it = rooms.begin(); it != rooms.end(); ++it){
         if(new_room->id == (*it)->id) continue;
         new_room->link_doors(*it, new_room->shared_wall(*it));
     }

@@ -35,7 +35,8 @@ string Potion::get_description(){
 }
 
 
-void Potion::use(Character* user){
+void Potion::use(Character* user, Character* target){
+    cout << "You drink the potion." << endl;
     quantity--;
 
     ///@TODO add non-healing potions

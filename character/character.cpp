@@ -15,19 +15,19 @@ using namespace std;
 
 
 Character::~Character(){
-    for(vector<Weapon*>::iterator it = weapons.begin(); it != weapons.end(); ++it){
+    for(auto it = weapons.begin(); it != weapons.end(); ++it){
         delete *it;
     }
     weapons.clear();
 
-    for(vector<Condition*>::iterator it = conditions.begin(); it != conditions.end(); ++it){
+    for(auto it = conditions.begin(); it != conditions.end(); ++it){
         delete *it;
     }
     conditions.clear();
 }
 
 bool Character::proficient_with(string weapon_type){
-    for(vector<string>::iterator it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it) {
+    for(auto it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it) {
         if (*it == weapon_type) return true;
     }
     return false;
@@ -60,7 +60,7 @@ void Character::end_of_turn_cleanup(bool quiet){
 
 
 bool Character::has_fighting_style(string style){
-    for(vector<string>::iterator it = fighting_styles.begin(); it != fighting_styles.end(); ++it){
+    for(auto it = fighting_styles.begin(); it != fighting_styles.end(); ++it){
         if((*it) == style) return true;
     }
     return false;

@@ -9,15 +9,32 @@
 using namespace std;
 
 
+void Weapon::set_defaults(){
+    _is_weapon = true;
+    _martial = false;
+    _loading = false;
+    _light = false;
+    _heavy = false;
+    _thrown = false;
+    _finesse = false;
+    _versatile = false;
+    _weapon_die = 0;
+    _n_dice = 0;
+    _dmg_mod = 0;
+    _atk_mod = 0;
+    _dtype = "weapon";
+    _range = 5;
+    effect_on_hit = NULL;
+}
+
+
 //For monsters, when fancy stuff don't matter.
 //Specifier in the format of "2/1d6+3 piercing" (where the 2/ at the beginning means +2 attack mod)
 ///TODO range increments?
 Weapon::Weapon(string name, string specifier) : Object(name){
-    _is_weapon = true;
+    set_defaults();
     _override = true;
-    effect_on_hit = NULL;
     _atk_mod = atoi(specifier.substr(0,specifier.find("/")).c_str());
-    cout << atoi(specifier.substr(0,specifier.find("/")).c_str()) << endl;
     _n_dice = atoi(specifier.substr(specifier.find("/")+1, specifier.find("d")-specifier.find("/")-1).c_str());
     _weapon_die = atoi(specifier.substr(specifier.find("d")+1,specifier.find("+")-specifier.find("d")-1).c_str());
     _dmg_mod = atoi(specifier.substr(specifier.find("+")+1, specifier.find(" ")-specifier.find("+")-1).c_str());
@@ -26,8 +43,7 @@ Weapon::Weapon(string name, string specifier) : Object(name){
 
 Weapon::Weapon(string name): Object(name){
     _override = false;
-    _is_weapon = true;
-    effect_on_hit = NULL;
+    set_defaults();
     identified = true;
 
     if(name == "greataxe"){
@@ -36,13 +52,7 @@ Weapon::Weapon(string name): Object(name){
         _dtype = "slashing";
         _martial = true;
         _2h = true;
-        _light = false;
         _heavy = true;
-        _range = 5;
-        _thrown = false;
-        _finesse = false;
-        _versatile = false;
-        _loading = false;
         _value = 30;
     }
 
@@ -51,14 +61,8 @@ Weapon::Weapon(string name): Object(name){
         _weapon_die = 6;
         _dtype = "piercing";
         _martial = true;
-        _2h = false;
         _light = true;
-        _heavy = false;
         _range = 30;
-        _thrown = false;
-        _finesse = false;
-        _versatile = false;
-        _loading = false;
         _value = 75;
     }
 
@@ -68,13 +72,8 @@ Weapon::Weapon(string name): Object(name){
         _dtype = "piercing";
         _martial = true;
         _2h = true;
-        _light = false;
         _heavy = true;
         _range = 150;
-        _thrown = false;
-        _finesse = false;
-        _versatile = false;
-        _loading = false;
         _value = 50;
     }
 
@@ -83,14 +82,7 @@ Weapon::Weapon(string name): Object(name){
         _weapon_die = 8;
         _dtype = "piercing";
         _martial = true;
-        _2h = false;
-        _light = false;
-        _heavy = false;
-        _range = 5;
-        _thrown = false;
         _finesse = true;
-        _versatile = false;
-        _loading = false;
         _value = 25;
     }
 
@@ -99,14 +91,7 @@ Weapon::Weapon(string name): Object(name){
         _weapon_die = 8;
         _dtype = "slashing";
         _martial = true;
-        _2h = false;
-        _light = false;
-        _heavy = false;
-        _range = 5;
-        _thrown = false;
-        _finesse = false;
         _versatile = true;
-        _loading = false;
         _value = 15;
     }
 
@@ -115,14 +100,8 @@ Weapon::Weapon(string name): Object(name){
         _weapon_die = 6;
         _dtype = "piercing";
         _martial = true;
-        _2h = false;
         _light = true;
-        _heavy = false;
-        _range = 5;
-        _thrown = false;
         _finesse = true;
-        _versatile = false;
-        _loading = false;
         _value = 10;
     }
 
@@ -130,15 +109,9 @@ Weapon::Weapon(string name): Object(name){
         _n_dice = 1;
         _weapon_die = 6;
         _dtype = "slashing";
-        _martial = false;
-        _2h = false;
         _light = true;
-        _heavy = false;
         _range = 20;
         _thrown = true;
-        _finesse = false;
-        _versatile = false;
-        _loading = false;
         _value = 5;
     }
 

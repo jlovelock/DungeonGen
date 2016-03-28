@@ -15,7 +15,7 @@ Weapon* PlayerChar::weapon_select(Character* target){
         cout << "Which weapon do you want to use?:" << endl;
 
         while(true) {
-            for(vector<Weapon*>::iterator it = weapons.begin(); it != weapons.end(); ++it) {
+            for(auto it = weapons.begin(); it != weapons.end(); ++it) {
                 if(distance_to(target) < (*it)->range()){
                     choice_matrix[(*it)->name()] = *it;
                     cout << "\t - " << (*it)->name();
@@ -31,7 +31,7 @@ Weapon* PlayerChar::weapon_select(Character* target){
             cout << endl;
             string choice;
             read(choice);
-            map<string, Weapon*>::iterator w = choice_matrix.find(choice);
+            auto w = choice_matrix.find(choice);
             if(w == choice_matrix.end()) {
                 cout << "Invalid selection. Your choices are as follows: " << endl;
             } else {

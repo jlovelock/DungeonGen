@@ -60,12 +60,12 @@ void PlayerChar::printCharacterSheet(){
     cout << endl;
 
     cout << "\tWeapons:" << endl;
-    for(vector<Weapon*>::iterator it = weapons.begin(); it != weapons.end(); ++it){
+    for(auto it = weapons.begin(); it != weapons.end(); ++it){
         cout << "\t - " << (*it)->get_weapon_description(this) << endl;
     }
 
     cout << "\tWeapon proficiencies: simple weapons";
-    for(vector<string>::iterator it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it){
+    for(auto it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it){
         cout << ", " << (*it);
         if((*it) == "martial") cout << " weapons";
     }
@@ -84,7 +84,7 @@ void PlayerChar::printCharacterSheet(){
     cout << "\tFighting style";
     if(fighting_styles.size() > 1) cout << "s";
     cout << ": ";
-    for(vector<string>::iterator it = fighting_styles.begin(); it != fighting_styles.end(); ++it){
+    for(auto it = fighting_styles.begin(); it != fighting_styles.end(); ++it){
         if(it != fighting_styles.begin()) cout << ", ";
         cout << (*it);
     }
@@ -92,7 +92,7 @@ void PlayerChar::printCharacterSheet(){
 
     if(conditions.size() > 0){
         cout << "\tCurrent conditions:" << endl;
-        for(vector<Condition*>::iterator it = conditions.begin(); it != conditions.end(); ++it){
+        for(auto it = conditions.begin(); it != conditions.end(); ++it){
             cout << "\t- " << (*it)->name() << " -- max time remaining = " << (*it)->time_remaining() << "." << endl;
         }
         cout << endl;

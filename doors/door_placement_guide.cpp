@@ -63,11 +63,11 @@ DoorPlacementGuide::DoorPlacementGuide(Room* rm, Dungeon* d){
             cout << to_string(dir[i]) << " wall:" << endl;
 
             cout << "preferred = ";
-            for(vector< pair<int,int> >::iterator it = preferred[dir[i]].begin(); it != preferred[dir[i]].end(); ++it){
+            for(auto it = preferred[dir[i]].begin(); it != preferred[dir[i]].end(); ++it){
                 cout << " [" << it->first << "," << it->second << "] ";
             }
             cout << "  //  allowed = ";
-            for(vector< pair<int,int> >::iterator it = allowed[dir[i]].begin(); it != allowed[dir[i]].end(); ++it){
+            for(auto it = allowed[dir[i]].begin(); it != allowed[dir[i]].end(); ++it){
                 cout << " [" << it->first << "," << it->second << "] ";
             }
             cout << endl;
@@ -77,7 +77,7 @@ DoorPlacementGuide::DoorPlacementGuide(Room* rm, Dungeon* d){
 
     // loop through each room in the dungeon, forbidding all adjacent areas corresponding to existing rooms
     int w = 0;
-    for(vector<Room*>::iterator it = d->rooms.begin(); it != d->rooms.end(); ++it){
+    for(auto it = d->rooms.begin(); it != d->rooms.end(); ++it){
         w = r->shared_wall(*it);
         if(w && DEBUG){
             cout << "--Room " << (*it)->id << " adjacent along " << to_string(w) << " wall." << endl;
@@ -98,11 +98,11 @@ DoorPlacementGuide::DoorPlacementGuide(Room* rm, Dungeon* d){
             cout << to_string(dir[i]) << " wall:" << endl;
 
             cout << "preferred = ";
-            for(vector< pair<int,int> >::iterator it = preferred[dir[i]].begin(); it != preferred[dir[i]].end(); ++it){
+            for(auto it = preferred[dir[i]].begin(); it != preferred[dir[i]].end(); ++it){
                 cout << " [" << it->first << "," << it->second << "] ";
             }
             cout << "  //  allowed = ";
-            for(vector< pair<int,int> >::iterator it = allowed[dir[i]].begin(); it != allowed[dir[i]].end(); ++it){
+            for(auto it = allowed[dir[i]].begin(); it != allowed[dir[i]].end(); ++it){
                 cout << " [" << it->first << "," << it->second << "] ";
             }
             cout << endl;
@@ -186,7 +186,7 @@ void DoorPlacementGuide::add_door_at(int wall, int x, int y){
 // if position was a preferred location along that wall, it downgrades to allowed
 // otherwise, it has no effect.
 void DoorPlacementGuide::downgrade(int wall, int position){
-    for(vector< pair<int,int> >::iterator it = preferred[wall].begin(); it != preferred[wall].end(); ++it){
+    for(auto it = preferred[wall].begin(); it != preferred[wall].end(); ++it){
         if(position >= it->first && position <= it->second){
             preferred[wall].erase(it);
             return;
@@ -205,7 +205,7 @@ void DoorPlacementGuide::remove_region(vector< pair<int, int> >& v, int LB, int 
 
     if(DEBUG) cout << "Remove region [" << LB << "," << UB << "]" << endl;
 
-    for(vector< pair<int,int> >::iterator it = v.begin(); !v.empty() && it != v.end(); ++it){
+    for(auto it = v.begin(); !v.empty() && it != v.end(); ++it){
 
         if(DEBUG) cout << "--Evaluating pair [" << it->first << "," << it->second << "]" << endl;
 

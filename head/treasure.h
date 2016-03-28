@@ -59,7 +59,7 @@ class Potion : public Treasure {
         ~Potion();
         std::string get_description();
         int healing_amount();
-        void use(Character* user);
+        void use(Character* user, Character* target=NULL);
 
 };
 

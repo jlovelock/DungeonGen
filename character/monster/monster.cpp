@@ -27,7 +27,7 @@ bool Monster::search_monster(bool print_err_msgs){
 
 
 bool Monster::has(string feature){
-    for(vector<string>::iterator it = features.begin(); it != features.end(); ++it){
+    for(auto it = features.begin(); it != features.end(); ++it){
         if((*it) == feature) return true;
     }
     return false;

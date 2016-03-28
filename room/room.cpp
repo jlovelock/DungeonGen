@@ -86,11 +86,14 @@ Room::~Room(){
         if(doors[i] != NULL){
 
             //don't double delete! only delete from first room - set the other to NULL
-            if(isFirstRoom(doors[i]) && doors[i]->second){
-                doors[i]->second->doors[0] = NULL;
-                delete doors[i];
-            } else if(!isFirstRoom(doors[i]) && doors[i]->first){
+            if(isFirstRoom(doors[i])){
+                // set to NULL from connecting room, if any
+                if(doors[i]->second){
+                    int id2 = doors[i]->second->get_door_id(doors[i]);
+                    doors[i]->second->doors[id2] = NULL;
+                }
                 doors[i] = NULL;
+                delete doors[i];
             }
 
         }

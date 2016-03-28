@@ -55,6 +55,8 @@ class Weapon : public Object {
     int misc_atk_mods(Character* c);
     int misc_dmg_mods(Character* c);
 
+    void set_defaults();
+
 //    //Melee attacks
 //    std::string melee_weapon;
 //    int melee_atk_mod, melee_weapon_die, melee_dmg_bonus;

@@ -12,18 +12,33 @@ Game::Game(){
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
 
 // ------------ Testing ---------------
-    for(int lvl = 0; lvl <= 2; lvl++){
-        for(int i = 0; i < 20; i++){
-            Scroll* s = new Scroll(lvl, 2);
-            s->identify();
-            add(s, scrolls);
-        }
-    }
+//    for(int lvl = 0; lvl <= 2; lvl++){
+//        for(int i = 0; i < 20; i++){
+//            Scroll* s = new Scroll(lvl, 2);
+//            s->identify();
+//            add(s, scrolls);
+//        }
+//    }
 }
 
 Game::~Game(){
-    loot.clear();
     delete dungeon;
+    delete PC;
+
+    for(auto it = loot.begin(); it != loot.end(); ++it){
+        delete *it;
+    }
+    loot.clear();
+
+    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
+        delete *it;
+    }
+    scrolls.clear();
+
+    for(auto it = potions.begin(); it != potions.end(); ++it){
+        delete *it;
+    }
+    potions.clear();
 }
 
 void Game::run() {
@@ -59,7 +74,7 @@ bool Game::getCommand() {
         return true;
 
     //combat
-    } else if(contains(input, "attack") || contains(input, "fight")) {
+    } else if(contains(input, "attack") || contains(input, "fight") || contains(input, "shoot") || contains(input, "stab")) {
         if(!combat(input)) return true;
 //    } else if(input == "melee"){
 //        cin >> input; //get monster name
@@ -72,6 +87,9 @@ bool Game::getCommand() {
 //    } else if(input == "attack" || input == "fight"){
 //        if(!combat()) return true;
 
+    } else if(contains(input, "kill") || contains(input, "murder")){
+        cout << "That's a bit presumptuous, but you can certainly try!" << endl;
+        if(!combat(input)) return true;
     } else if(contains(input,"search") || contains(input, "loot")){
         if(!searching(input)) return true;
     } else if(input == "inventory"){
@@ -79,11 +97,11 @@ bool Game::getCommand() {
         return true;
     } else if(contains(input, "drink") || contains(input, "potion")){
         if(!drink_potion()) return true;
-    } else if(contains(input, "identify")){
+    } else if(contains(input, "identify") || contains(input, "inspect") || contains(input, "examine")){
         if(loot.empty() && potions.empty()) cout << "Sorry, not sure what you're referring to there." << endl << endl;
         else cout << "Inspecting things in that much detail takes a while. Maybe you should rest for a bit?" << endl << endl;
         return true;
-    } else if(contains(input, "cast") || contains(input, "read")){
+    } else if(contains(input, "cast") || contains(input, "read") || contains(input, "scroll")){
         if(!cast_spell(input)) return true;
 
     } else if(contains(input, "settings") || contains(input, "preferences")){
@@ -172,7 +190,7 @@ bool Game::combat(string input)
     // find and equip that weapon first
     if(contains(input, "with")){
         bool found = false, equipped = false;
-        for(vector<Weapon*>::iterator it = PC->weapons.begin(); it != PC->weapons.end(); ++it){
+        for(auto it = PC->weapons.begin(); it != PC->weapons.end(); ++it){
             if(contains(input, (*it)->name())){
                 found = true;
                 equipped = PC->equip(*it);
@@ -277,7 +295,7 @@ void Game::drink_potion(int index){
 
 Scroll* Game::select_scroll(){
     bool flag = true;
-    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
         if((*it)->is_identified()){
             if(flag){
                 cout << "Choose which scroll you would like to cast, or enter 'cancel' to exit this menu." << endl;
@@ -295,7 +313,7 @@ Scroll* Game::select_scroll(){
     string input;
     read(input);
 
-    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
         if((*it)->is_identified() && (contains(input, (*it)->name()))){
            return (Scroll*) *it;
         }
@@ -312,7 +330,7 @@ bool Game::cast_spell(string input){
     }
 
     Scroll* to_cast = NULL;
-    for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
         if(contains(input, (*it)->name()) && (*it)->is_identified()){
             to_cast = (Scroll*) *it;
             break;
@@ -334,7 +352,7 @@ bool Game::cast_spell(string input){
     cout << "The scroll crumbles to dust as the magic leaves it." << endl << endl;
     //cout << "$$ HAS LONGSTRIDER=" << PC->is("buffed by longstrider") << endl;
     if(to_cast->quantity == 0){
-        for(vector<Treasure*>::iterator it = scrolls.begin(); it != scrolls.end(); ++it){
+        for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
             if((*it)->quantity == 0){
                 delete *it;
                 scrolls.erase(it);
@@ -372,7 +390,7 @@ bool Game::drink_potion(){
         do {
             cout << "Which potion?" << endl;
             char idx = 'A';
-            for(vector<Treasure*>::iterator it = potions.begin(); it != potions.end(); ++it){
+            for(auto it = potions.begin(); it != potions.end(); ++it){
                 cout << "\t(" << idx << "): ";
                 cout << (*it)->get_description() << endl;
                 idx++;

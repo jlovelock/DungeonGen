@@ -176,7 +176,8 @@ void run_all_tests(){
 
         t->extra_door_adj();
     //...add more tests here
-    delete t;
+
+        delete t;
     }
 
     cout << "All " << num_tests_run << "/" << num_tests_run << " tests completed successfully!" << endl;

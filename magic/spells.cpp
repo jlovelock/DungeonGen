@@ -28,12 +28,12 @@ void Spell::cast(Character* caster, Character* target){
 
     // specifics
     if(_name == "hold person" && target->race != "humanoid"){
-        cout << "The spell fails: hold PERSON can't affect a " << convert_to_uppercase(target->race) << "." << endl;
+        cout << "The spell fails: hold PERSON can't affect a " << target->race << "." << endl;
         return;
     }
 
-    // Check range
-    if(caster->distance_to(target) > range){
+    // Check range; -4 fudge factor
+    if(caster->distance_to(target) - 4 > range){
         cout << "You're too far away to do that: " << _name << " only has a range of " << range << " feet." << endl;
         //cout << "You are << sqrt(pow(xPos-target->xPos, 2)+pow(yPos-target->yPos, 2)) << " feet away from the " << target->full_name() << "." << endl;
         return;

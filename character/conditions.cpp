@@ -23,7 +23,7 @@ void Character::add_condition(Condition* c){
 }
 
 void Character::remove_condition(string name){
-    for(vector<Condition*>::iterator it = conditions.begin(); it != conditions.end(); ++it){
+    for(auto it = conditions.begin(); it != conditions.end(); ++it){
         if((*it)->name() == name) {
             delete *it;
             conditions.erase(it);
@@ -37,7 +37,7 @@ void Character::remove_condition(string name){
 }
 
 bool Character::is(string effect){
-    for(vector<Condition*>::iterator it = conditions.begin(); it != conditions.end(); ++it)
+    for(auto it = conditions.begin(); it != conditions.end(); ++it)
         if((*it)->name() == effect) return true;
 
     return false;

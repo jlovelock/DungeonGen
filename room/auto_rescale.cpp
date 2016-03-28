@@ -300,7 +300,7 @@ void Room::link_doors(Room* adjacent, int wall){
 
     // Case 2: The other room has at least one door, but the newly added room doesn't (yet):
     //      just add it to this room's door list. (We'll be at one more door than originally intended... oh well)
-    for(vector<Door*>::iterator it = adj_rm_doors.begin(); it != adj_rm_doors.end(); ++it){
+    for(auto it = adj_rm_doors.begin(); it != adj_rm_doors.end(); ++it){
         int idx = find_overwrite_index();
         doors[idx] = (*it);
         (*it)->second = this; //to get here, the door in question must have been unconnected before now
