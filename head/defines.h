@@ -25,6 +25,8 @@ extern bool test_mode;
 extern std::ifstream testfile_input;
 extern unsigned num_tests_run;
 
+extern std::ofstream unrecognized_input;
+
 int scroll_save_DC(int lvl);
 
 static const char* skargs[] = {

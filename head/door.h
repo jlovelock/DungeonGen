@@ -58,6 +58,7 @@ public:
     void break_down();
     bool pick_lock(Character*);
     bool barred_from(Room*);
+    bool obstructed_from(Room*);
     int getWall(Room*);
     std::pair<int, int> get_position(){ return std::make_pair(xPos, yPos); }
     void set_defaults();

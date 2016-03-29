@@ -2,8 +2,10 @@
 #include <game.h>
 #include <weapon.h>
 #include <pc.h>
-
+#include <fstream>
 using namespace std;
+
+ofstream unrecognized_input;
 
 Game::Game(){
     PC = new PlayerChar(1);
@@ -19,11 +21,18 @@ Game::Game(){
             add(s, scrolls);
         }
     }
+
+    unrecognized_input.open("utils/input_log.txt", ifstream::app);
+    if(!unrecognized_input.is_open()) {
+        cout << "Could not open input log file. Exiting." << endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 Game::~Game(){
     delete dungeon;
     delete PC;
+    unrecognized_input.close();
 
     for(auto it = loot.begin(); it != loot.end(); ++it){
         delete *it;

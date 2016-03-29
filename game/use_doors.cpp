@@ -29,6 +29,7 @@ bool Game::parse_open_door(string input){
     string allowed_responses[] = {"north", "south", "east", "west", ""};
     if(!in_list(input, allowed_responses)){
         cout << "Unrecognized command" << endl;
+        unrecognized_input << input << endl;
         return false;
     }
 

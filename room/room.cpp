@@ -17,14 +17,36 @@ Room* Room::connected(Door* d){
 
 
 Door* Room::get_door_on_wall(string input, bool use_first){
-    int doorCopies = 0, doorNum = 0;
+    const int NOT_FOUND = -2, NEW_ROOM = -1;
+    int doorCopies = 0, doorNum = NOT_FOUND, prev_id = NOT_FOUND, cur_id = NOT_FOUND;
     for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
         if(contains(input, doors[i]->getWallString(this)) && !doors[i]->secret){
-            if(use_first){
+            if(use_first)
                 return doors[i];
-            } else {
-                doorNum = i;
-                doorCopies++;
+            else {
+                /* set cur_id = id of connected room, or NEW_ROOM if leading somewhere new */
+                if(isFirstRoom(doors[i])){
+                    if(!doors[i]->second) cur_id = NEW_ROOM;
+                    else cur_id = doors[i]->second->get_id();
+                } else {
+                    cur_id = doors[i]->first->get_id();
+                }
+
+                /* first door found: set vars appropriately */
+                if(prev_id == NOT_FOUND){
+                    doorNum = i;
+                    prev_id = cur_id;
+                    doorCopies++;
+                    continue;
+                }
+
+                /* unique door found (leads a different place): will need to prompt user */
+                else if(prev_id != cur_id)
+                    doorCopies++;
+
+                /* duplicate door found (leads same place): overwrite doorNum index only if this version is easier to go through */
+                else if(doors[doorNum]->obstructed_from(this))
+                    doorNum = i;
             }
         }
     }

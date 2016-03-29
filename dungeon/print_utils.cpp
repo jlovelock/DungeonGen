@@ -30,7 +30,8 @@ void Dungeon::print_map(pair<int,int> POI){
             grid[((*it)->eastEdge)/5][((*it)->southEdge+i)/5] = WALL;
         }
         for(int d = 0; d < MAX_DOORS && (*it)->doors[d] != NULL; d++){
-            grid[(*it)->doors[d]->xPos/5][(*it)->doors[d]->yPos/5] = DOOR;
+            if((*it)->doors[d]->is_secret())
+                grid[(*it)->doors[d]->xPos/5][(*it)->doors[d]->yPos/5] = DOOR;
         }
         for(int i = 0; i < MAX_MONSTERS && (*it)->monsters[i] != NULL; i++){
             if((*it)->monsters[i]->is_alive())

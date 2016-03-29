@@ -58,6 +58,10 @@ void Door::break_down(){
     locked = false;
 }
 
+bool Door::obstructed_from(Room* r){
+    return locked || (barred && (barredSide xor (r->id == first->id)));
+}
+
 // returns true iff it's barred from the side of r
 // (ie, you can remove the bar if you're inside r)
 bool Door::barred_from(Room* r){

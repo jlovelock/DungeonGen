@@ -131,6 +131,7 @@ void Dungeon::edit_preferences(){
             cout << "Monster spawning set to ON." << endl;
         } else {
             cout << "Error, unrecognized input." << endl;
+            unrecognized_input << "(in settings menu: ) " << input << endl;
         }
         return;
     } else if(contains(input, "treasure") || contains(input, "hoard")){
