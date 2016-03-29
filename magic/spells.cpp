@@ -24,7 +24,6 @@ void Spell::cast(Character* caster, Character* target){
 
     bool is_PC = !caster->is_monster;
     int dmg = damage();
-    if(beneficial) target = caster;
 
     // specifics
     if(_name == "hold person" && target->race != "humanoid"){
@@ -63,7 +62,9 @@ void Spell::cast(Character* caster, Character* target){
     }
 
     // Apply conditions
-    if(condition) target->add_condition(condition);
+    if(condition) {
+        condition->apply(target, caster);
+    }
     if(concentration) caster->concentrate_on(this);
 
     // Check specific cases

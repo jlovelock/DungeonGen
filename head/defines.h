@@ -68,6 +68,12 @@ std::string to_string(int dir); //converts NORTH to "north", eg
 #define MAX_DOORS 7
 #define MAX_MONSTERS 5
 
+//check_time for conditions
+#define CASTER_END_TURN 101010
+#define CASTER_START_TURN 202020
+#define TARGET_START_TURN 303030
+#define TARGET_END_TURN 404040
+
 ///TODO SET THESE
 #define LOCKPICK_DC 0
 #define SECRET_DOOR_DC 0

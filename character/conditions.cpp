@@ -4,51 +4,65 @@
 #include <string>
 using namespace std;
 
-void Character::add_condition(string name, int duration, int DC, string check){
-    add_condition(new Condition(name, duration, check, DC));
-}
-
 void Character::add_condition(Condition* c){
-    /*
-     * Copy the condition itself, not just the pointer.
-     * That way, the original Condition can be deleted safely in the Spell deconstructor,
-     *   and these in the Character deconstructor.
-     */
-    conditions.push_back(new Condition(c));
 
-    if(is_monster)
-        cout << "The " << full_name() << " is now " << c->name() << "." << endl;
-    else
-        cout << "You are now " << c->name() << "." << endl;
+    if(is(c->name())){
+        remove_condition(c->name(), true);
+
+        if(is_monster)
+            cout << "The " << full_name() << " was already " << c->name() << ", but it's been refreshed." << endl;
+        else
+            cout << "You were already " << c->name() << ", but the effect is refreshed." << endl;
+    } else {
+        if(is_monster)
+            cout << "The " << full_name() << " is now " << c->name() << "." << endl;
+        else
+            cout << "You are now " << c->name() << "." << endl;
+    }
+    affected_conditions.push_back(c);
 }
 
-void Character::remove_condition(string name){
-    for(auto it = conditions.begin(); it != conditions.end(); ++it){
-        if((*it)->name() == name) {
-            delete *it;
-            conditions.erase(it);
-            if(is_PC())
-                cout << "You are no longer " << name << "." << endl;
-            else
-                cout << "The " << full_name() << " is no longer " << name << "." << endl;
+void Character::cause_condition(Condition* c) {
+    caused_conditions.push_back(c);
+}
+
+void Character::remove_condition(string name, bool quiet){
+    for(auto it = affected_conditions.begin(); it != affected_conditions.end(); ++it){
+        if((*it)->name() == name && !(*it)->is_active()) {
+            (*it)->deactivate();
+            if(!quiet){
+                if(is_PC())
+                    cout << "You are no longer " << name << "." << endl;
+                else
+                    cout << "The " << full_name() << " is no longer " << name << "." << endl;
+            }
             return;
         }
     }
 }
 
 bool Character::is(string effect){
-    for(auto it = conditions.begin(); it != conditions.end(); ++it)
-        if((*it)->name() == effect) return true;
+    for(auto it = affected_conditions.begin(); it != affected_conditions.end(); ++it)
+        if((*it)->name() == effect && (*it)->is_active()) return true;
 
     return false;
 }
 
-void Character::update_conditions(bool quiet){
-    for(int i = 0; i < (int)conditions.size(); i++){
-        if(conditions.at(i)->advance(this, quiet)){
-            delete conditions.at(i);
-            conditions.erase(conditions.begin()+i);
-            i--;
-        }
+void Character::update_conditions(bool start_of_turn, bool quiet){
+    if(DEBUG) cout << "$$\t" << full_name();
+    if(DEBUG) { if(start_of_turn) cout << " start turn:" << endl; else cout << " end turn:" << endl; }
+
+    for(int i = 0; i < (int)affected_conditions.size(); i++){
+        if((start_of_turn && affected_conditions.at(i)->updates_at(TARGET_START_TURN))
+           || (!start_of_turn && affected_conditions.at(i)->updates_at(TARGET_END_TURN)))
+        affected_conditions.at(i)->advance(quiet);
     }
+
+    for(int i = 0; i < (int)caused_conditions.size(); i++){
+        if((start_of_turn && caused_conditions.at(i)->updates_at(CASTER_START_TURN))
+           || (!start_of_turn && caused_conditions.at(i)->updates_at(CASTER_END_TURN)))
+        caused_conditions.at(i)->advance(quiet);
+    }
+
+    if(DEBUG) cout << "$$\t...done" << endl;
 }

@@ -90,13 +90,19 @@ void PlayerChar::printCharacterSheet(){
     }
     cout << endl;
 
-    if(conditions.size() > 0){
-        cout << "\tCurrent conditions:" << endl;
-        for(auto it = conditions.begin(); it != conditions.end(); ++it){
+    cout << "\tCurrent conditions:";
+    bool found = false;
+    for(auto it = affected_conditions.begin(); it != affected_conditions.end(); ++it){
+        if((*it)->is_active()){
+            if(!found){
+                found = true;
+                cout << endl;
+            }
             cout << "\t- " << (*it)->name() << " -- max time remaining = " << (*it)->time_remaining() << "." << endl;
         }
-        cout << endl;
     }
+    if(!found) cout << " (none)" << endl;
+
 
     cout << "======================================================================================" << endl << endl;
 }

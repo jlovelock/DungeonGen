@@ -21,8 +21,7 @@ string Treasure::get_description(){
     string tmp = _description;
     if(identified){
         tmp +=" worth ";
-        char tmp_str[10];
-        tmp += string(itoa(_value, tmp_str, 10));
+        tmp += to_string(_value);
         tmp += "gp";
         if(quantity > 1) tmp += " each";
     }

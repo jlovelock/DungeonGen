@@ -1,5 +1,6 @@
 
 #include <string>
+#include <defines.h>
 
 class Character;
 
@@ -12,16 +13,22 @@ class Condition {
     bool test_each_turn;
     std::string check_type; //attribute, skill, or save
     std::string check_stat;
-    ///add something about when to test out? should default be end or start of turn?
-    // maybe switch test_each_turn from a bool to a #define'd int (never, EOT, start of turn, etc -- customizable)
+    int check_time; //see defines.h
+    Character* target;
+    bool active;
+    Condition(Condition*, Character*);
 
 public:
-    Condition(std::string n, int dur, std::string check="", int dc=0, bool tet=false);
-    Condition(Condition*);
+    Condition(std::string n, int dur, std::string check="", int dc=0, int time=TARGET_END_TURN);
     ~Condition();
     std::string name(){ return _name; }
-    bool advance(Character*, bool quiet=false);
-    bool test(Character*, bool);
+    bool advance(bool quiet=false);
+    bool test(bool);
     void set_DC(int);
     std::string time_remaining();
+    bool is_active(){ return active; }
+    void deactivate(){ active = false; }
+    void apply(Character* target, Character* caster);
+    bool updates_at(int time){ return check_time == time; }
+    Character* get_target() { return target; }
 };

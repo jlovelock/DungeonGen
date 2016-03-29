@@ -37,7 +37,6 @@ void Spell::blade_ward(){
     level = 0;
     range = 0;
 
-    /// Should last until end of your next turn.
     condition = new Condition("protected by blade ward", 2);
     beneficial = true;
 }

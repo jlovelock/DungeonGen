@@ -20,10 +20,14 @@ Character::~Character(){
     }
     weapons.clear();
 
-    for(auto it = conditions.begin(); it != conditions.end(); ++it){
+    /*
+     * Only delete from caused conditions vector. Same condition is spread across 2 chars, shouldn't double delete!
+     */
+    for(auto it = caused_conditions.begin(); it != caused_conditions.end(); ++it){
         delete *it;
     }
-    conditions.clear();
+    affected_conditions.clear();
+    caused_conditions.clear();
 }
 
 bool Character::proficient_with(string weapon_type){
@@ -52,9 +56,13 @@ int Character::save(string stat){
     return d20() + save_mods[stat];
 }
 
-void Character::end_of_turn_cleanup(bool quiet){
+void Character::start_turn(bool quiet){
+    update_conditions(true, quiet);
+}
+
+void Character::end_turn(bool quiet){
     if(DEBUG) cout << "$$ EOT: " << name() << "...";
-    update_conditions(quiet);
+    update_conditions(false, quiet);
     if(DEBUG) cout << "done" << endl;
 }
 

@@ -1,6 +1,7 @@
 
 #include <pc.h>
 #include <weapon.h>
+#include <conditions.h>
 
 using namespace std;
 
@@ -31,13 +32,13 @@ void PlayerChar::generic_attack(Character* opponent){
     if(is("blinded")) {
         cout << "Blind and unable to see, you are forced to strike out randomly." << endl;
         has_disadvantage = true;
-    } else if(opponent->is("blinded")){
+    } if(opponent->is("blinded")){
         cout << "Blinded, the " << opponent->name() << " can't dodge out of the way of your attack nearly as easily." << endl;
         has_advantage = true;
-    } else if(w->is_ranged() && in_melee_with(opponent)){
+    } if(w->is_ranged() && in_melee_with(opponent)){
         cout << "However, you struggle to fire the " << w->name() << " from melee." << endl;
         has_disadvantage = true;
-    } else if(opponent->is("paralyzed")){
+    } if(opponent->is("paralyzed")){
         cout << "Paralyzed, he can't stop you from lining up a devastating blow!" << endl;
         has_advantage = true;
     }
@@ -66,6 +67,8 @@ void PlayerChar::action_on_kill(Character* opponent){
     cout << "You have gained " << opponent->get_xp() << " experience points." << endl << endl;
     if(xp > next_levelup()) levelup();
     in_melee = false;
+
+    //end opponent's concentration effects here
 }
 
 void PlayerChar::attack(Character* opponent, int attack_roll, int dmg){

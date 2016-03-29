@@ -186,7 +186,7 @@ void Game::add(Treasure* item, vector<Treasure*>& v){
         if(item->name() == (*it)->name()){
             (*it)->quantity += item->quantity;
             delete item;
-            if(DEBUG) cout << "updated existing.";
+            if(DEBUG) cout << "updated existing." << endl;
             return;
         }
     }

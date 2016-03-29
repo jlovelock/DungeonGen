@@ -30,13 +30,13 @@ void Monster::generic_attack(Character* opponent){
     if(is("blinded")){
         cout << "Blinded, he can't target you nearly as effectively." << endl;
         has_disadvantage = true;
-    } else if(opponent->is("blinded")){
+    } if(opponent->is("blinded")){
         cout << "Unable to see your opponent lashing out with their " << w->name() << ", you struggle to avoid the attack." << endl;
         has_advantage = true;
-    } else if(w->is_ranged() && in_melee_with(opponent)){
+    } if(w->is_ranged() && in_melee_with(opponent)){
         cout << "However, he struggles to fire his " << w->name() << " from melee." << endl;
         has_disadvantage = true;
-    } else if(opponent->is("paralyzed")){
+    } if(opponent->is("paralyzed")){
         cout << "Paralyzed, you can't stop him from lining up a devastating blow!" << endl;
         has_advantage = true;
     }
@@ -60,7 +60,7 @@ void Monster::generic_attack(Character* opponent){
 
     if(dmg > 0){
         opponent->adjust_for_resistances(dmg, w->get_dtype());
-        cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of damage." << endl;
+        cout << "The " << full_name() << "'s " << main_hand->name() << " slams into your side, dealing " << dmg << " points of " << w->get_dtype() << " damage." << endl;
         opponent->take_damage(dmg);
         w->action_on_hit(opponent, this);
 

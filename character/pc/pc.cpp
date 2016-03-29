@@ -62,7 +62,7 @@ void PlayerChar::short_rest(){
     }
 
     for(int i = 0; i < 600; i++){
-        end_of_turn_cleanup(true);
+        end_turn(true);
     }
     cout << endl;
 }

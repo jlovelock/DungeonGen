@@ -10,12 +10,13 @@ void Scroll::use(Character* user, Character* target){
     cout << "You attempt to cast ";
     if(quantity > 0) cout << "one of ";
     cout << "your " << get_description();
-    if(target)
-        cout << " on the " << target->full_name() << "." << endl;
-    else
+    if(spell->targets_self()){
         cout << " on yourself." << endl;
-    spell->cast(user, target);
-    //user->cast(spell, target);
+        spell->cast(user, user);
+    } else {
+        cout << " on the " << target->full_name() << "." << endl;
+        spell->cast(user, target);
+    }
     quantity--;
 }
 

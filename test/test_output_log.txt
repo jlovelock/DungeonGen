@@ -28,19 +28,70 @@ Level 1 Human fighter  [0/300 xp to level 2]
 	Weapon proficiencies: simple weapons, martial weapons
 	Trained skills: ATHLETICS (+5) PERCEPTION (+4) 
 	Fighting style: defense
+	Current conditions: (none)
 ======================================================================================
 
-$$	adding fire bolt...done.
 $$	adding blade ward...done.
-$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...done.
-$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding longstrider...done.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...done.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...done.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding longstrider...done.
+$$	adding magic missile...done.
+$$	adding inflict wounds...done.
+$$	adding magic missile...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding inflict wounds...updated existing.
 $$	adding armor of agathys...done.
-$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...done.
-$$	adding longstrider...updated existing.$$	adding inflict wounds...done.
-$$	adding armor of agathys...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding inflict wounds...updated existing.$$	adding inflict wounds...updated existing.$$	adding longstrider...updated existing.$$	adding inflict wounds...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding inflict wounds...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding scorching ray...done.
+$$	adding magic missile...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding hold person...done.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...done.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
 $$	adding blindness...done.
-$$	adding blindness...updated existing.$$	adding hold person...done.
-$$	adding hold person...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.## Adding room north with dimensions (20,20).
+$$	adding hold person...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+## Adding room north with dimensions (20,20).
 Adjusting position (original W40 E60 S70 N90)
 ...checking room 0:  north south east west OK
 -- Attempting to link room 1 with room 0!
@@ -50,7 +101,7 @@ Adjusting position (original W40 E60 S70 N90)
 ## Opening door in north direction.
 You enter room 1.
 @@ W40 E60 S70 N90
-There is the opening to the corridor you entered to the south (leading back to the antechamber) --[ID #2 @(50,70)]--.
+There is the opening to the corridor you entered to the south (leading back to the guardroom) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -58,7 +109,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the antechamber.
+You turn back to the guardroom.
 @@ W40 E60 S50 N70
 There is a dungeon exit door on the south wall--[ID #0 @(50,50)]--, an opening to a corridor on the east wall--[ID #1 @(60,60)]--, and an opening to a corridor on the west wall--[ID #3 @(40,60)]--, as well as the opening to the corridor you entered to the north (leading back to the ) --[ID #2 @(50,70)]--.
 
@@ -75,7 +126,7 @@ Adjusting position (original W60 E80 S50 N70)
 ## Opening door in east direction.
 You enter room 2.
 @@ W60 E80 S50 N70
-There is the opening to the corridor you entered to the west (leading back to the antechamber) --[ID #1 @(60,60)]--.
+There is the opening to the corridor you entered to the west (leading back to the guardroom) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -96,13 +147,13 @@ Adjusting position (original W60 E80 S70 N90)
 ## Opening door in north direction.
 You enter room 3.
 @@ W60 E80 S70 N90
-There is a stone door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the portcullis door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
+There is a wooden door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the wooden door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
 
 ## north door opened.
 
 You are in a 20 by 20 foot rectangular , 
 @@ W60 E80 S70 N90
-There is a stone door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the portcullis door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
+There is a wooden door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the wooden door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
 
                               
                               
@@ -141,9 +192,13 @@ You remove the bar on the door before opening it.
 
 You enter room 1.
 @@ W40 E60 S70 N90
-There is an opening to a corridor on the south wall (leading back to the antechamber)--[ID #2 @(50,70)]--, as well as the stone door you entered to the east (leading back to the ) --[ID #4 @(60,80)]--.
+There is an opening to a corridor on the south wall (leading back to the guardroom)--[ID #2 @(50,70)]--, as well as the wooden door you entered to the east (leading back to the ) --[ID #4 @(60,80)]--.
 
-$$ EOT: fighter...done
+$$ EOT: fighter...$$	fighter end turn:
+$$	...done
+done
+$$	fighter start turn:
+$$	...done
                               
                               
                               
@@ -211,19 +266,70 @@ Level 1 Human fighter  [0/300 xp to level 2]
 	Weapon proficiencies: simple weapons, martial weapons
 	Trained skills: ATHLETICS (+5) PERCEPTION (+4) 
 	Fighting style: defense
+	Current conditions: (none)
 ======================================================================================
 
 $$	adding fire bolt...done.
-$$	adding blade ward...done.
 $$	adding poison spray...done.
-$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding armor of agathys...done.
+$$	adding blade ward...done.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding inflict wounds...done.
 $$	adding magic missile...done.
-$$	adding magic missile...updated existing.$$	adding inflict wounds...done.
-$$	adding armor of agathys...updated existing.$$	adding inflict wounds...updated existing.$$	adding longstrider...done.
-$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding inflict wounds...updated existing.$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding armor of agathys...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding blindness...done.
-$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...done.
-$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding hold person...done.
-$$	adding scorching ray...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding hold person...updated existing.$$	adding scorching ray...updated existing.## Adding room north with dimensions (50,50).
+$$	adding inflict wounds...updated existing.
+$$	adding armor of agathys...done.
+$$	adding armor of agathys...updated existing.
+$$	adding longstrider...done.
+$$	adding armor of agathys...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding scorching ray...done.
+$$	adding blindness...done.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...done.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+## Adding room north with dimensions (50,50).
 Adjusting position (original W25 E75 S70 N120)
 ...checking room 0:  north south east west OK
 -- Attempting to link room 1 with room 0!
@@ -273,19 +379,70 @@ Level 1 Human fighter  [0/300 xp to level 2]
 	Weapon proficiencies: simple weapons, martial weapons
 	Trained skills: ATHLETICS (+5) PERCEPTION (+4) 
 	Fighting style: defense
+	Current conditions: (none)
 ======================================================================================
 
+$$	adding poison spray...done.
 $$	adding blade ward...done.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
 $$	adding fire bolt...done.
-$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...done.
-$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding armor of agathys...done.
-$$	adding inflict wounds...done.
-$$	adding armor of agathys...updated existing.$$	adding longstrider...done.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
 $$	adding magic missile...done.
-$$	adding longstrider...updated existing.$$	adding inflict wounds...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding inflict wounds...updated existing.$$	adding armor of agathys...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding longstrider...updated existing.$$	adding inflict wounds...updated existing.$$	adding blindness...done.
+$$	adding inflict wounds...done.
+$$	adding longstrider...done.
+$$	adding armor of agathys...done.
+$$	adding longstrider...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding inflict wounds...updated existing.
 $$	adding scorching ray...done.
-$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding hold person...done.
-$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.## Adding room east with dimensions (20,20).
+$$	adding hold person...done.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...done.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+## Adding room east with dimensions (20,20).
 Adjusting position (original W60 E80 S50 N70)
 ...checking room 0:  north south east west OK
 -- Attempting to link room 1 with room 0!
@@ -295,7 +452,7 @@ Adjusting position (original W60 E80 S50 N70)
 ## Opening door in east direction.
 You enter room 1.
 @@ W60 E80 S50 N70
-There is the opening to the corridor you entered to the west (leading back to the dining room) --[ID #1 @(60,60)]--.
+There is the opening to the corridor you entered to the west (leading back to the guardroom) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -315,7 +472,7 @@ Adjusting position (original W55 E85 S30 N50)
 ## Opening door in south direction.
 You enter room 2.
 @@ W55 E85 S30 N50
-There is the portcullis door you entered to the north (leading back to the ) --[ID #4 @(70,50)]--.
+There is the iron door you entered to the north (leading back to the ) --[ID #4 @(70,50)]--.
 
 ## south door opened.
 
@@ -332,7 +489,7 @@ Adjusting position (original W40 E60 S70 N90)
 ## Opening door in north direction.
 You enter room 3.
 @@ W40 E60 S70 N90
-There is the opening to the corridor you entered to the south (leading back to the dining room) --[ID #2 @(50,70)]--.
+There is the opening to the corridor you entered to the south (leading back to the guardroom) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -354,7 +511,7 @@ Adjusting position (original W60 E130 S70 N90)
 ## Opening door in east direction.
 You enter room 4.
 @@ W60 E130 S70 N90
-There is the hidden door you entered to the west (leading back to the ) --[ID #5 @(60,80)]--.
+There is the wooden door you entered to the west (leading back to the ) --[ID #5 @(60,80)]--.
 
 ## east door opened.
 
@@ -448,19 +605,70 @@ Level 1 Human fighter  [0/300 xp to level 2]
 	Weapon proficiencies: simple weapons, martial weapons
 	Trained skills: ATHLETICS (+5) PERCEPTION (+4) 
 	Fighting style: defense
+	Current conditions: (none)
 ======================================================================================
 
+$$	adding poison spray...done.
+$$	adding blade ward...done.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
 $$	adding fire bolt...done.
-$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...done.
-$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...done.
-$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding inflict wounds...done.
-$$	adding longstrider...done.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding inflict wounds...done.
 $$	adding armor of agathys...done.
-$$	adding longstrider...updated existing.$$	adding magic missile...done.
-$$	adding inflict wounds...updated existing.$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding inflict wounds...updated existing.$$	adding inflict wounds...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding inflict wounds...updated existing.$$	adding inflict wounds...updated existing.$$	adding armor of agathys...updated existing.$$	adding hold person...done.
-$$	adding hold person...updated existing.$$	adding blindness...done.
-$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding scorching ray...done.
-$$	adding hold person...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding scorching ray...updated existing.## Adding room north with dimensions (20,60).
+$$	adding magic missile...done.
+$$	adding inflict wounds...updated existing.
+$$	adding longstrider...done.
+$$	adding inflict wounds...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding blindness...done.
+$$	adding scorching ray...done.
+$$	adding hold person...done.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+## Adding room north with dimensions (20,60).
 Adjusting position (original W40 E60 S70 N130)
 ...checking room 0:  north south east west OK
 -- Attempting to link room 1 with room 0!
@@ -470,7 +678,7 @@ Adjusting position (original W40 E60 S70 N130)
 ## Opening door in north direction.
 You enter room 1.
 @@ W40 E60 S70 N130
-There is the opening to the corridor you entered to the south (leading back to the pantry) --[ID #2 @(50,70)]--.
+There is the opening to the corridor you entered to the south (leading back to the armory) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -488,7 +696,7 @@ Adjusting position (original W60 E120 S90 N110)
 ## Opening door in east direction.
 You enter room 2.
 @@ W60 E120 S90 N110
-There is the hidden door you entered to the west (leading back to the ) --[ID #4 @(60,100)]--.
+There is the wooden door you entered to the west (leading back to the ) --[ID #4 @(60,100)]--.
 
 ## east door opened.
 
@@ -531,7 +739,7 @@ Adjusting position (original W60 E100 S55 N65)
 ## Opening door in east direction.
 You enter room 4.
 @@ W60 E80 S55 N65
-There is the opening to the corridor you entered to the west (leading back to the pantry) --[ID #1 @(60,60)]--.
+There is the opening to the corridor you entered to the west (leading back to the armory) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -597,19 +805,70 @@ Level 1 Human fighter  [0/300 xp to level 2]
 	Weapon proficiencies: simple weapons, martial weapons
 	Trained skills: ATHLETICS (+5) PERCEPTION (+4) 
 	Fighting style: defense
+	Current conditions: (none)
 ======================================================================================
 
-$$	adding poison spray...done.
 $$	adding fire bolt...done.
-$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...done.
-$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding longstrider...done.
-$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...done.
-$$	adding inflict wounds...done.
+$$	adding blade ward...done.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...done.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding longstrider...done.
 $$	adding armor of agathys...done.
-$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding inflict wounds...updated existing.$$	adding armor of agathys...updated existing.$$	adding inflict wounds...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding inflict wounds...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding hold person...done.
+$$	adding magic missile...done.
+$$	adding armor of agathys...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding inflict wounds...done.
+$$	adding longstrider...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding scorching ray...done.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
 $$	adding blindness...done.
-$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...done.
-$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding scorching ray...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.## Adding room north with dimensions (20,60).
+$$	adding hold person...done.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+## Adding room north with dimensions (20,60).
 Adjusting position (original W40 E60 S70 N130)
 ...checking room 0:  north south east west OK
 -- Attempting to link room 1 with room 0!
@@ -619,7 +878,7 @@ Adjusting position (original W40 E60 S70 N130)
 ## Opening door in north direction.
 You enter room 1.
 @@ W40 E60 S70 N130
-There is the opening to the corridor you entered to the south (leading back to the sitting room) --[ID #2 @(50,70)]--.
+There is the opening to the corridor you entered to the south (leading back to the throne room) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -637,7 +896,7 @@ Adjusting position (original W60 E80 S90 N110)
 ## Opening door in east direction.
 You enter room 2.
 @@ W60 E80 S90 N110
-There is the wooden door you entered to the west (leading back to the ) --[ID #4 @(60,100)]--.
+There is the portcullis door you entered to the west (leading back to the ) --[ID #4 @(60,100)]--.
 
 ## east door opened.
 
@@ -682,7 +941,7 @@ Adjusting position (original W60 E90 S40 N80)
 ## Opening door in east direction.
 You enter room 4.
 @@ W60 E80 S40 N80
-There is the opening to the corridor you entered to the west (leading back to the sitting room) --[ID #1 @(60,60)]--.
+There is the opening to the corridor you entered to the west (leading back to the throne room) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -748,19 +1007,70 @@ Level 1 Human fighter  [0/300 xp to level 2]
 	Weapon proficiencies: simple weapons, martial weapons
 	Trained skills: ATHLETICS (+5) PERCEPTION (+4) 
 	Fighting style: defense
+	Current conditions: (none)
 ======================================================================================
 
 $$	adding poison spray...done.
 $$	adding blade ward...done.
-$$	adding poison spray...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...done.
-$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding magic missile...done.
-$$	adding inflict wounds...done.
+$$	adding fire bolt...done.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding poison spray...updated existing.
 $$	adding armor of agathys...done.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...done.
+$$	adding inflict wounds...done.
+$$	adding inflict wounds...updated existing.
 $$	adding longstrider...done.
-$$	adding longstrider...updated existing.$$	adding inflict wounds...updated existing.$$	adding inflict wounds...updated existing.$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding inflict wounds...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding hold person...done.
-$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding hold person...updated existing.$$	adding scorching ray...done.
-$$	adding scorching ray...updated existing.$$	adding hold person...updated existing.$$	adding blindness...done.
-$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding scorching ray...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.## Adding room east with dimensions (40,20).
+$$	adding magic missile...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding scorching ray...done.
+$$	adding blindness...done.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...done.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding hold person...updated existing.
+$$	adding hold person...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding hold person...updated existing.
+## Adding room east with dimensions (40,20).
 Adjusting position (original W60 E100 S50 N70)
 ...checking room 0:  north south east west OK
 -- Attempting to link room 1 with room 0!
@@ -770,7 +1080,7 @@ Adjusting position (original W60 E100 S50 N70)
 ## Opening door in east direction.
 You enter room 1.
 @@ W60 E100 S50 N70
-There is the opening to the corridor you entered to the west (leading back to the guardroom) --[ID #1 @(60,60)]--.
+There is the opening to the corridor you entered to the west (leading back to the latrine) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -788,7 +1098,7 @@ Adjusting position (original W70 E90 S70 N110)
 ## Opening door in north direction.
 You enter room 2.
 @@ W70 E90 S70 N110
-There is the wooden door you entered to the south (leading back to the ) --[ID #4 @(80,70)]--.
+There is the portcullis door you entered to the south (leading back to the ) --[ID #4 @(80,70)]--.
 
 ## north door opened.
 
@@ -807,7 +1117,7 @@ Adjusting position (original W60 E70 S85 N95)
 ## Opening door in west direction.
 You enter room 3.
 @@ W60 E70 S85 N95
-There is the hidden door you entered to the east (leading back to the ) --[ID #5 @(70,90)]--.
+There is the wooden door you entered to the east (leading back to the ) --[ID #5 @(70,90)]--.
 
 ## west door opened.
 
@@ -825,7 +1135,7 @@ Adjusting position (original W20 E40 S50 N70)
 ## Opening door in west direction.
 You enter room 4.
 @@ W20 E40 S50 N70
-There is the opening to the corridor you entered to the east (leading back to the guardroom) --[ID #3 @(40,60)]--.
+There is the opening to the corridor you entered to the east (leading back to the latrine) --[ID #3 @(40,60)]--.
 
 ## west door opened.
 
@@ -846,7 +1156,7 @@ Adjusting position (original W25 E35 S70 N140)
 ## Opening door in north direction.
 You enter room 5.
 @@ W25 E35 S70 N140
-There is the wooden door you entered to the south (leading back to the ) --[ID #6 @(30,70)]--.
+There is the hidden door you entered to the south (leading back to the ) --[ID #6 @(30,70)]--.
 
 ## north door opened.
 
@@ -907,7 +1217,7 @@ Adjusting position (original W40 E60 S70 N100)
 ## Opening door in north direction.
 You enter room 7.
 @@ W45 E65 S70 N85
-There is the opening to the corridor you entered to the south (leading back to the guardroom) --[ID #2 @(50,70)]--.
+There is the opening to the corridor you entered to the south (leading back to the latrine) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -973,19 +1283,70 @@ Level 1 Human fighter  [0/300 xp to level 2]
 	Weapon proficiencies: simple weapons, martial weapons
 	Trained skills: ATHLETICS (+5) PERCEPTION (+4) 
 	Fighting style: defense
+	Current conditions: (none)
 ======================================================================================
 
 $$	adding poison spray...done.
+$$	adding fire bolt...done.
+$$	adding poison spray...updated existing.
+$$	adding fire bolt...updated existing.
 $$	adding blade ward...done.
-$$	adding poison spray...updated existing.$$	adding fire bolt...done.
-$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding poison spray...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding fire bolt...updated existing.$$	adding fire bolt...updated existing.$$	adding blade ward...updated existing.$$	adding armor of agathys...done.
-$$	adding magic missile...done.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding poison spray...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding blade ward...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding fire bolt...updated existing.
+$$	adding inflict wounds...done.
+$$	adding inflict wounds...updated existing.
 $$	adding longstrider...done.
-$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding inflict wounds...done.
-$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding longstrider...updated existing.$$	adding magic missile...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding magic missile...updated existing.$$	adding armor of agathys...updated existing.$$	adding longstrider...updated existing.$$	adding scorching ray...done.
-$$	adding hold person...done.
+$$	adding longstrider...updated existing.
+$$	adding armor of agathys...done.
+$$	adding inflict wounds...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding armor of agathys...updated existing.
+$$	adding magic missile...done.
+$$	adding inflict wounds...updated existing.
+$$	adding inflict wounds...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding magic missile...updated existing.
+$$	adding longstrider...updated existing.
+$$	adding scorching ray...done.
 $$	adding blindness...done.
-$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.$$	adding blindness...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding hold person...updated existing.$$	adding blindness...updated existing.$$	adding scorching ray...updated existing.## Adding room north with dimensions (20,20).
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding hold person...done.
+$$	adding blindness...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding hold person...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+$$	adding hold person...updated existing.
+$$	adding scorching ray...updated existing.
+$$	adding blindness...updated existing.
+$$	adding blindness...updated existing.
+## Adding room north with dimensions (20,20).
 Adjusting position (original W40 E60 S70 N90)
 ...checking room 0:  north south east west OK
 -- Attempting to link room 1 with room 0!
@@ -995,7 +1356,7 @@ Adjusting position (original W40 E60 S70 N90)
 ## Opening door in north direction.
 You enter room 1.
 @@ W40 E60 S70 N90
-There is the opening to the corridor you entered to the south (leading back to the kitchen) --[ID #2 @(50,70)]--.
+There is the opening to the corridor you entered to the south (leading back to the guardroom) --[ID #2 @(50,70)]--.
 
 ## north door opened.
 
@@ -1003,7 +1364,7 @@ There is the opening to the corridor you entered to the south (leading back to t
 ## Door added: ID=4, position=(60,80).
 
 ## Opening door in south direction.
-You turn back to the kitchen.
+You turn back to the guardroom.
 @@ W40 E60 S50 N70
 There is a dungeon exit door on the south wall--[ID #0 @(50,50)]--, an opening to a corridor on the east wall--[ID #1 @(60,60)]--, and an opening to a corridor on the west wall--[ID #3 @(40,60)]--, as well as the opening to the corridor you entered to the north (leading back to the ) --[ID #2 @(50,70)]--.
 
@@ -1020,7 +1381,7 @@ Adjusting position (original W60 E80 S50 N70)
 ## Opening door in east direction.
 You enter room 2.
 @@ W60 E80 S50 N70
-There is the opening to the corridor you entered to the west (leading back to the kitchen) --[ID #1 @(60,60)]--.
+There is the opening to the corridor you entered to the west (leading back to the guardroom) --[ID #1 @(60,60)]--.
 
 ## east door opened.
 
@@ -1041,7 +1402,7 @@ Adjusting position (original W60 E80 S70 N90)
 ## Opening door in north direction.
 You enter room 3.
 @@ W60 E80 S70 N90
-There is a iron door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the stone door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
+There is a wooden door on the west wall (leading back to the )--[ID #4 @(60,80)]--, as well as the wooden door you entered to the south (leading back to the ) --[ID #5 @(70,70)]--.
 
 ## north door opened.
 

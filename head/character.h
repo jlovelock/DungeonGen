@@ -81,9 +81,9 @@ class Character {
         void train_saves(std::string save1="", std::string save2="");
 
         //ongoing effects
-        std::vector<Condition*> conditions;
-        void add_condition(std::string name, int duration, int DC=0, std::string check="");
-        void update_conditions(bool quiet=false);
+        std::vector<Condition*> affected_conditions;
+        std::vector<Condition*> caused_conditions;
+        void update_conditions(bool start_of_turn, bool quiet=false);
 
     public:
         Character(int lvl);
@@ -132,15 +132,17 @@ class Character {
         virtual void action_on_kill(Character*) {}
 
         void add_condition(Condition*);
+        void cause_condition(Condition*);
         bool is(std::string);
 
         bool is_PC(){ return !is_monster; }
 
-        void end_of_turn_cleanup(bool quiet=false);
+        void start_turn(bool quiet=false);
+        void end_turn(bool quiet=false);
 
         void adjust_for_resistances(int& dmg, std::string dtype);
         int temp_hp;
-        void remove_condition(std::string);
+        void remove_condition(std::string, bool quiet=false);
 
         bool concentrating(){ return concentrating_on != NULL; }
         void drop_concentration();

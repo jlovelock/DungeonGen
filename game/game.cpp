@@ -12,13 +12,13 @@ Game::Game(){
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
 
 // ------------ Testing ---------------
-//    for(int lvl = 0; lvl <= 2; lvl++){
-//        for(int i = 0; i < 20; i++){
-//            Scroll* s = new Scroll(lvl, 2);
-//            s->identify();
-//            add(s, scrolls);
-//        }
-//    }
+    for(int lvl = 0; lvl <= 2; lvl++){
+        for(int i = 0; i < 20; i++){
+            Scroll* s = new Scroll(lvl, 2);
+            s->identify();
+            add(s, scrolls);
+        }
+    }
 }
 
 Game::~Game(){
@@ -55,6 +55,7 @@ bool Game::getCommand() {
     string input;
     read(input);
     cout << endl;
+    bool new_room=false;
     if(contains(input, "new") || contains(input, "restart") || contains(input, "reset")){
         cout << "Reset this dungeon and start a new game? [y/n]" << endl;
         read(input);
@@ -118,17 +119,17 @@ bool Game::getCommand() {
 //        return true;
     } else {
         parse_open_door(input);
-        PC->end_of_turn_cleanup();
-        return true;
+        new_room = true;
     }
 
-    PC->end_of_turn_cleanup();
+    PC->end_turn();
 
     //moneter's turn to attack
-    if(cur_room->has_monsters()){
+    if(cur_room->has_monsters() && !new_room){
     ///TODO robustness here
     ///TODO FIXME multiple monster support
         Character* m = cur_room->get_active_monster_char();
+        m->start_turn();
         if(m->is("paralyzed")){
             cout << "The " << m->full_name() << " tries to attack, you, but can't move!" << endl;
         } else {
@@ -137,10 +138,11 @@ bool Game::getCommand() {
         }
 
         if(m->is_alive())
-            m->end_of_turn_cleanup();
+            m->end_turn();
     }
 
     if(!PC->is_alive()) return false;
+    PC->start_turn();
     return true;
 }
 

@@ -9,13 +9,26 @@
 
 using namespace std;
 
+void Condition::apply(Character* target, Character* caster){
 
-Condition::Condition(string n, int dur, string check, int dc, bool tet){
+    /*
+     * Copy the condition itself, not just the pointer.
+     * That way, the original Condition can be deleted safely in the Spell deconstructor,
+     *   and these in the Character deconstructor.
+     */
+    Condition* applied = new Condition(this, target);
+    target->add_condition(applied);
+    caster->cause_condition(applied);
+}
+
+
+Condition::Condition(string n, int dur, string check, int dc, int time){
     _name = n;
     rounds_remaining = dur;
     DC = dc;
     autopass = !dc;
-    test_each_turn = tet;
+    test_each_turn = DC;
+    check_time = time;
 
     if(contains(check, "save")){
         check_type = "save";
@@ -32,7 +45,7 @@ Condition::Condition(string n, int dur, string check, int dc, bool tet){
         check_type = "attribute";
 }
 
-Condition::Condition(Condition* c){
+Condition::Condition(Condition* c, Character* t){
     _name = c->_name;
     rounds_remaining = c->rounds_remaining;
     autopass = c->autopass;
@@ -40,43 +53,44 @@ Condition::Condition(Condition* c){
     test_each_turn = c->test_each_turn;
     check_type = c->check_type; //attribute, skill, or save
     check_stat = c->check_stat;
+    check_time = c->check_time;
+    active = true;
+    target = t;
 }
 
 Condition::~Condition(){}
 
-bool Condition::advance(Character* c, bool quiet){
+bool Condition::advance(bool quiet){
     if(--rounds_remaining <= 0 || test_each_turn){
-        return test(c, quiet);
+        return test(quiet);
     } else return false;
 }
 
-bool Condition::test(Character* c, bool quiet){
+bool Condition::test(bool quiet){
     if(autopass) {
-        if(c->is_PC())
-            cout << "You are no longer " << _name << "." << endl;
-        else
-            cout << "The " << c->full_name() << " is no longer " << _name << "." << endl;
+        target->remove_condition(this->name(), quiet);
         return true;
     } else {
         int roll;
         if(check_type == "save")
-            roll = c->save(check_stat);
+            roll = target->save(check_stat);
         else if(check_type == "skill")
-            roll = c->skill_check(check_stat);
+            roll = target->skill_check(check_stat);
         else //check_type == attribute
-            roll = c->attribute_chk(check_stat);
+            roll = target->attribute_chk(check_stat);
 
         if(roll >= DC){
-            if(c->is_PC())
+            if(target->is_PC())
                 cout << "You manage to shrug off being " << _name << "." << endl;
             else
-                cout << "The " << c->full_name() << " manages to shrug off being " << _name << "." << endl;
+                cout << "The " << target->full_name() << " manages to shrug off being " << _name << "." << endl;
+                active = false;
             return true;
         } else if(!quiet) {
-            if(c->is_PC())
+            if(target->is_PC())
                 cout << "You are still " << _name << "." << endl;
             else
-                cout << "The " << c->full_name() << " is still " << _name << "." << endl;
+                cout << "The " << target->full_name() << " is still " << _name << "." << endl;
         }
     }
     return false;
