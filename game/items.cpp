@@ -56,8 +56,12 @@ void Game::print_inventory(){
     if(!loot.empty()){
         cout << "MISC TREASURE:" << endl;
         for(auto it = loot.begin(); it != loot.end(); ++it){
-            cout << "\t- ";
-            //if(!(*it)->identified) cout << "[?] ";
+            if(!(*it)->is_identified()) cout << "    [?]\t";
+            else {
+                int spaces = 3-num_digits((*it)->value());
+                for(int i = 0; i < spaces; i++) cout << " ";
+                cout << "[" << (*it)->value() << "gp]\t";
+            }
             cout << (*it)->quantity << " " << (*it)->get_description() << "." << endl;
         }
         cout << endl;
@@ -181,17 +185,74 @@ void Game::identify_items(){
 }
 
 void Game::add(Treasure* item, vector<Treasure*>& v){
-    if(DEBUG) cout << "$$\tadding " << item->name() << "...";
     for(auto it = v.begin(); it != v.end(); ++it){
         if(item->name() == (*it)->name()){
+            cout << "You find another " << (*it)->get_description(false) << "." << endl;
             (*it)->quantity += item->quantity;
             delete item;
-            if(DEBUG) cout << "updated existing." << endl;
             return;
         }
     }
     v.push_back(item);
-    if(DEBUG) cout << "done." << endl;
+    if(is_vowel(item->get_description().at(0)))
+        cout << "You find an " << item->get_description() << "." << endl;
+    else
+        cout << "You find a " << item->get_description() << "." << endl;
+}
+
+void Game::roll_adjusted_treasure(){
+    int x = d100();
+
+    /* coins */
+    if(x < 49) {
+        int coins;
+        if(x < 18){
+            coins = (d6()+d6()+d6()+d6()+d6()+d6())*35;
+            cout << "You find " << coins << " cp." << endl;
+            cp += coins;
+            return;
+        } else if(x < 35){
+            coins = (d6()+d6()+d6())*35;
+            cout << "You find " << coins << " sp." << endl;
+            sp += coins;
+            return;
+        } else {
+            coins = (d6()+d6())*5;
+            cout << "You find " << coins << " gp." << endl;
+            gp += coins;
+            return;
+        }
+
+    /* mundane item */
+    } else if (x < 87) {
+        if (x < 62)
+            add(new Gemstone(10), loot);
+        else if (x < 79)
+            add(new Gemstone(50), loot);
+        else
+            add(new Art(25), loot);
+
+    /* magic item */
+    } else {
+        Treasure* t;
+        if (x < 93)
+            t = magic_item('A');
+        else if (x < 96)
+            t = magic_item('B');
+        else if (x < 98)
+            t = magic_item('C');
+        else if (x < 100)
+            t = magic_item('F');
+        else
+            t = magic_item('G');
+
+        if(t->type() == "potion")
+            add(t, potions);
+        else if(t->type() == "scroll")
+            add(t, scrolls);
+        else
+            add(t, loot);
+    }
 }
 
 

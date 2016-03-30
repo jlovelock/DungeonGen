@@ -21,12 +21,12 @@ Potion::Potion(std::string name, std::string _rarity, int num) : Treasure("potio
 
 Potion::~Potion(){}
 
-string Potion::get_description(){
+string Potion::get_description(bool plural){
     string tmp = "";
     if(!identified) tmp += "unidentified ";
     tmp += _description;
     tmp += " potion";
-    if(quantity != 1) tmp += "s";
+    if(quantity != 1 && plural) tmp += "s";
     if(identified){
         tmp +=" of ";
         tmp += name();

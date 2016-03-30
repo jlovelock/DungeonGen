@@ -20,11 +20,11 @@ void Scroll::use(Character* user, Character* target){
     quantity--;
 }
 
-string Scroll::get_description(){
+string Scroll::get_description(bool plural){
     string tmp = "";
     if(identified) {
         tmp += "scroll";
-        if(quantity > 1) tmp += "s";
+        if(quantity > 1 && plural) tmp += "s";
         tmp += " of ";
         tmp += name();
     } else {

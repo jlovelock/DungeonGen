@@ -17,13 +17,13 @@ Treasure::Treasure(string _ttype, int num, int gp) : Object() {
 
 Treasure::~Treasure(){}
 
-string Treasure::get_description(){
+string Treasure::get_description(bool plural){
     string tmp = _description;
     if(identified){
         tmp +=" worth ";
         tmp += to_string(_value);
         tmp += "gp";
-        if(quantity > 1) tmp += " each";
+        if(quantity > 1 && plural) tmp += " each";
     }
     return tmp;
 }

@@ -17,6 +17,20 @@ int d12() { return rand()%12+1; }
 int d20(){ return rand()%20+1; }
 int d100() { return rand()%100+1; }
 
+int num_digits(int x){
+    int n = 0;
+    while(x > 0){
+        x = x/10;
+        n++;
+    }
+    return n;
+}
+
+bool is_vowel(char c){
+    c = tolower(c);
+    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+}
+
 bool contains(string to_search, string keyword){
     return to_search.find(keyword) != string::npos;
 }

@@ -1,6 +1,8 @@
 
 #include <cstdlib>
 #include <treasure.h>
+#include <iostream>
+#include <string>
 using namespace std;
 
 Gemstone::Gemstone(int gp, int num) : Treasure("gemstone", num, gp) {
@@ -49,15 +51,15 @@ void Gemstone::roll_10gp(){
             break;
         case 7:
             _name = "malachite";
-            _description = "opake striated light and dark green";
+            _description = "opaque striated light and dark green";
             break;
         case 8:
             _name = "moss agage";
             y = d4();
-            if(y==1) _description = "translucent pink with mossy gray markings";
-            else if(y==2) _description = "translucent yellow-white with mossy gray markings";
-            else if(y==3) _description = "translucent pink with mossy green markings";
-            else _description = "translucent yellow-white with mossy green markings";
+            if(y==1) _description = "translucent pink and mossy gray marked";
+            else if(y==2) _description = "translucent yellow-white and mossy gray marked";
+            else if(y==3) _description = "translucent pink and mossy green marked";
+            else _description = "translucent yellow-white and mossy green marked";
             break;
         case 9:
             _name = "obsidian";
@@ -69,7 +71,7 @@ void Gemstone::roll_10gp(){
             break;
         case 11:
             _name = "tiger eye";
-            _description = "translucent brown with a golden centre";
+            _description = "golden centred translucent brown";
             break;
         default:
             _name = "turquoise";
@@ -83,7 +85,7 @@ void Gemstone::roll_50gp(){
     switch(x){
         case 1:
             _name = "bloodstone";
-            _description = "opaque dark gray with red flecks";
+            _description = "opaque dark gray red flecked";
             break;
         case 2:
             _name = "carnelian";
@@ -103,16 +105,19 @@ void Gemstone::roll_50gp(){
             break;
         case 6:
             _name = "jasper";
-            _description = "opaque blue, black, or brown";
+            y = d6()/2;
+            if(y==0) _description = "opaque blue";
+            else if(y==1) _description = "opaque black";
+            else _description = "opaque brown";
             break;
         case 7:
             _name = "moonstone";
-            _description = "translucent white with a pale blue glow";
+            _description = "pale blue glowing translucent white";
             break;
         case 8:
             _name = "onyx";
             y = rand()%3;
-            if(y == 1) _description = "opaque bands of black and white";
+            if(y == 1) _description = "opaque banded black and white";
             else if(y==2) _description = "pure white";
             else _description = "pure black";
             break;
@@ -125,11 +130,11 @@ void Gemstone::roll_50gp(){
             break;
         case 10:
             _name = "sardonyx";
-            _description = "opaque bands of red and white";
+            _description = "opaque banded red and white";
             break;
         case 11:
             _name = "star rose quartz";
-            _description = "translucent rosy stone with a white star-shaped centre";
+            _description = "white star-shaped centred translucent rosy";
             break;
         default:
             _name = "zircon";
@@ -139,15 +144,16 @@ void Gemstone::roll_50gp(){
 
 }
 
-string Gemstone::get_description(){
-    string tmp = "";
-    if(identified){
-        tmp += name();
-        tmp += " ";
-    }
+string Gemstone::get_description(bool plural){
+    string tmp = _description;
+    tmp += " ";
 
-    tmp += "gemstone";
-    if(quantity != 1) tmp += "s";
+    if(identified)
+        tmp += name();
+    else
+        tmp += "unidentified";
+    tmp += " gemstone";
+    if(quantity != 1 && plural) tmp += "s";
 
     if(identified){
         tmp +=" worth ";
@@ -155,12 +161,6 @@ string Gemstone::get_description(){
         tmp += "gp";
         if(quantity > 1) tmp += " each";
     }
-
-    tmp += " that ";
-    if(quantity != 1) tmp +="are"; else tmp +="is";
-    tmp +=" ";
-
-    tmp += _description;
 
     return tmp;
 

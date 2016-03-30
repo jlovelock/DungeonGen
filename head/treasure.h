@@ -16,7 +16,7 @@ public:
 
     int quantity;
     std::string type(){ return _type; }
-    virtual std::string get_description();
+    virtual std::string get_description(bool plural=true);
     virtual void use(Character* user=NULL, Character* target=NULL){}
 };
 
@@ -27,7 +27,7 @@ class Gemstone : public Treasure {
     public:
         Gemstone(int gp, int num=1);
         ~Gemstone(){}
-        std::string get_description();
+        std::string get_description(bool plural=true);
 };
 
 class Art : public Treasure {
@@ -44,7 +44,7 @@ class Scroll : public Treasure {
     public:
         Scroll(int lvl, int num=1);
         ~Scroll();
-        std::string get_description();
+        std::string get_description(bool plural=true);
         void use(Character* user, Character* target);
         bool targets_self(){ return spell->targets_self(); }
         bool targets_enemy(){ return !spell->targets_self(); }
@@ -57,7 +57,7 @@ class Potion : public Treasure {
     public:
         Potion(std::string name, std::string _rarity, int num=1);
         ~Potion();
-        std::string get_description();
+        std::string get_description(bool plural=true);
         int healing_amount();
         void use(Character* user, Character* target=NULL);
 

@@ -14,13 +14,13 @@ Game::Game(){
     cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
 
 // ------------ Testing ---------------
-    for(int lvl = 0; lvl <= 2; lvl++){
-        for(int i = 0; i < 20; i++){
-            Scroll* s = new Scroll(lvl, 2);
-            s->identify();
-            add(s, scrolls);
-        }
-    }
+//    for(int lvl = 0; lvl <= 2; lvl++){
+//        for(int i = 0; i < 20; i++){
+//            Scroll* s = new Scroll(lvl, 2);
+//            s->identify();
+//            add(s, scrolls);
+//        }
+//    }
 
     unrecognized_input.open("utils/input_log.txt", ifstream::app);
     if(!unrecognized_input.is_open()) {
@@ -276,9 +276,10 @@ bool Game::searching(string input){
            && !(dungeon->treasure_enabled() == "NEVER")
            && PC->skill_check("INVESTIGATION") > FIND_TREASURE_DC){
 
-            cout << "You find a treasure hoard!" << endl;
+//            cout << "You find a treasure hoard!" << endl;
             cur_room->loot_room();
-            rollTreasureHoard();
+//            rollTreasureHoard();
+            roll_adjusted_treasure();
             found = true;
         }
 

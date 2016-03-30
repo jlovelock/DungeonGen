@@ -18,7 +18,9 @@ int right(int wall);
 bool contains(std::string to_search, std::string keyword);
 void convert_to_uppercase(std::string& input);
 void convert_to_lowercase(std::string& input);
+bool is_vowel(char);
 bool in_list(std::string, std::string[]);
+int num_digits(int);
 void run_all_tests();
 
 extern bool test_mode;
