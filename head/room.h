@@ -4,7 +4,6 @@
 #include <door.h>
 #include <defines.h>
 
-
 class Monster;
 class PlayerChar;
 
@@ -30,7 +29,7 @@ class Room {
     ///TODO add more descriptions
     std::string shape, purpose_full, purpose_short;
     std::string hazard;
-    bool treasure;
+    int treasure;
 
     // Utility functions for adjusting room size/placement
     bool within(int x, int y);
@@ -86,8 +85,9 @@ class Room {
 
 public:
     Room();
-    bool has_treasure(){ return treasure; }
-    void loot_room(){ treasure = false; }
+    bool has_treasure(){ return treasure != NO_TREASURE; }
+    bool treasure_amount() { return treasure == FULL_TREASURE; }
+    void loot_room(){ treasure = NO_TREASURE; }
 
     //baddies!
     Monster* monsters[MAX_MONSTERS];

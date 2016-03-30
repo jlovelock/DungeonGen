@@ -200,8 +200,23 @@ void Game::add(Treasure* item, vector<Treasure*>& v){
         cout << "You find a " << item->get_description() << "." << endl;
 }
 
-void Game::roll_adjusted_treasure(){
+void Game::roll_adjusted_treasure(bool full_treasure_amount){
     int x = d100();
+
+    if(!full_treasure_amount){
+        int coins;
+        if(x < 51){
+            coins = (d6()+d6()+d6()+d6()+d6()+d6())*10;
+            cout << "You find " << coins << " cp." << endl;
+            cp += coins;
+            return;
+        } else {
+            coins = (d6()+d6()+d6())*10;
+            cout << "You find " << coins << " sp." << endl;
+            sp += coins;
+            return;
+        }
+    }
 
     /* coins */
     if(x < 49) {

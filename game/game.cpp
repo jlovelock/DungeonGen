@@ -277,9 +277,9 @@ bool Game::searching(string input){
            && PC->skill_check("INVESTIGATION") > FIND_TREASURE_DC){
 
 //            cout << "You find a treasure hoard!" << endl;
-            cur_room->loot_room();
 //            rollTreasureHoard();
-            roll_adjusted_treasure();
+            roll_adjusted_treasure(cur_room->treasure_amount());
+            cur_room->loot_room();
             found = true;
         }
 

@@ -22,7 +22,7 @@ class Game {
     //treasure
     void rollIndividualTreasure(std::string);
     void rollTreasureHoard();
-    void roll_adjusted_treasure();
+    void roll_adjusted_treasure(bool);
     std::vector<Treasure*> loot, potions, scrolls;
     int cp, sp, ep, gp, pp;
     void print_inventory();

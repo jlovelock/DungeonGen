@@ -81,22 +81,23 @@ void Room::setEdgeCoords(int entry_wall, int entry_x, int entry_y){
 //roll contents
 ///TODO fill in the blanks where there are some, distinguish between monsters as dominant inhabitants / random creatures
 void Room::set_contents(){
+
     int x = d100();
     if(x < 9){
         monsters[0] = new Monster(0);
     } else if(x < 16){
         monsters[0] = new Monster(0);
-        treasure = true;
+        treasure = FULL_TREASURE;
     } else if(x < 28){
         ///pet or allied creature
     } else if(x < 34){
         ///pet or allied creature
-        treasure = true;
+        treasure = FULL_TREASURE;
     } else if(x < 43){
         monsters[0] = new Monster(0);
     } else if(x < 51){
         monsters[0] = new Monster(0);
-        treasure = true;
+        treasure = FULL_TREASURE;
     } else if(x < 59){
         int y = d20();
         if(y < 4) hazard = "brown mold";
@@ -105,14 +106,14 @@ void Room::set_contents(){
         else if(y < 16) hazard = "spiderwebs";
         else if(y < 18) hazard = "violet fungus";
         else hazard = "yellow mold";
-        ///incidental treasure
+        treasure = INCIDENTAL_TREASURE;
     } else if(x < 64){
         ///obstacle
     } else if(x < 74){
         ///trap
     } else if(x < 77){
         ///trap
-        treasure = true;
+        treasure = FULL_TREASURE;
     } else if(x < 81){
         ///trick
     } else if(x > 88 && x < 95){
@@ -124,7 +125,7 @@ void Room::set_contents(){
         else if(y < 18) hazard = "violet fungus";
         else hazard = "yellow mold";
     } else {
-        treasure = true;
+        treasure = FULL_TREASURE;
     }
 }
 
@@ -135,7 +136,7 @@ void Room::generateChamber(string dungeon_type, Door* d){
         monsters[i] = NULL;
 
     //defaults
-    treasure = false;
+    treasure = NO_TREASURE;
 
     setPurpose(dungeon_type);
     set_contents();
