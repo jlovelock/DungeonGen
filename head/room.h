@@ -2,6 +2,7 @@
 #define ROOM_H
 #include <string>
 #include <door.h>
+#include <inventory.h>
 #include <defines.h>
 
 class Monster;
@@ -29,7 +30,6 @@ class Room {
     ///TODO add more descriptions
     std::string shape, purpose_full, purpose_short;
     std::string hazard;
-    int treasure;
 
     // Utility functions for adjusting room size/placement
     bool within(int x, int y);
@@ -82,12 +82,12 @@ class Room {
     void remove_all_monsters();
 
     int shared_wall(Room*);
+    Inventory* inventory;
 
 public:
     Room();
-    bool has_treasure(){ return treasure != NO_TREASURE; }
-    bool treasure_amount() { return treasure == FULL_TREASURE; }
-    void loot_room(){ treasure = NO_TREASURE; }
+    bool has_treasure(){ return !inventory->is_empty(); }
+    void loot(Character*);
 
     //baddies!
     Monster* monsters[MAX_MONSTERS];

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <pc.h>
 #include <weapon.h>
+#include <inventory.h>
 #include <conditions.h>
 
 using namespace std;
@@ -59,10 +60,7 @@ void PlayerChar::printCharacterSheet(){
     if(temp_hp > 0) cout << " [+" << temp_hp << " temp hp]";
     cout << endl;
 
-    cout << "\tWeapons:" << endl;
-    for(auto it = weapons.begin(); it != weapons.end(); ++it){
-        cout << "\t - " << (*it)->get_weapon_description(this) << endl;
-    }
+    inventory->print_weapon_stats(this);
 
     cout << "\tWeapon proficiencies: simple weapons";
     for(auto it = weapon_proficiencies.begin(); it != weapon_proficiencies.end(); ++it){

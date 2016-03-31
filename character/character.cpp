@@ -10,15 +10,15 @@
 #include <objects.h>
 #include <weapon.h>
 #include <conditions.h>
+#include <inventory.h>
 
 using namespace std;
 
 
+void Character::print_inventory(){ inventory->print(this); }
+
 Character::~Character(){
-    for(auto it = weapons.begin(); it != weapons.end(); ++it){
-        delete *it;
-    }
-    weapons.clear();
+    delete inventory;
 
     /*
      * Only delete from caused conditions vector. Same condition is spread across 2 chars, shouldn't double delete!
@@ -61,7 +61,7 @@ void Character::start_turn(bool quiet){
 }
 
 void Character::end_turn(bool quiet){
-    if(DEBUG) cout << "$$ EOT: " << name() << "...";
+    if(DEBUG) cout << "EOT: " << name() << "...";
     update_conditions(false, quiet);
     if(DEBUG) cout << "done" << endl;
 }

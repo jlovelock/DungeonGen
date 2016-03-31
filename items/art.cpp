@@ -1,6 +1,7 @@
 
 #include <cstdlib>
 #include <treasure.h>
+#include <iostream>
 using namespace std;
 
 
@@ -11,6 +12,18 @@ Art::Art(int gp, int num) : Treasure("art", num, gp) {
         case 25: roll_25gp(); break;
     }
 }
+
+void Art::identify(){
+    cout << "\t- Your " << get_description();
+
+    if(quantity == 1)
+        cout << " is worth " << value() << " gp." << endl;
+    else
+        cout << " are worth " << value() << " gp each." << endl;
+
+    identified = true;
+}
+
 
 void Art::roll_25gp(){
     int x=d10();

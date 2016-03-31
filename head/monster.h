@@ -24,7 +24,9 @@ public:
     void generic_attack(Character*);
     void attack(Character* opponent, int attack_roll, int dmg);
 
-    bool search_monster(bool print_err_msgs=false);
+//    bool search_monster(bool print_err_msgs=false);
+    bool was_looted(){ return searched; }
+    void mark_as_looted(){ searched = false; }
     bool has(std::string);
 
     std::string name() { return _short_name; }

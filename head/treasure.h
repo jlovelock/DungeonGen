@@ -8,14 +8,10 @@
 int magic_item_cost(std::string rarity);
 
 class Treasure : public Object {
-protected:
-    std::string _type;
 public:
     Treasure(std::string _ttype, int num, int gp);    //mundane items
     virtual ~Treasure();
 
-    int quantity;
-    std::string type(){ return _type; }
     virtual std::string get_description(bool plural=true);
     virtual void use(Character* user=NULL, Character* target=NULL){}
 };
@@ -36,6 +32,7 @@ class Art : public Treasure {
     public:
         Art(int gp, int num=1);
         ~Art(){}
+        void identify();
 };
 
 class Scroll : public Treasure {
@@ -48,6 +45,7 @@ class Scroll : public Treasure {
         void use(Character* user, Character* target);
         bool targets_self(){ return spell->targets_self(); }
         bool targets_enemy(){ return !spell->targets_self(); }
+        void identify();
 };
 
 
@@ -60,6 +58,7 @@ class Potion : public Treasure {
         std::string get_description(bool plural=true);
         int healing_amount();
         void use(Character* user, Character* target=NULL);
+        void identify();
 
 };
 

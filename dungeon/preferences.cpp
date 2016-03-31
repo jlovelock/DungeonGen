@@ -109,7 +109,7 @@ void Dungeon::edit_preferences(){
     cout << "Your current settings:" << endl;
     cout << "\tDungeon type: " << dtype << endl;
     cout << "\tMonster spawning: " << (m_ena ? "ON" : "OFF") << endl;
-    cout << "\tTreasure hoards: " << t_ena << endl;
+    cout << "\tTreasure spawning: " << t_ena << endl;
     cout << "\tMagic items: " << mag_it << endl;
     cout << endl;
 
@@ -120,7 +120,7 @@ void Dungeon::edit_preferences(){
     if(contains(input, "dungeon") || contains(input, "type")){
         cout << "Sorry, only the STRONGHOLD dungeon type is supported at this time." << endl;
         return;
-    } else if(contains(input, "monster") || contains(input, "spawn")){
+    } else if(contains(input, "monster")){
         cout << "Monsters ON or OFF? " << endl;
         read(input);
         if(contains(input, "off")){
@@ -134,20 +134,21 @@ void Dungeon::edit_preferences(){
             unrecognized_input << "(in settings menu: ) " << input << endl;
         }
         return;
-    } else if(contains(input, "treasure") || contains(input, "hoard")){
-        cout << "Treasure hoard spawning: RANDOM, ALWAYS, or NEVER?" << endl;
+    } else if(contains(input, "treasure")){
+        cout << "Treasure spawning: RANDOM, ALWAYS, or NEVER?" << endl;
         read(input);
         if(contains(input, "random")){
             t_ena = "RANDOM";
-            cout << "Treasure hoards will spawn randomly." << endl;
+            cout << "Treasure will spawn randomly." << endl;
         } else if(contains(input, "always")){
             t_ena = "ALWAYS";
-            cout << "There will be a treasure hoard in every room." << endl;
+            cout << "There will be treasure in every room." << endl;
         } else if(contains(input, "never")){
             t_ena = "NEVER";
-            cout << "Treasure hoards will never spawn." << endl;
+            cout << "Treasure will never spawn." << endl;
         } else {
             cout << "Input not recognized." << endl;
+            unrecognized_input << "(in treasure settings: ) " << input << endl;
         }
     } else if(contains(input, "magic") || contains(input, "items")){
         cout << "Treasure hoards containing magic items: RANDOM, ALWAYS, or NEVER?" << endl;
@@ -163,6 +164,7 @@ void Dungeon::edit_preferences(){
             cout << "Magic items will never spawn." << endl;
         } else {
             cout << "Input not recognized." << endl;
+            unrecognized_input << "(in magic item settings: ) " << input << endl;
         }
     }
     write_preferences();

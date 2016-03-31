@@ -16,7 +16,7 @@ void init(){
 
 int main(){
     init();
-    run_all_tests();
+//    run_all_tests();
 
     while(1){
         Game* g = new Game;

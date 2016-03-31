@@ -28,7 +28,7 @@ void Character::cause_condition(Condition* c) {
 
 void Character::remove_condition(string name, bool quiet){
     for(auto it = affected_conditions.begin(); it != affected_conditions.end(); ++it){
-        if((*it)->name() == name && !(*it)->is_active()) {
+        if((*it)->name() == name && (*it)->is_active()) {
             (*it)->deactivate();
             if(!quiet){
                 if(is_PC())
@@ -49,7 +49,7 @@ bool Character::is(string effect){
 }
 
 void Character::update_conditions(bool start_of_turn, bool quiet){
-    if(DEBUG) cout << "$$\t" << full_name();
+    if(DEBUG) cout << "\t" << full_name();
     if(DEBUG) { if(start_of_turn) cout << " start turn:" << endl; else cout << " end turn:" << endl; }
 
     for(int i = 0; i < (int)affected_conditions.size(); i++){
@@ -64,5 +64,5 @@ void Character::update_conditions(bool start_of_turn, bool quiet){
         caused_conditions.at(i)->advance(quiet);
     }
 
-    if(DEBUG) cout << "$$\t...done" << endl;
+    if(DEBUG) cout << "\t...done" << endl;
 }

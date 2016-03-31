@@ -3,6 +3,7 @@
 #include <objects.h>
 #include <weapon.h>
 #include <pc.h>
+#include <inventory.h>
 
 using namespace std;
 
@@ -10,36 +11,12 @@ using namespace std;
 Weapon* PlayerChar::weapon_select(Character* target){
         //if(is_monster) return weapons[0]; //TODO multi-weapon support for monsters??
 
-        map<string, Weapon*> choice_matrix;
-
-        cout << "Which weapon do you want to use?:" << endl;
-
-        while(true) {
-            for(auto it = weapons.begin(); it != weapons.end(); ++it) {
-                if(distance_to(target) < (*it)->range()){
-                    choice_matrix[(*it)->name()] = *it;
-                    cout << "\t - " << (*it)->name();
-                    if(distance_to(target) >= 10 && (*it)->is_thrown())
-                        cout << " (thrown)";
-                    cout << endl;
-                }
-                else {
-                    cout << "\t(" << (*it)->name() << " out of range.)" << endl;
-                }
-            }
-
-            cout << endl;
-            string choice;
-            read(choice);
-            auto w = choice_matrix.find(choice);
-            if(w == choice_matrix.end()) {
-                cout << "Invalid selection. Your choices are as follows: " << endl;
-            } else {
-                cout << choice_matrix.at(choice)->name() << " selected." << endl;
-                equip(choice_matrix.at(choice));
-                return choice_matrix.at(choice);
-            }
-        }
+    Weapon* w = inventory->weapon_select(distance_to(target));
+    if(!w) return NULL;
+    else {
+        equip(w);
+        return w;
+    }
 }
 
 
@@ -187,3 +164,31 @@ bool Character::equip(Object* o, bool equip_to_offhand){
     }
 }
 
+
+void Character::identify_items(vector<Object*> v, bool& item_identified){
+    for(auto it = v.begin(); it != v.end(); ++it){
+        if(!(*it)->is_identified() && attribute_chk("INT") > LOOT_IDENTIFY_DC){
+            if(!item_identified) {
+                cout << "You are able to identify the following:" << endl;
+                item_identified = true;
+            }
+            cout << "\t- ";
+            (*it)->identify();
+        }
+    }
+}
+
+void Character::identify_items(){
+    if(!inventory->has_unidentified_items()) return;
+
+    bool item_identified = false;
+    cout << "As you rest, you look over the items you have gathered more closely." << endl;
+
+    identify_items(inventory->scroll_obj_vector(), item_identified);
+    identify_items(inventory->potion_obj_vector(), item_identified);
+    identify_items(inventory->weapon_obj_vector(), item_identified);
+    identify_items(inventory->misc_obj_vector(), item_identified);
+
+    if(!item_identified) cout << "Unfortunately, you are unable to identify anything." << endl;
+    cout << endl;
+}

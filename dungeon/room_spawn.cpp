@@ -94,6 +94,20 @@ void Dungeon::link_all_doors(Room* new_room){
     }
 }
 
+///TODO -- magic items "never"
+void Dungeon::modify_contents(Room* r){
+    if(treasure_enabled() == "NEVER"){
+        r->inventory->clear();
+
+    } else if(magic_items_enabled() == "ALWAYS"){
+        r->inventory->clear();
+        r->inventory->add(magic_item('A'));
+
+    } else if(treasure_enabled() == "ALWAYS" && !r->has_treasure()){
+        r->inventory->roll_full_treasure();
+    }
+}
+
 
 Room* Dungeon::add_room(Door* d, bool is_passage){
     Room* next_rm = new Room(dtype, d, is_passage);
@@ -114,5 +128,6 @@ Room* Dungeon::add_room(Door* d, bool is_passage){
     DoorPlacementGuide dpg(next_rm, this);
     dpg.spawn_doors();
 
+    modify_contents(next_rm);
     return next_rm;
 }

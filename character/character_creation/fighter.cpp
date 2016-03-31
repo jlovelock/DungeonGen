@@ -3,6 +3,7 @@
 #include <string>
 
 #include <weapon.h>
+#include <inventory.h>
 #include <pc.h>
 
 using namespace std;
@@ -23,10 +24,10 @@ void PlayerChar::default_fighter(){
 
     //weapons
     Weapon* w1 = new Weapon("greataxe");
-    weapons.push_back(w1);
+    inventory->add(w1);
     equip(w1);
     Weapon* w2 = new Weapon("hand crossbow");
-    weapons.push_back(w2);
+    inventory->add(w2);
 
     //skills
     train("PERCEPTION");
@@ -67,12 +68,12 @@ void PlayerChar::fighter(){
         if(contains(input, "chainmail")){
             _AC = 16;
             Weapon* w = new Weapon("hand crossbow");
-            weapons.push_back(w);
+            inventory->add(w);
             break;
         } else if(contains(input, "leather")){
             _AC = 11+attribute_mods["DEX"];
             Weapon* w = new Weapon("longbow");
-            weapons.push_back(w);
+            inventory->add(w);
             break;
         } else cout << "\tInvalid selection." << endl;
     } while(true);
@@ -83,7 +84,7 @@ void PlayerChar::fighter(){
         if(contains(input, "two")){
             cout << "\tGreataxe selected." << endl;
             Weapon* w = new Weapon("greataxe");
-            weapons.push_back(w);
+            inventory->add(w);
             equip(w);
             break;
         } else if(contains(input, "one")){
@@ -92,12 +93,12 @@ void PlayerChar::fighter(){
             if(input == "y"){
                cout << "\tRapier selected." << endl;
                Weapon* w = new Weapon("rapier");
-               weapons.push_back(w);
+               inventory->add(w);
                equip(w);
             } else if(input == "n"){
                 cout << "\tLongsword selected." << endl;
                 Weapon* w = new Weapon("longsword");
-                weapons.push_back(w);
+                inventory->add(w);
                 equip(w);
             }
             cout << "\tShield? [y/n] ";
@@ -105,7 +106,7 @@ void PlayerChar::fighter(){
             if(input == "y"){
                 cout << "\tShield added." << endl;
                 Object* s = new Object("shield");
-                objects.push_back(s);
+                inventory->add(s);
                 equip(s, true);
             } else cout << "\tNo shield." << endl;
             break;
@@ -115,8 +116,8 @@ void PlayerChar::fighter(){
             if(input == "y"){
                 Weapon* s1 = new Weapon("shortsword");
                 Weapon* s2 = new Weapon("shortsword");
-                weapons.push_back(s1);
-                weapons.push_back(s2);
+                inventory->add(s1);
+                inventory->add(s2);
                 equip(s1);
                 equip(s2, true);
                 cout << "\tShortswords selected." << endl;
@@ -124,8 +125,8 @@ void PlayerChar::fighter(){
                 cout << "\tHandaxes selected." << endl;
                 Weapon* s1 = new Weapon("handaxe");
                 Weapon* s2 = new Weapon("handaxe");
-                weapons.push_back(s1);
-                weapons.push_back(s2);
+                inventory->add(s1);
+                inventory->add(s2);
                 equip(s1);
                 equip(s2, true);
             }

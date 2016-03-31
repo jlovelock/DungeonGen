@@ -121,8 +121,13 @@ Room::~Room(){
         }
     }
     remove_all_monsters();
+    delete inventory;
 }
 
+
+void Room::loot(Character* PC){
+    PC->inventory->transfer(inventory, purpose_short);
+}
 
 bool Room::isFirstRoom(Door* door){
     return door->first->id == this->id;

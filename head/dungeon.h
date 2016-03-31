@@ -25,6 +25,7 @@ class Dungeon{
     void write_preferences();
 
     void link_all_doors(Room*);
+    void modify_contents(Room* r); //re: settings
 
 public:
     Dungeon();

@@ -18,6 +18,17 @@ void Scroll::use(Character* user, Character* target){
         spell->cast(user, target);
     }
     quantity--;
+    cout << "The scroll crumbles to dust as the magic leaves it." << endl << endl;
+}
+
+void Scroll::identify(){
+    cout << quantity << " of your scrolls";
+    if(quantity == 1)
+        cout << " is a scroll of ";
+    else
+        cout << " are scrolls of ";
+    cout << name() << "." << endl;
+    identified = true;
 }
 
 string Scroll::get_description(bool plural){

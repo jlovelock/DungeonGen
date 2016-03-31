@@ -14,6 +14,7 @@ class Spell;
 class Door;
 class Object;
 class Condition;
+class Inventory;
 
 class Character {
     friend class Dungeon;
@@ -54,7 +55,6 @@ class Character {
         bool is_trained(std::string skill){ return skill_mods[skill] != attribute_mods[base_attribute(skill)]; }
 
         //Melee attacks
-        int distance_to(Character* target);
         int attack_roll(Weapon* w);
         int damage(Weapon* w, std::string mode = "");
         bool in_melee;
@@ -109,8 +109,9 @@ class Character {
         void heal(int hp);
 
         //Equipment
-        std::vector<Weapon*> weapons; //in inventory
-        std::vector<Object*> objects;
+
+        Inventory* inventory;
+        void print_inventory();
         bool equip(Object*, bool equip_to_offhand=false);
         std::string equipped_weapon_type();
         bool has_free_hand(){ return main_hand == NULL || off_hand == NULL; }
@@ -122,6 +123,7 @@ class Character {
         void move_position(int, int);
         void close_with(Character*);
         bool in_melee_with(Character* opponent);
+        int distance_to(Character* target);
 
         virtual std::string name() { return ""; }
         virtual std::string full_name() { return ""; }
@@ -147,6 +149,9 @@ class Character {
         bool concentrating(){ return concentrating_on != NULL; }
         void drop_concentration();
         void concentrate_on(Spell* s){ drop_concentration(); concentrating_on = s;}
+
+        void identify_items();
+        void identify_items(std::vector<Object*>, bool&);
 };
 
 

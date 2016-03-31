@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib>
 #include <fstream>
-
+#include <cstdarg>
 #include <defines.h>
 
 using namespace std;
@@ -51,17 +51,8 @@ void read(string& input){
     cout << endl << ">> ";
 
     istream& s = test_mode ? testfile_input : cin;
-//    if(test_mode){
-//        s =
-//    } else {
-//        s = cin;
-//    }
     getline(s, input);
     convert_to_lowercase(input);
-
-//    cout << "READ: " << input << endl;
-//    string asd;
-//    cin >> asd;
 
     if(contains(input, "exit") || contains(input, "quit")){
         cout << endl << "Thanks for playing!" << endl;

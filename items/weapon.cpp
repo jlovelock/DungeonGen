@@ -25,6 +25,9 @@ void Weapon::set_defaults(){
     _dtype = "weapon";
     _range = 5;
     effect_on_hit = NULL;
+    _type = "weapon";
+    quantity = 1;
+    _lootable = true;
 }
 
 
@@ -39,6 +42,7 @@ Weapon::Weapon(string name, string specifier) : Object(name){
     _weapon_die = atoi(specifier.substr(specifier.find("d")+1,specifier.find("+")-specifier.find("d")-1).c_str());
     _dmg_mod = atoi(specifier.substr(specifier.find("+")+1, specifier.find(" ")-specifier.find("+")-1).c_str());
     _dtype = specifier.substr(specifier.find(" ")+1);
+    _lootable = false;
 }
 
 Weapon::Weapon(string name): Object(name){

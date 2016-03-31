@@ -21,6 +21,15 @@ Potion::Potion(std::string name, std::string _rarity, int num) : Treasure("potio
 
 Potion::~Potion(){}
 
+void Potion::identify(){
+    cout << "Your " << get_description();
+    if(quantity == 1)
+        cout << " is a potion of " << name() << "." << endl;
+    else
+        cout << " are potions of " << name() << "." << endl;
+    identified = true;
+}
+
 string Potion::get_description(bool plural){
     string tmp = "";
     if(!identified) tmp += "unidentified ";
@@ -36,7 +45,7 @@ string Potion::get_description(bool plural){
 
 
 void Potion::use(Character* user, Character* target){
-    cout << "You drink the potion." << endl;
+    cout << "You drink the " << get_description() << "." << endl;
     quantity--;
 
     ///@TODO add non-healing potions

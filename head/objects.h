@@ -2,6 +2,7 @@
 #define OBJECTS_H
 
 #include <string>
+#include <iostream>
 
 class Spell;
 class Character;
@@ -15,19 +16,29 @@ class Object{
         bool is_two_handed(){ return _2h; }
         bool is_weapon(){ return _is_weapon; }
         bool is_equipped_to(Character*);
-        virtual std::string get_description() { return _description; }
+        virtual std::string get_description(bool plural=true) { return _description; }
         bool is_identified(){ return identified; }
-        void identify(){ identified = true; }
         int value(){ return _value; }
         virtual void use(Character* user=NULL, void* target=NULL){}
         void action_on_hit(Character* target, Character* attacker=NULL);
         void set_effect_on_hit(Spell* s){ if(!effect_on_hit) effect_on_hit = s; }
+        bool depleted(){ return quantity == 0; }
+        int get_quantity(){ return quantity; }
+        void increase_quantity(int x){ quantity += x; }
+        std::string type(){ return _type; }
+        bool is_lootable(){ return _lootable; }
+        void set_lootable(){ _lootable = true; }
+
+        virtual void identify();
 
     protected:
         std::string _name;
         std::string _description;
+        std::string _type;
         bool _2h;
         bool _is_weapon;
+        int quantity;
+        bool _lootable;
 
         int _value; //in gp; anything <1gp is free
 

@@ -15,6 +15,7 @@ Treasure::Treasure(string _ttype, int num, int gp) : Object() {
     _value = gp;
 }
 
+
 Treasure::~Treasure(){}
 
 string Treasure::get_description(bool plural){

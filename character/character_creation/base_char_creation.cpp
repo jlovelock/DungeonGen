@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <character.h>
+#include <inventory.h>
 #include <defines.h>
 
 using namespace std;
@@ -31,6 +32,7 @@ void Character::initialize(){
     prof = 2;
     main_hand = NULL; off_hand = NULL;
     concentrating_on = NULL;
+    inventory = new Inventory;
 }
 
 Character::Character(){

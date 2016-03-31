@@ -5,7 +5,6 @@ using namespace std;
 
 Room::Room(Door* d, int x, int y, bool is_large){
     id = max_id++;
-    treasure = NO_TREASURE;
     hazard.clear();
     purpose_short.clear();
     for(int i = 0; i < MAX_MONSTERS; i++){

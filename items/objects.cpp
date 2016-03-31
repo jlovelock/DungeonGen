@@ -3,6 +3,7 @@
 #include <string>
 #include <character.h>
 #include <spells.h>
+#include <iostream>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ Object::~Object(){
 
 Object::Object(){
     _name = "??";
-    _description = "N/A";
+    _description = "--";
     _id = max_id++;
 
     _value = 0;
@@ -26,6 +27,7 @@ Object::Object(){
     _2h = false;
     effect_on_hit = NULL;
     rarity = "mundane";
+    _lootable = true;
 }
 
 Object::Object(string name){
@@ -40,6 +42,20 @@ Object::Object(string name){
     _2h = false;
     effect_on_hit = NULL;
     rarity = "mundane";
+    _type = "object";
+    quantity = 1;
+    _lootable = true;
+}
+
+void Object::identify(){
+    cout << "\t- Your " << get_description();
+
+    if(quantity == 1)
+        cout << " is a " << name() << " worth " << value() << " gp." << endl;
+    else
+        cout << " are " << name() << "s worth " << value() << " gp each." << endl;
+
+    identified = true;
 }
 
 void Object::action_on_hit(Character* target, Character* attacker){

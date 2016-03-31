@@ -6,6 +6,7 @@
 #include <weapon.h>
 #include <monster.h>
 #include <spells.h>
+#include <inventory.h>
 
 using namespace std;
 
@@ -15,13 +16,16 @@ Monster::Monster(double CR) : Character(){
     is_monster = true;
     searched = false;
     prof = 2;
+    inventory->set_monster_treasure(CR);
 
-    int n = rand()%3;
-    switch(n){
-        case 0: spawn_giant_rat(1); break;
-        case 1: spawn_cultist(1); break;
-        case 2: spawn_poisonous_snake(1); break;
-    }
+    spawn_cultist(1);
+
+//    int n = rand()%3;
+//    switch(n){
+//        case 0: spawn_giant_rat(1); break;
+//        case 1: spawn_cultist(1); break;
+//        case 2: spawn_poisonous_snake(1); break;
+//    }
     cur_hp = max_hp;
     temp_hp = 0;
 }
@@ -38,7 +42,7 @@ void Monster::spawn_giant_rat(int group_size){
     set_attributes(7,15,11,2,10,4);
 
     Weapon* w = new Weapon("bite", "4/1d4+2 piercing");
-    weapons.push_back(w);
+    inventory->add(w);
     main_hand = w;
     off_hand = NULL;
 
@@ -65,7 +69,8 @@ void Monster::spawn_cultist(int group_size){
     train("RELIGION");
 
     Weapon* w = new Weapon("scimitar","3/1d6+1 piercing");
-    weapons.push_back(w);
+    w->set_lootable();
+    inventory->add(w);
     main_hand = w;
     off_hand = NULL;
 
@@ -92,7 +97,7 @@ void Monster::spawn_poisonous_snake(int group_size){
     s->save_DC = 10;
     s->save_stat = "CON";
     w->set_effect_on_hit(s);
-    weapons.push_back(w);
+    inventory->add(w);
     main_hand = w;
     off_hand = NULL;
 

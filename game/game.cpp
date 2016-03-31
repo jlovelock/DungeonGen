@@ -11,14 +11,13 @@ Game::Game(){
     PC = new PlayerChar(1);
     dungeon = new Dungeon();
     cur_room = dungeon->starting_room();
-    cp = 0; sp = 0; ep = 0; gp = 0; pp = 0;
 
-// ------------ Testing ---------------
+//// ------------ Testing ---------------
 //    for(int lvl = 0; lvl <= 2; lvl++){
 //        for(int i = 0; i < 20; i++){
 //            Scroll* s = new Scroll(lvl, 2);
 //            s->identify();
-//            add(s, scrolls);
+//            PC->inventory->add(s);
 //        }
 //    }
 
@@ -33,21 +32,6 @@ Game::~Game(){
     delete dungeon;
     delete PC;
     unrecognized_input.close();
-
-    for(auto it = loot.begin(); it != loot.end(); ++it){
-        delete *it;
-    }
-    loot.clear();
-
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-        delete *it;
-    }
-    scrolls.clear();
-
-    for(auto it = potions.begin(); it != potions.end(); ++it){
-        delete *it;
-    }
-    potions.clear();
 }
 
 void Game::run() {
@@ -103,13 +87,12 @@ bool Game::getCommand() {
     } else if(contains(input,"search") || contains(input, "loot")){
         if(!searching(input)) return true;
     } else if(input == "inventory"){
-        print_inventory();
+        PC->print_inventory();
         return true;
     } else if(contains(input, "drink") || contains(input, "potion")){
-        if(!drink_potion()) return true;
+        if(!drink_potion(input)) return true;
     } else if(contains(input, "identify") || contains(input, "inspect") || contains(input, "examine")){
-        if(loot.empty() && potions.empty()) cout << "Sorry, not sure what you're referring to there." << endl << endl;
-        else cout << "Inspecting things in that much detail takes a while. Maybe you should rest for a bit?" << endl << endl;
+        cout << "Inspecting things in that much detail takes a while. Maybe you should rest for a bit?" << endl << endl;
         return true;
     } else if(contains(input, "cast") || contains(input, "read") || contains(input, "scroll")){
         if(!cast_spell(input)) return true;
@@ -122,10 +105,6 @@ bool Game::getCommand() {
         equip_item(input);
         return true;
 
-    //switch rooms
-//    } else if(input == "open" || input == "go"){
-//        parse_open_door();
-//        return true;
     } else {
         parse_open_door(input);
         new_room = true;
@@ -163,7 +142,7 @@ void Game::rest(){
         cout << "You can't rest when there's a " << cur_room->get_active_monster() << " in the room!" << endl;
     else {
         PC->short_rest();
-        identify_items();
+        PC->identify_items();
     }
 }
 
@@ -199,18 +178,8 @@ bool Game::combat(string input)
 {
     // attack <monster> with <weapon>
     // find and equip that weapon first
-    if(contains(input, "with")){
-        bool found = false, equipped = false;
-        for(auto it = PC->weapons.begin(); it != PC->weapons.end(); ++it){
-            if(contains(input, (*it)->name())){
-                found = true;
-                equipped = PC->equip(*it);
-                break;
-            }
-        }
-        if(!found) cout << "That's not a weapon you can attack with." << endl << endl;
-        if(!equipped) return false;
-    }
+    if(contains(input, "with"))
+        equip_item(input);
 
     ///@TODO multi-monster support
     ///@TODO add more options here
@@ -247,11 +216,7 @@ bool Game::searching(string input){
     //search a single monster
     ///TODO multi-monster support
     if(contains(input, cur_room->get_monster()) || input == "loot"){
-        if(cur_room->monsters[0]->search_monster(true)){
-            rollIndividualTreasure(cur_room->monsters[0]->full_name());
-            return true;
-        }
-        return false;
+        return PC->search_monster(cur_room->monsters[0], true);
 
     //search the whole room
     // Default option (just "search" will go here")
@@ -265,21 +230,15 @@ bool Game::searching(string input){
 
         //search monster corpses
         for(int i = 0; i < MAX_MONSTERS && cur_room->monsters[i] != NULL; i++){
-            if(cur_room->monsters[i]->search_monster(false)){
-                rollIndividualTreasure(cur_room->monsters[0]->full_name());
+            if(PC->search_monster(cur_room->monsters[0], false))
                 found_small = true;
-            }
         }
 
         //search for treasure
         if((cur_room->has_treasure() || dungeon->treasure_enabled() == "ALWAYS")
            && !(dungeon->treasure_enabled() == "NEVER")
            && PC->skill_check("INVESTIGATION") > FIND_TREASURE_DC){
-
-//            cout << "You find a treasure hoard!" << endl;
-//            rollTreasureHoard();
-            roll_adjusted_treasure(cur_room->treasure_amount());
-            cur_room->loot_room();
+            cur_room->loot(PC);
             found = true;
         }
 
@@ -295,123 +254,3 @@ bool Game::searching(string input){
 }
 
 
-
-void Game::drink_potion(int index){
-    potions.at(index)->use(PC);
-
-    if(potions.at(index)->quantity == 0){
-        delete potions.at(index);
-        potions.erase(potions.begin()+index);
-    }
-}
-
-Scroll* Game::select_scroll(){
-    bool flag = true;
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-        if((*it)->is_identified()){
-            if(flag){
-                cout << "Choose which scroll you would like to cast, or enter 'cancel' to exit this menu." << endl;
-                flag = false;
-            }
-            cout << "\t- " << (*it)->name() << endl;
-        }
-    }
-    if(flag){
-        cout << "You can't cast a scroll you haven't identified. You can attempt to identify them while you rest." << endl;
-        return NULL;
-    }
-
-    cout << endl;
-    string input;
-    read(input);
-
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-        if((*it)->is_identified() && (contains(input, (*it)->name()))){
-           return (Scroll*) *it;
-        }
-    }
-    return NULL;
-
-}
-
-//returns true iff a spell was cast
-bool Game::cast_spell(string input){
-    if(scrolls.empty()){
-        cout << "You have no scrolls from which to cast." << endl << endl;
-        return false;
-    }
-
-    Scroll* to_cast = NULL;
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-        if(contains(input, (*it)->name()) && (*it)->is_identified()){
-            to_cast = (Scroll*) *it;
-            break;
-        }
-    }
-
-    if(!to_cast)
-        to_cast = select_scroll();
-
-    if(!to_cast)
-        return false;
-
-    if(to_cast->targets_enemy() && !cur_room->has_monsters()){
-        cout << "There are no enemies in the room to cast that at." << endl << endl;
-        return false;
-    }
-
-    to_cast->use(PC, cur_room->get_active_monster_char());
-    cout << "The scroll crumbles to dust as the magic leaves it." << endl << endl;
-    //cout << "$$ HAS LONGSTRIDER=" << PC->is("buffed by longstrider") << endl;
-    if(to_cast->quantity == 0){
-        for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-            if((*it)->quantity == 0){
-                delete *it;
-                scrolls.erase(it);
-                break;
-            }
-        }
-    }
-    //cout << "$$ HAS LONGSTRIDER=" << PC->is("buffed by longstrider") << endl;
-    return true;
-}
-
-
-
-//returns true iff you drank a potion
-bool Game::drink_potion(){
-    if(potions.empty()){
-        cout << "You have no potions to drink!" << endl;
-        return false;
-    }
-    string input;
-    if(potions.size() == 1){
-        cout << "Drink the " << potions.front()->get_description() << "? [y/n] (" << potions.front()->quantity << " in inventory)" << endl;
-
-        read(input);
-        if(input == "y"){
-            drink_potion(0);
-            return true;
-        } else {
-            cout << "Alright, what do you want to do instead?" << endl;
-            return false;
-        }
-
-    } else {
-        char inputChar;
-        do {
-            cout << "Which potion?" << endl;
-            char idx = 'A';
-            for(auto it = potions.begin(); it != potions.end(); ++it){
-                cout << "\t(" << idx << "): ";
-                cout << (*it)->get_description() << endl;
-                idx++;
-            }
-            cout << endl;
-            cin.get(inputChar);
-        } while((unsigned)(inputChar - 'A') > potions.size());
-
-        drink_potion(inputChar-'A');
-        return true;
-    }
-}

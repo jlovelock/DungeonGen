@@ -4,6 +4,8 @@
 
 #include <character.h>
 
+class Monster;
+
 class PlayerChar : public Character {
 
     std::string PC_class;
@@ -46,6 +48,7 @@ public:
     void print_status();
 
     void action_on_kill(Character*);
+    bool search_monster(Monster* m, bool print_err_msgs);
 };
 
 

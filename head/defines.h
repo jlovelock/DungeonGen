@@ -78,11 +78,6 @@ std::string to_string(int dir); //converts NORTH to "north", eg
 #define TARGET_START_TURN 303030
 #define TARGET_END_TURN 404040
 
-//treasure
-#define NO_TREASURE 2562555
-#define FULL_TREASURE 988763
-#define INCIDENTAL_TREASURE 51514343
-
 ///TODO SET THESE
 #define LOCKPICK_DC 0
 #define SECRET_DOOR_DC 0

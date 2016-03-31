@@ -1,14 +1,28 @@
 
 #include <limits.h>
 #include <pc.h>
+#include <monster.h>
+#include <inventory.h>
 
 using namespace std;
 
 
-void PlayerChar::short_rest(){
-    //sanity check -- this function is just for PCs
-    //if(is_monster) return;
+bool PlayerChar::search_monster(Monster* m, bool print_err_msgs){
+    if(m->is_alive()){
+        if(print_err_msgs) cout << "You can't do that while it's still alive!" << endl;
+        return false;
+    } else if (m->was_looted()){
+        if(print_err_msgs) cout << "You've already done that." << endl;
+        return false;
+    } else {
+        inventory->transfer(m->inventory, m->full_name());
+        m->mark_as_looted();
+        return true;
+    }
+}
 
+
+void PlayerChar::short_rest(){
     if(hit_dice > 0){
         cout << "You may spend any number of your remaining hit dice; each will restore 1d" << hit_die_size << "+" << attribute_mods["CON"] << " hp." << endl;
         cout << " You have " << hit_dice << " hit ";
@@ -129,6 +143,7 @@ void PlayerChar::special_action(){
             return;
         } else {
             cout << "Input not recognized. Try again?" << endl;
+            unrecognized_input << "(in special menu: ) " << input << endl;
         }
     } while (true);
 

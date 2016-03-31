@@ -25,15 +25,13 @@ class Game {
     void roll_adjusted_treasure(bool);
     std::vector<Treasure*> loot, potions, scrolls;
     int cp, sp, ep, gp, pp;
-    void print_inventory();
 
-    void equip_item(std::string);
+    bool equip_item(std::string);
     void rest();
     void look(std::string);
     bool searching(std::string);
     bool combat(std::string);
-    bool drink_potion();
-    void drink_potion(int index);
+    bool drink_potion(std::string);
     bool has_unidentified_items();
     void identify_items();
     bool cast_spell(std::string);
