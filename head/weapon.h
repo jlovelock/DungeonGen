@@ -7,6 +7,7 @@
 #include <iostream>
 
 class Weapon : public Object {
+    friend class Monster;
 
   public:
     Weapon(){ /* This keeps getting called by the weapon select map thing. It shouldn't be. TODO Debug */ }

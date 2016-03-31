@@ -192,3 +192,15 @@ void Character::identify_items(){
     if(!item_identified) cout << "Unfortunately, you are unable to identify anything." << endl;
     cout << endl;
 }
+
+bool Character::is_encumbered(){
+    return inventory->weight() > 5*attribute_scores["STR"];
+}
+
+bool Character::is_heavily_encumbered(){
+    return inventory->weight() > 10*attribute_scores["STR"];
+}
+
+bool Character::is_overencumbered(){
+    return inventory->weight() > 15*attribute_scores["STR"];
+}

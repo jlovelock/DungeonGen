@@ -53,6 +53,8 @@ public:
     bool is_empty();
     bool has_unidentified_items();
     int num_unidentified_scrolls();
+
+    float weight();
 };
 
 

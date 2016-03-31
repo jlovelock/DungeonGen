@@ -152,6 +152,9 @@ class Character {
 
         void identify_items();
         void identify_items(std::vector<Object*>, bool&);
+        bool is_encumbered();
+        bool is_heavily_encumbered();
+        bool is_overencumbered();
 };
 
 

@@ -16,6 +16,13 @@ int d10() { return rand()%10+1; }
 int d12() { return rand()%12+1; }
 int d20(){ return rand()%20+1; }
 int d100() { return rand()%100+1; }
+int d20(string mode){
+    int x = d20(), y = d20();
+    if(mode == "disadvantage")
+        return (x < y ? x : y);
+    else
+        return (x > y ? x : y);
+}
 
 int num_digits(int x){
     int n = 0;

@@ -28,6 +28,7 @@ class Object{
         std::string type(){ return _type; }
         bool is_lootable(){ return _lootable; }
         void set_lootable(){ _lootable = true; }
+        int weight(){ return _weight; }
 
         virtual void identify();
 
@@ -41,6 +42,7 @@ class Object{
         bool _lootable;
 
         int _value; //in gp; anything <1gp is free
+        float _weight; //in lbs
 
         bool identified;
         bool consumable;

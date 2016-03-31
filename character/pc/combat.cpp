@@ -41,6 +41,9 @@ void PlayerChar::generic_attack(Character* opponent){
     } if(opponent->is("paralyzed")){
         cout << "Paralyzed, he can't stop you from lining up a devastating blow!" << endl;
         has_advantage = true;
+    } if(is_heavily_encumbered()){
+        cout << "However, you struggle to attack while carrying such a heavy pack." << endl;
+        has_disadvantage = true;
     }
 
     if(has_advantage && !has_disadvantage)

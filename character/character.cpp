@@ -43,6 +43,10 @@ int Character::skill_check(std::string skill){
 }
 
 int Character::attribute_chk(std::string att){
+    if(is_heavily_encumbered() && (att == "STR" || att == "DEX" || att == "CON")){
+        cout << "The crushing weight of your pack on your back makes it difficult for you to execute smoothly." << endl;
+        return d20("disadvantage") + attribute_mods[att];
+    }
     return d20() + attribute_mods[att];
 }
 
@@ -52,6 +56,10 @@ int Character::save(string stat){
         if(is_monster) cout << "he is"; else cout << "you are";
         cout << " entirely unable to avoid the effect." << endl;
         return 0;
+    }
+    if(is_heavily_encumbered() && (stat == "STR" || stat == "DEX" || stat == "CON")){
+        cout << "The crushing weight of your pack on your back makes it difficult for you to keep steady." << endl;
+        return d20("disadvantage") + save_mods[stat];
     }
     return d20() + save_mods[stat];
 }
@@ -63,6 +71,30 @@ void Character::start_turn(bool quiet){
 void Character::end_turn(bool quiet){
     if(DEBUG) cout << "EOT: " << name() << "...";
     update_conditions(false, quiet);
+
+    bool looped = false;
+
+    ///TODO: drop on floor of room instead of destroying!
+    while(is_overencumbered()){
+        if(!looped){
+            cout << "You are overencumbered [" << inventory->weight() << " of " << attribute_scores["STR"]*15 << "! Inventory:" << endl;
+            inventory->print(this);
+            looped = true;
+        } else {
+            cout << "You are still overencumbered [" << inventory->weight() << " of " << attribute_scores["STR"]*15 << "!" << endl;
+        }
+        cout << "Which item to destroy?" << endl;
+        string input;
+        read(input);
+        Object* o = inventory->get_item(input);
+        if(!o) continue;
+        cout << o->name() << " destroyed." << endl << endl;
+        inventory->remove(o);
+        delete o;
+    }
+    if(is_heavily_encumbered()) cout << "You are heavily encumbered. You may want to drop some items." << endl;
+    else if(is_encumbered()) cout << "You are encumbered. You may want to drop some items." << endl;
+
     if(DEBUG) cout << "done" << endl;
 }
 

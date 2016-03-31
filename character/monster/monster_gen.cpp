@@ -18,14 +18,12 @@ Monster::Monster(double CR) : Character(){
     prof = 2;
     inventory->set_monster_treasure(CR);
 
-    spawn_cultist(1);
-
-//    int n = rand()%3;
-//    switch(n){
-//        case 0: spawn_giant_rat(1); break;
-//        case 1: spawn_cultist(1); break;
-//        case 2: spawn_poisonous_snake(1); break;
-//    }
+    int n = rand()%3;
+    switch(n){
+        case 0: spawn_giant_rat(1); break;
+        case 1: spawn_cultist(1); break;
+        case 2: spawn_poisonous_snake(1); break;
+    }
     cur_hp = max_hp;
     temp_hp = 0;
 }
@@ -70,6 +68,7 @@ void Monster::spawn_cultist(int group_size){
 
     Weapon* w = new Weapon("scimitar","3/1d6+1 piercing");
     w->set_lootable();
+    w->_weight = 3;
     inventory->add(w);
     main_hand = w;
     off_hand = NULL;

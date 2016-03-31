@@ -9,6 +9,7 @@ Potion::Potion(std::string name, std::string _rarity, int num) : Treasure("potio
     rarity = _rarity;
     _name = name;
     _description = name;
+    _weight = 0.5; //PHB p150
 
     if(is_healing){
         rarity == "common" ? _description = "red, glimmering" : _description = "deep red, glimmering";

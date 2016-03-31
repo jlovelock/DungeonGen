@@ -21,6 +21,7 @@ Object::Object(){
     _id = max_id++;
 
     _value = 0;
+    _weight = 0;
     identified = true;
     consumable = false;
     _is_weapon = false;
@@ -36,6 +37,7 @@ Object::Object(string name){
     _id = max_id++;
 
     _value = 0;
+    _weight = 0;
     identified = true;
     consumable = false;
     _is_weapon = false;
@@ -45,6 +47,8 @@ Object::Object(string name){
     _type = "object";
     quantity = 1;
     _lootable = true;
+
+    if(name == "shield") _weight = 6;
 }
 
 void Object::identify(){

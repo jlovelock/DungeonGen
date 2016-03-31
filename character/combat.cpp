@@ -18,10 +18,6 @@ int Character::AC(){
 }
 
 
-
-
-
-
 bool Character::in_melee_with(Character* opponent){
     return     xPos - opponent->xPos <= 5
             && xPos - opponent->xPos >= -5
@@ -32,6 +28,8 @@ bool Character::in_melee_with(Character* opponent){
 int Character::adjusted_speed(){
     int modifiers = 0;
     if(is("buffed by longstrider")) modifiers += 10;
+    if(is_heavily_encumbered()) modifiers -= 20;
+    else if(is_encumbered()) modifiers -= 10;
 
     return speed + modifiers;
 }

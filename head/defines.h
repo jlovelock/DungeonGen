@@ -11,6 +11,7 @@ int d8();
 int d10();
 int d12();
 int d20();
+int d20(std::string mode);
 int d100();
 int opposite(int wall);
 int left(int wall);

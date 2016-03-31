@@ -615,3 +615,20 @@ bool Inventory::has_unidentified_items(){
 
     return false;
 }
+
+float Inventory::weight(){
+    float w = (cp + sp + ep + gp + pp)/50;
+    for(auto it = misc.begin(); it != misc.end(); ++it){
+        w += (*it)->weight();
+    }
+    for(auto it = potions.begin(); it != potions.end(); ++it){
+        w += (*it)->weight();
+    }
+    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
+        w += (*it)->weight();
+    }
+    for(auto it = weapons.begin(); it != weapons.end(); ++it){
+        w += (*it)->weight();
+    }
+    return w;
+}

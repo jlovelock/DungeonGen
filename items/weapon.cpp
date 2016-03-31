@@ -58,6 +58,7 @@ Weapon::Weapon(string name): Object(name){
         _2h = true;
         _heavy = true;
         _value = 30;
+        _weight = 7;
     }
 
     else if(name == "hand crossbow"){
@@ -68,6 +69,7 @@ Weapon::Weapon(string name): Object(name){
         _light = true;
         _range = 30;
         _value = 75;
+        _weight = 3;
     }
 
     else if(name == "longbow"){
@@ -79,6 +81,7 @@ Weapon::Weapon(string name): Object(name){
         _heavy = true;
         _range = 150;
         _value = 50;
+        _weight = 2;
     }
 
     else if(name == "rapier"){
@@ -88,6 +91,7 @@ Weapon::Weapon(string name): Object(name){
         _martial = true;
         _finesse = true;
         _value = 25;
+        _weight = 2;
     }
 
     else if(name == "longsword"){
@@ -97,6 +101,7 @@ Weapon::Weapon(string name): Object(name){
         _martial = true;
         _versatile = true;
         _value = 15;
+        _weight = 3;
     }
 
     else if(name == "shortsword"){
@@ -107,6 +112,7 @@ Weapon::Weapon(string name): Object(name){
         _light = true;
         _finesse = true;
         _value = 10;
+        _weight = 2;
     }
 
     else if(name == "handaxe"){
@@ -117,6 +123,7 @@ Weapon::Weapon(string name): Object(name){
         _range = 20;
         _thrown = true;
         _value = 5;
+        _weight = 2;
     }
 
 }
