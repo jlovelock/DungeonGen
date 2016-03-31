@@ -22,12 +22,12 @@ int Spell::damage(){
 
 void Spell::cast(Character* caster, Character* target){
 
-    bool is_PC = !caster->is_monster;
+    bool is_PC = caster->is_PC();
     int dmg = damage();
 
     // specifics
-    if(_name == "hold person" && target->race != "humanoid"){
-        cout << "The spell fails: hold PERSON can't affect a " << target->race << "." << endl;
+    if(_name == "hold person" && target->get_race() != "humanoid"){
+        cout << "The spell fails: hold PERSON can't affect a " << target->get_race() << "." << endl;
         return;
     }
 
@@ -69,7 +69,7 @@ void Spell::cast(Character* caster, Character* target){
 
     // Check specific cases
     if(_name == "armor of agathys"){
-        target->temp_hp += 5*level;
+        target->gain_temp_hp(5*level);
     }
 
     cout << endl;

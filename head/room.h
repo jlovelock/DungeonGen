@@ -111,6 +111,11 @@ public:
 
     int get_id() { return id; }
 
+    int north(){ return northEdge; }
+    int south(){ return southEdge; }
+    int east(){ return eastEdge; }
+    int west(){ return westEdge; }
+
 };
 
 #endif // ROOM_H

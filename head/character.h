@@ -17,9 +17,6 @@ class Condition;
 class Inventory;
 
 class Character {
-    friend class Dungeon;
-    friend class Room;
-    friend class Spell;
     friend class Object;
 
     protected:
@@ -31,7 +28,6 @@ class Character {
         bool is_monster;
         int prof;
         int speed;
-        int adjusted_speed();
         int xp;
 
         //Special
@@ -60,14 +56,12 @@ class Character {
         bool in_melee;
 
         int _AC;
-        int max_hp, cur_hp;
+        int max_hp, cur_hp, temp_hp;
         int hit_dice, hit_die_size;
         int init;
 
         //Spellcasting
         std::string casting_stat;
-        int spell_attack();
-        int spell_save_DC();
         bool within_range(Character* target, Spell* spell);
         Spell* concentrating_on;
 
@@ -94,6 +88,7 @@ class Character {
         int skill_check(std::string skill);
         int attribute_chk(std::string att);
         bool has_fighting_style(std::string);
+        bool proficient_with(std::string weapon_type);
 
         //Combat functions
         virtual void attack(Character*, int, int) {}
@@ -103,21 +98,16 @@ class Character {
         int save(std::string stat);
         int AC();
 
+        /* HP and Damage */
         void take_damage(int dmg);
         bool is_alive(){ return cur_hp > 0; }
         bool is_injured(){ return cur_hp < max_hp; }
         void heal(int hp);
+        void adjust_for_resistances(int& dmg, std::string dtype);
+        int has_temp_hp(){ return temp_hp > 0; }
+        void gain_temp_hp(int n){ if(temp_hp < n) temp_hp = n; }
 
-        //Equipment
-
-        Inventory* inventory;
-        void print_inventory();
-        bool equip(Object*, bool equip_to_offhand=false);
-        std::string equipped_weapon_type();
-        bool has_free_hand(){ return main_hand == NULL || off_hand == NULL; }
-        bool proficient_with(std::string weapon_type);
-
-        //Positioning
+        /* Positioning */
         std::pair<int, int> get_position();
         void set_position(int, int);
         void move_position(int, int);
@@ -128,12 +118,14 @@ class Character {
         virtual std::string name() { return ""; }
         virtual std::string full_name() { return ""; }
 
-        void cast(Spell* spell, Character* target);
+        //void cast(Spell* spell, Character* target);
 
         int get_xp(){ return xp; }
         virtual void action_on_kill(Character*) {}
 
+        /* Conditions */
         void add_condition(Condition*);
+        void remove_condition(std::string, bool quiet=false);
         void cause_condition(Condition*);
         bool is(std::string);
 
@@ -142,19 +134,29 @@ class Character {
         void start_turn(bool quiet=false);
         void end_turn(bool quiet=false);
 
-        void adjust_for_resistances(int& dmg, std::string dtype);
-        int temp_hp;
-        void remove_condition(std::string, bool quiet=false);
 
-        bool concentrating(){ return concentrating_on != NULL; }
-        void drop_concentration();
-        void concentrate_on(Spell* s){ drop_concentration(); concentrating_on = s;}
-
+        /* Items and Equipment */
+        Inventory* inventory;
+        void print_inventory();
         void identify_items();
         void identify_items(std::vector<Object*>, bool&);
         bool is_encumbered();
         bool is_heavily_encumbered();
         bool is_overencumbered();
+        bool equip(Object*, bool equip_to_offhand=false);
+        std::string equipped_weapon_type();
+        bool has_free_hand(){ return main_hand == NULL || off_hand == NULL; }
+
+        std::string get_race(){ return race; }
+        int adjusted_speed();
+
+        /* Spellcasting */
+        int spell_attack();
+        int spell_save_DC();
+        bool concentrating(){ return concentrating_on != NULL; }
+        void drop_concentration();
+        void concentrate_on(Spell* s){ drop_concentration(); concentrating_on = s;}
+
 };
 
 

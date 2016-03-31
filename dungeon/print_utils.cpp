@@ -35,7 +35,7 @@ void Dungeon::print_map(pair<int,int> POI){
         }
         for(int i = 0; i < MAX_MONSTERS && (*it)->monsters[i] != NULL; i++){
             if((*it)->monsters[i]->is_alive())
-                grid[(*it)->monsters[i]->xPos/5][(*it)->monsters[i]->yPos/5] = MONSTER;
+                grid[(*it)->monsters[i]->get_position().first/5][(*it)->monsters[i]->get_position().second/5] = MONSTER;
         }
     }
 

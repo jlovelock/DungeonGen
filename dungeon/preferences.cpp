@@ -113,13 +113,14 @@ void Dungeon::edit_preferences(){
     cout << "\tMagic items: " << mag_it << endl;
     cout << endl;
 
-    cout << "Enter the setting you'd like to change, or 'cancel' to go back to the previous menu." << endl;
+    cout << "Enter the setting you'd like to change, or 'back' to return to the previous menu." << endl;
     string input;
     read(input);
 
+    if(contains(input, "back")) return;
+
     if(contains(input, "dungeon") || contains(input, "type")){
         cout << "Sorry, only the STRONGHOLD dungeon type is supported at this time." << endl;
-        return;
     } else if(contains(input, "monster")){
         cout << "Monsters ON or OFF? " << endl;
         read(input);
@@ -133,7 +134,6 @@ void Dungeon::edit_preferences(){
             cout << "Error, unrecognized input." << endl;
             unrecognized_input << "(in settings menu: ) " << input << endl;
         }
-        return;
     } else if(contains(input, "treasure")){
         cout << "Treasure spawning: RANDOM, ALWAYS, or NEVER?" << endl;
         read(input);
@@ -166,6 +166,8 @@ void Dungeon::edit_preferences(){
             cout << "Input not recognized." << endl;
             unrecognized_input << "(in magic item settings: ) " << input << endl;
         }
-    }
+    } else cout << "Input not recognized." << endl;
+    cout << endl;
     write_preferences();
+    edit_preferences();
 }

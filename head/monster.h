@@ -5,6 +5,7 @@
 #include <character.h>
 
 class Character;
+class Room;
 
 class Monster : public Character {
 
@@ -23,6 +24,8 @@ public:
 
     void generic_attack(Character*);
     void attack(Character* opponent, int attack_roll, int dmg);
+
+    void set_position_in(Room*);
 
 //    bool search_monster(bool print_err_msgs=false);
     bool was_looted(){ return searched; }

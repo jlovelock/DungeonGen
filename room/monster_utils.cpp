@@ -21,7 +21,7 @@ bool Room::has_monsters(){
 
 Monster* Room::get_monster(string name){
     for(int i = 0; i < MAX_MONSTERS && monsters[i] != NULL; i++){
-        if(contains(name, monsters[i]->name()) || contains(name, monsters[i]->race))
+        if(contains(name, monsters[i]->name()) || contains(name, monsters[i]->get_race()))
             return monsters[i];
     }
     return NULL;

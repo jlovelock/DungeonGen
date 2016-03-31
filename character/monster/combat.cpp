@@ -69,7 +69,7 @@ void Monster::generic_attack(Character* opponent){
             int x = 5;
             adjust_for_resistances(x, "cold");
             take_damage(x);
-            if(opponent->temp_hp == 0){
+            if(!opponent->has_temp_hp()){
                 opponent->remove_condition("enchanted with armor of agathys");
             }
             if(!is_alive()) opponent->action_on_kill(this);
