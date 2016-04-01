@@ -22,6 +22,7 @@ void convert_to_lowercase(std::string& input);
 bool is_vowel(char);
 bool in_list(std::string, std::string[]);
 int num_digits(int);
+int extract_num_from_string(std::string);
 void run_all_tests();
 
 extern bool test_mode;
@@ -65,6 +66,7 @@ std::string to_string(int dir); //converts NORTH to "north", eg
 #define GRID_SIZE 30
 #define TEST_REPETITION 10
 #define DEBUG (0 || test_mode)
+#define NOT_FOUND 5676567
 
 #define NORTH 100
 #define SOUTH 200

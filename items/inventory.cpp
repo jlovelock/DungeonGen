@@ -101,60 +101,42 @@ void Inventory::add(Object* o){
     else if(o->type() == "potion")  potions.push_back((Potion*)o);
     else if(o->type() == "scroll")  scrolls.push_back((Scroll*)o);
     else                               misc.push_back(o);
-
-//    if(is_vowel(o->get_description().at(0)))
-//        cout << "You find an " << o->get_description() << "." << endl;
-//    else
-//        cout << "You find a " << o->get_description() << "." << endl;
 }
 
-/// Todo: clean up all this junk repeated code!!
+
+vector<Object*> Inventory::all(){
+    vector<Object*> v;
+    for(auto it = potions.begin(); it != potions.end(); ++it)
+        v.push_back(*it);
+    for(auto it = scrolls.begin(); it != scrolls.end(); ++it)
+        v.push_back(*it);
+    for(auto it = weapons.begin(); it != weapons.end(); ++it)
+        v.push_back(*it);
+    for(auto it = misc.begin(); it != misc.end(); ++it)
+        v.push_back(*it);
+    return v;
+}
+
+/// Todo: clean up junk repeated code!!
 void Inventory::transfer(Inventory* i, string name){
     stringstream ss;
     vector<string> found;
-    for(auto it = i->weapons.begin(); it != i->weapons.end(); it = i->weapons.erase(it)){
+    vector<Object*> to_add = i->all();
+    for(auto it = to_add.begin(); it != to_add.end(); it = to_add.erase(it)) {
         if(!(*it)->is_lootable()) continue;
         if(get_item((*it)->name()) != NULL)                 ss << "another ";
         else if(is_vowel((*it)->get_description().at(0)))   ss << "an ";
         else                                                ss << "a ";
-        ss << (*it)->get_description();
+        ss << (*it)->get_description_with_article();
         found.push_back(ss.str());
         ss.str("");
         add(*it);
     }
 
-    for(auto it = i->potions.begin(); it != i->potions.end(); it = i->potions.erase(it)){
-        if(!(*it)->is_lootable()) continue;
-        if(get_item((*it)->name()) != NULL)                 ss << "another ";
-        else if(is_vowel((*it)->get_description().at(0)))   ss << "an ";
-        else                                                ss << "a ";
-        ss << (*it)->get_description();
-        found.push_back(ss.str());
-        ss.str("");
-        add(*it);
-    }
-
-    for(auto it = i->scrolls.begin(); it != i->scrolls.end(); it = i->scrolls.erase(it)){
-        if(!(*it)->is_lootable()) continue;
-        if(get_item((*it)->name()) != NULL)                 ss << "another ";
-        else if(is_vowel((*it)->get_description().at(0)))   ss << "an ";
-        else                                                ss << "a ";
-        ss << (*it)->get_description();
-        found.push_back(ss.str());
-        ss.str("");
-        add(*it);
-    }
-
-    for(auto it = i->misc.begin(); it != i->misc.end(); it = i->misc.erase(it)){
-        if(!(*it)->is_lootable()) continue;
-        if(get_item((*it)->name()) != NULL)                 ss << "another ";
-        else if(is_vowel((*it)->get_description().at(0)))   ss << "an ";
-        else                                                ss << "a ";
-        ss << (*it)->get_description();
-        found.push_back(ss.str());
-        ss.str("");
-        add(*it);
-    }
+    i->weapons.clear();
+    i->potions.clear();
+    i->scrolls.clear();
+    i->misc.clear();
 
     if(i->cp > 0){
         cp += i->cp;
@@ -259,7 +241,7 @@ void Inventory::roll_full_treasure(){
 }
 
 // Does not delete the object! (In case you want to add it to another's inventory.)
-void Inventory::remove(Object* o){
+Object* Inventory::remove(Object* o){
     vector<Object*> v;
          if(o->type() == "weapon")  v.assign( weapons.begin(), weapons.end() );
     else if(o->type() == "potion")  v.assign( potions.begin(), potions.end() );
@@ -272,26 +254,34 @@ void Inventory::remove(Object* o){
             else if(o->type() == "potion")  potions.erase( potions.begin()+i );
             else if(o->type() == "scroll")  scrolls.erase( scrolls.begin()+i );
             else                               misc.erase(    misc.begin()+i );
-            return;
+            return o;
         }
     }
     cout << o->name() << " not found in inventory." << endl;
 }
 
-Object* Inventory::get_item(string input){
-    for(auto it = weapons.begin(); it != weapons.end(); ++it){
-        if(contains(input, (*it)->name()) || contains(input, (*it)->get_description()) || contains((*it)->get_description(), input)) return *it;
+/* Returns the object that was just removed. */
+Object* Inventory::remove(Object* o, int num){
+    if(!o) return NULL;
+    if(num < o->get_quantity()){
+        Object* split = o->clone();
+        split->set_quantity(num);
+        o->set_quantity(o->get_quantity()-num);
+        return split;
+    } else {
+        remove(o);
+        return o;
     }
-    for(auto it = potions.begin(); it != potions.end(); ++it){
-        if(contains(input, (*it)->name()) || contains(input, (*it)->get_description()) || contains((*it)->get_description(), input)) return *it;
-    }
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-        if(contains(input, (*it)->name()) || contains(input, (*it)->get_description()) || contains((*it)->get_description(), input)) return *it;
-    }
-    for(auto it = misc.begin(); it != misc.end(); ++it){
-        if(contains(input, (*it)->name()) || contains(input, (*it)->get_description()) || contains((*it)->get_description(), input)) return *it;
-    }
+}
 
+Object* Inventory::get_item(string input){
+    vector<Object*> v = all();
+    for(auto it = v.begin(); it != v.end(); ++it){
+        if( contains(input, (*it)->name()) ||
+            contains(input, (*it)->get_description()) ||
+            contains((*it)->get_description(), input) )
+                return *it;
+    }
     return NULL;
 }
 
@@ -421,6 +411,33 @@ void Inventory::set_monster_treasure(int CR){
         cout << "This monster is way too powerful holy shit. How did this happen. You get no money, sorry." << endl;
     }
 }
+
+
+int Inventory::num_unidentified_scrolls(){
+    int n = 0;
+    for(auto it = scrolls.begin(); it != scrolls.end(); ++it)
+        if(!(*it)->is_identified()) ++n;
+    return n;
+}
+
+bool Inventory::has_unidentified_items(){
+    vector<Object*> v = all();
+    for(auto it = v.begin(); it != v.end(); ++it)
+        if(!(*it)->is_identified()) return true;
+
+    return false;
+}
+
+float Inventory::weight(){
+    float w = (cp + sp + ep + gp + pp)/50;
+    vector<Object*> v = all();
+    for(auto it = v.begin(); it != v.end(); ++it){
+        w += (*it)->weight() * (float)(*it)->get_quantity();
+    }
+    return w;
+}
+
+
 
 /// deprecated, but if ever needed again, it'll be as a part of this class.
 //void Game::roll_treasure_hoard(){
@@ -590,45 +607,3 @@ void Inventory::set_monster_treasure(int CR){
 //    }
 //
 //}
-
-
-int Inventory::num_unidentified_scrolls(){
-    int n = 0;
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it)
-        if(!(*it)->is_identified()) ++n;
-    return n;
-}
-
-bool Inventory::has_unidentified_items(){
-    for(auto it = misc.begin(); it != misc.end(); ++it){
-        if(!(*it)->is_identified()) return true;
-    }
-    for(auto it = potions.begin(); it != potions.end(); ++it){
-        if(!(*it)->is_identified()) return true;
-    }
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-        if(!(*it)->is_identified()) return true;
-    }
-    for(auto it = weapons.begin(); it != weapons.end(); ++it){
-        if(!(*it)->is_identified()) return true;
-    }
-
-    return false;
-}
-
-float Inventory::weight(){
-    float w = (cp + sp + ep + gp + pp)/50;
-    for(auto it = misc.begin(); it != misc.end(); ++it){
-        w += (*it)->weight();
-    }
-    for(auto it = potions.begin(); it != potions.end(); ++it){
-        w += (*it)->weight();
-    }
-    for(auto it = scrolls.begin(); it != scrolls.end(); ++it){
-        w += (*it)->weight();
-    }
-    for(auto it = weapons.begin(); it != weapons.end(); ++it){
-        w += (*it)->weight();
-    }
-    return w;
-}

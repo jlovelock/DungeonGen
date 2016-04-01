@@ -112,6 +112,28 @@ void Spell::clr(){
     condition_save_stat = "";
 }
 
+Spell::Spell(Spell* s){
+    _name = s->_name;
+    level = s->level;
+    range = s->range;
+    casting_time = s->casting_time;
+    concentration = s->concentration;
+    beneficial = s->beneficial;
+    attack_roll_required = s->attack_roll_required;
+    save_negates = s->save_negates;
+    save_half = s->save_half;
+    save_stat = s->save_stat;
+    save_DC = s->save_DC;
+    num_damage_dice = s->num_damage_dice;
+    damage_die = s->damage_die;
+    damage_mod = s->damage_mod;
+    damage_type = s->damage_type;
+    if(s->condition) condition = new Condition(s->condition);
+    else condition = NULL;
+    condition_save = s->condition_save;
+    condition_save_stat = s->condition_save_stat;
+}
+
 Spell::Spell(){
     clr();
 }

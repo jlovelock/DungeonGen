@@ -6,6 +6,7 @@
 #include <room.h>
 #include <monster.h>
 #include <pc.h>
+#include <objects.h>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ Room* Room::connected(Door* d){
 
 
 Door* Room::get_door_on_wall(string input, bool use_first){
-    const int NOT_FOUND = -2, NEW_ROOM = -1;
+    const int NEW_ROOM = -1;
     int doorCopies = 0, doorNum = NOT_FOUND, prev_id = NOT_FOUND, cur_id = NOT_FOUND;
     for(int i = 0; i < MAX_DOORS && doors[i] != NULL; i++){
         if(contains(input, doors[i]->getWallString(this)) && !doors[i]->secret){
@@ -121,16 +122,49 @@ Room::~Room(){
         }
     }
     remove_all_monsters();
-    delete inventory;
+    delete hidden_items;
+    delete public_items;
 }
 
 ///TODO: flag object as visible (non-hidden)
-void Room::add_item(Object* o){
-    inventory->add(o);
+void Room::drop_item(Object* o){
+    public_items->add(o);
 }
 
-void Room::loot(Character* PC){
-    PC->inventory->transfer(inventory, purpose_short);
+///@TODO: be able to drop / pick up coins
+///@TODO: this feels like it should be an inventory function...
+Object* Room::pick_up_item(string input){
+    Object* o = public_items->get_item(input);
+    if(!o) return NULL;
+    int num = 0; // how many to pick up
+
+    /* get input on how many to pick up, if multiple on floor */
+    if(o->get_quantity() > 1){
+        if(contains(input, "all")) num = o->get_quantity();
+        else num = extract_num_from_string(input);
+        while(num == NOT_FOUND){
+            cout << "How many? (" << o->get_quantity() << " on the floor)" << endl;
+            read(input);
+            if(contains(input, "all"))
+                num = o->get_quantity();
+            else
+                num = extract_num_from_string(input);
+        }
+    } else {
+        num = 1;
+    }
+
+    return public_items->remove(o, num);
+}
+
+
+void Room::loot(Character* PC, bool& found, bool& found_small){
+    found_small = found_small || !public_items->is_empty();
+    PC->inventory->transfer(public_items, "the floor of the " + purpose_short);
+    if(has_treasure() && PC->skill_check("INVESTIGATION") > FIND_TREASURE_DC){
+        PC->inventory->transfer(hidden_items, purpose_short);
+        found = true;
+    }
 }
 
 bool Room::isFirstRoom(Door* door){
@@ -201,6 +235,7 @@ void Room::printDescription(int doorNum){
 
     if(DEBUG) cout << "@@ " << location() << endl;
 
+    /* Monsters */
     ///TODO multi-monster support
     if(monsters[0] != NULL){
         if(has_monsters())
@@ -209,10 +244,31 @@ void Room::printDescription(int doorNum){
             cout << "The corpse of a " << monsters[0]->full_name() << " lies on the floor." << endl; ///TODO FIXME
     }
 
+    /* Hazards */
     if(!hazard.empty()){
         cout << "Toxic " << hazard << " covers the walls." << endl;
     }
 
+    /* Dropped Items */
+    if(!public_items->is_empty()){
+        vector<Object*> on_floor = public_items->all();
+        bool plural = on_floor.size() > 1;
+
+        cout << on_floor.at(0)->get_description_with_article(true);
+        plural = plural || on_floor.at(0)->get_quantity() > 1;
+
+        for(unsigned i = 1; i < on_floor.size(); i++){
+            if(on_floor.size() > 2) cout << ",";
+            cout << " ";
+            if(i == on_floor.size()-1) cout << "and ";
+            cout << on_floor.at(i)->get_description_with_article();
+            plural = plural || on_floor.at(i)->get_quantity() > 1;
+        }
+        if(plural) cout << " are "; else cout << " is ";
+        cout << "on the floor." << endl;
+    }
+
+    /* Exits */
     cout << "There is ";
     int i;
     bool doorFound = false;

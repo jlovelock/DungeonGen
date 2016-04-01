@@ -67,6 +67,43 @@ void read(string& input){
     }
 }
 
+bool is_number(char c){
+    return
+        c == '1' ||
+        c == '2' ||
+        c == '3' ||
+        c == '4' ||
+        c == '5' ||
+        c == '6' ||
+        c == '7' ||
+        c == '8' ||
+        c == '9' ||
+        c == '0';
+}
+
+/*
+ * returns NOT_FOUND if no number was found
+ * positive #s only (entering -10 will return 10)
+ * if multiple numbers are present, returns the first one
+ * decimals are rounded ("32.5" returns 32)
+ */
+int extract_num_from_string(string s){
+    int start = NOT_FOUND, end = NOT_FOUND;
+    for(unsigned i = 0; i < s.length(); i++){
+        if(is_number(s.at(i)) && start == NOT_FOUND) {
+            start = i;
+        } else if(!is_number(s.at(i)) && start != NOT_FOUND) {
+            end = i;
+            break;
+        }
+    }
+    if(start != NOT_FOUND){
+        int len = (end == NOT_FOUND ? s.length()-start : end-start);
+        return atoi(s.substr(start, len).c_str());
+    }
+    return NOT_FOUND;
+}
+
 bool is_skill(std::string s){
     convert_to_uppercase(s);
     for(unsigned i = 0; i < skills_list.size(); i++){

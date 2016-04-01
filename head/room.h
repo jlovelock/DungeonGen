@@ -82,13 +82,15 @@ class Room {
     void remove_all_monsters();
 
     int shared_wall(Room*);
-    Inventory* inventory;
+    Inventory* hidden_items;
+    Inventory* public_items;
 
 public:
     Room();
-    bool has_treasure(){ return !inventory->is_empty(); }
-    void loot(Character*);
-    void add_item(Object*);
+    bool has_treasure(){ return !hidden_items->is_empty(); }
+    void loot(Character*, bool&, bool&);
+    void drop_item(Object*);
+    Object* pick_up_item(std::string);
 
     //baddies!
     Monster* monsters[MAX_MONSTERS];

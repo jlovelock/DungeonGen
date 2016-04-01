@@ -60,6 +60,7 @@ public:
     Spell();
     Spell(std::string);  //for monster bonus dmg. Formatting example: "2d4+0 poison"
     Spell(int lvl);      //for scrolls only
+    Spell(Spell*);
     ~Spell();
     std::string name(){ return _name; }
 

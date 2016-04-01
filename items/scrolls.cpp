@@ -22,7 +22,7 @@ void Scroll::use(Character* user, Character* target){
 }
 
 Scroll::Scroll(Scroll* o) : Treasure(o) {
-    spell = o->spell; ///@TODO confirm this is okay too!
+    spell = new Spell(o->spell);
 }
 
 Object* Scroll::clone(){

@@ -4,6 +4,7 @@
 #include <character.h>
 #include <spells.h>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -39,11 +40,13 @@ Object::Object(Object* o){
 
     _value = o->_value;
     _weight = o->_weight;
+    _type = o->_type;
     identified = o->identified;
     consumable = o->consumable;
     _is_weapon = o->_is_weapon;
     _2h = o->_2h;
-    effect_on_hit = o->effect_on_hit; ///@TODO CONFIRM THIS IS OKAY
+    if(o->effect_on_hit) effect_on_hit = new Spell(o->effect_on_hit);
+    else effect_on_hit = NULL;
     rarity = o->rarity;
     _lootable = o->_lootable;
     quantity = o->quantity;
@@ -71,6 +74,21 @@ Object::Object(string name){
     _lootable = true;
 
     if(name == "shield") _weight = 6;
+}
+
+string Object::get_description_with_article(bool capitalized){
+    if(quantity > 1){
+        stringstream ss;
+        ss << quantity << " " << get_description(true);
+        return ss.str();
+    } else {
+        if(is_vowel(get_description().at(0)))
+            if(capitalized) return "An " + get_description();
+            else return "an " + get_description();
+        else
+            if(capitalized) return "A " + get_description();
+            else return "a " + get_description();
+    }
 }
 
 void Object::identify(){

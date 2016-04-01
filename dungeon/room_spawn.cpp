@@ -97,14 +97,14 @@ void Dungeon::link_all_doors(Room* new_room){
 ///TODO -- magic items "never"
 void Dungeon::modify_contents(Room* r){
     if(treasure_enabled() == "NEVER"){
-        r->inventory->clear();
+        r->hidden_items->clear();
 
     } else if(magic_items_enabled() == "ALWAYS"){
-        r->inventory->clear();
-        r->inventory->add(magic_item('A'));
+        r->hidden_items->clear();
+        r->hidden_items->add(magic_item('A'));
 
     } else if(treasure_enabled() == "ALWAYS" && !r->has_treasure()){
-        r->inventory->roll_full_treasure();
+        r->hidden_items->roll_full_treasure();
     }
 }
 

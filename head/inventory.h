@@ -26,6 +26,7 @@ public:
     ~Inventory();
     void clear();
 
+    std::vector<Object*> all();
     std::vector<Potion*> potion_vector(){ return potions; }
     std::vector<Scroll*> scroll_vector(){ return scrolls; }
     std::vector<Weapon*> weapon_vector(){ return weapons; }
@@ -39,7 +40,8 @@ public:
     void add(Object*);
     void add_coins(int n, std::string type);
     void transfer(Inventory*, std::string); //parameter inventory emptied, xfer'd to caller
-    void remove(Object*);
+    Object* remove(Object*);
+    Object* remove(Object*, int);
 
     Weapon* weapon_select(int distance);
     Object* get_item(std::string);

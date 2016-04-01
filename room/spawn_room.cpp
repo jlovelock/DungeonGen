@@ -5,21 +5,6 @@
 
 using namespace std;
 
-
-/////TODO place exits appropriately (ie not all south doors should be on top of each other!)
-//void Room::setExits(int entrance, bool large){
-//    int numExits = rollExits(large);
-//
-//    ///TODO some sort of sorting? (Don't want to say "door on the east, north, and east")
-//    for(int i = 1; i < MAX_DOORS; i++){
-//        if(i < numExits){
-//            doors[i] = new Door(this, entrance);
-//        }
-//        else
-//            doors[i] = NULL;
-//    }
-//}
-
 ///For creating the starting area only!!
 Room::Room(){
     max_id = 0;
@@ -29,7 +14,8 @@ Room::Room(){
     }
 
     setPurpose("STRONGHOLD"); ///@TODO specify based on preferences
-    inventory = new Inventory;
+    hidden_items = new Inventory;
+    public_items = new Inventory;
 
     int x = d10();
     switch(x){
@@ -87,17 +73,17 @@ void Room::set_contents(){
         monsters[0] = new Monster(0);
     } else if(x < 16){
         monsters[0] = new Monster(0);
-        inventory->roll_full_treasure();
+        hidden_items->roll_full_treasure();
     } else if(x < 28){
         ///pet or allied creature
     } else if(x < 34){
         ///pet or allied creature
-        inventory->roll_full_treasure();
+        hidden_items->roll_full_treasure();
     } else if(x < 43){
         monsters[0] = new Monster(0);
     } else if(x < 51){
         monsters[0] = new Monster(0);
-        inventory->roll_full_treasure();
+        hidden_items->roll_full_treasure();
     } else if(x < 59){
         int y = d20();
         if(y < 4) hazard = "brown mold";
@@ -106,14 +92,14 @@ void Room::set_contents(){
         else if(y < 16) hazard = "spiderwebs";
         else if(y < 18) hazard = "violet fungus";
         else hazard = "yellow mold";
-        inventory->roll_incidental_treasure();
+        hidden_items->roll_incidental_treasure();
     } else if(x < 64){
         ///obstacle
     } else if(x < 74){
         ///trap
     } else if(x < 77){
         ///trap
-        inventory->roll_full_treasure();
+        hidden_items->roll_full_treasure();
     } else if(x < 81){
         ///trick
     } else if(x > 88 && x < 95){
@@ -125,7 +111,7 @@ void Room::set_contents(){
         else if(y < 18) hazard = "violet fungus";
         else hazard = "yellow mold";
     } else {
-        inventory->roll_full_treasure();
+        hidden_items->roll_full_treasure();
     }
 }
 
@@ -136,7 +122,8 @@ void Room::generateChamber(string dungeon_type, Door* d){
         monsters[i] = NULL;
 
     //defaults
-    inventory = new Inventory;
+    hidden_items = new Inventory;
+    public_items = new Inventory;
     setPurpose(dungeon_type);
     set_contents();
 

@@ -34,6 +34,7 @@ class Object{
 
         virtual void identify();
         virtual Object* clone();
+        std::string get_description_with_article(bool capitalized=false);
 
     protected:
         std::string _name;

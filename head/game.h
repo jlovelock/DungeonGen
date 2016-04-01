@@ -21,6 +21,7 @@ class Game {
 
     bool equip_item(std::string);
     void drop_item(std::string);
+    void pick_up_item(std::string);
     void rest();
     void check_encumbrance();
     void look(std::string);

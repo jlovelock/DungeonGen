@@ -16,10 +16,10 @@ class Condition {
     int check_time; //see defines.h
     Character* target;
     bool active;
-    Condition(Condition*, Character*);
 
 public:
     Condition(std::string n, int dur, std::string check="", int dc=0, int time=TARGET_END_TURN);
+    Condition(Condition*, Character* c=NULL);
     ~Condition();
     std::string name(){ return _name; }
     bool advance(bool quiet=false);

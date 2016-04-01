@@ -13,14 +13,14 @@ Game::Game(){
     dungeon = new Dungeon();
     cur_room = dungeon->starting_room();
 
-//// ------------ Testing ---------------
-//    for(int lvl = 0; lvl <= 2; lvl++){
-//        for(int i = 0; i < 20; i++){
-//            Scroll* s = new Scroll(lvl, 2);
-//            s->identify();
-//            PC->inventory->add(s);
-//        }
-//    }
+// ------------ Testing ---------------
+    for(int lvl = 0; lvl <= 2; lvl++){
+        for(int i = 0; i < 20; i++){
+            Scroll* s = new Scroll(lvl, 2);
+            s->identify();
+            PC->inventory->add(s);
+        }
+    }
 
     unrecognized_input.open("utils/input_log.txt", ifstream::app);
     if(!unrecognized_input.is_open()) {
@@ -69,6 +69,9 @@ bool Game::getCommand() {
         return true;
     } else if(contains(input, "drop")){
         drop_item(input);
+        return true;
+    } else if(contains(input, "pick up") || contains(input, "grab")){
+        pick_up_item(input);
         return true;
 
     //combat
@@ -139,52 +142,64 @@ bool Game::getCommand() {
     return true;
 }
 
+///@TODO: be able to drop / pick up coins
+void Game::pick_up_item(string input){
+    Object* o = cur_room->pick_up_item(input);
+    if(!o) {
+        cout << "You don't see that on the floor." << endl;
+        return;
+    }
+
+    cout << o->get_quantity() << " " << o->get_description() << " added to inventory." << endl << endl;
+    PC->inventory->add(o);
+}
+
 ///@TODO: be able to drop coins
 ///@TODO: if PC has an item equipped, dropping it should unequip
 void Game::drop_item(string input){
+    /* Find item */
     Object* o = PC->inventory->get_item(input);
     if(!o){
-        cout << "Which item?" << endl;
+        cout << "Sorry, which item did you want to drop?" << endl;
         read(input);
+        o = PC->inventory->get_item(input);
     }
     if(!o) {
         cout << "You aren't carrying that item." << endl;
         return;
     }
+
+    /* Figure out how many to drop */
+    int num = NOT_FOUND;
     if(o->get_quantity() > 1){
-        cout << "How many? (" << o->get_quantity() << " in inventory)" << endl;
-        read(input);
-
-        if(contains(input, "all") || atoi(input.c_str()) >= o->get_quantity()){
-            PC->inventory->remove(o);
-            cur_room->add_item(o);
-            cout << "All " << o->get_quantity() << " " << o->get_description() << " dropped." << endl << endl;
-            if(o->is_equipped_to(PC))
-                PC->unequip(o);
-            if(o->is_equipped_to(PC)) // do it twice in case dual wielded!
-                PC->unequip(o);
-
-         //should just be stoi(input), but c++11 string functions aren't working??
-         ///@TODO: sanitize input better here!
-        } else {
-            o->set_quantity( o->get_quantity() - atoi(input.c_str()) );
-            Object* split = o->clone();
-            split->set_quantity( atoi(input.c_str()) );
-            cur_room->add_item(split);
-
-            //niche dual wielding thing, if you're wielding two swords and drop all but one, should unequip one.
-            ///@TODO: what if dual wielding two different weapons?
-            if(o->is_equipped_to(PC) && PC->equipped_weapon_type() == "dual" && o->get_quantity() == 1)
-                PC->unequip(o);
-
-            cout << split->get_quantity() << " " << split->get_description() << " dropped." << endl;
+        if(contains(input, "all")) num = o->get_quantity();
+        else num = extract_num_from_string(input);
+        while(num == NOT_FOUND){
+            cout << "How many? (" << o->get_quantity() << " in inventory)" << endl;
+            read(input);
+            if(contains(input, "all"))
+                num = o->get_quantity();
+            else
+                num = extract_num_from_string(input);
         }
     } else {
-        PC->inventory->remove(o);
-        cur_room->add_item(o);
-        if(o->is_equipped_to(PC)) PC->unequip(o);
-        cout << o->get_description() << " dropped." << endl << endl;
+        num = 1;
     }
+
+    /* Unequip if need be */
+    ///@TODO: fix minor bug here when dual wielding two different weapons
+    int num_remaining = o->get_quantity() - num;
+    if(num_remaining == 0){
+        while(o->is_equipped_to(PC)) PC->unequip(o);
+    } else if(num_remaining == 1){
+        if(PC->equipped_weapon_type() == "dual" && o->is_equipped_to(PC))
+            PC->unequip(o);
+    }
+
+    /* Drop it! */
+    Object* dropped = PC->inventory->remove(o, num);
+    cout << dropped->get_quantity() << " " << dropped->get_description() << " dropped." << endl << endl;
+    cur_room->drop_item(dropped);
 }
 
 void Game::check_encumbrance(){
@@ -303,14 +318,7 @@ bool Game::searching(string input){
                 found_small = true;
         }
 
-        //search for treasure
-        if((cur_room->has_treasure() || dungeon->treasure_enabled() == "ALWAYS")
-           && !(dungeon->treasure_enabled() == "NEVER")
-           && PC->skill_check("INVESTIGATION") > FIND_TREASURE_DC){
-            cur_room->loot(PC);
-            found = true;
-        }
-
+        cur_room->loot(PC, found, found_small);
         cur_room->search_for_secret_doors(PC, found);
 
         if(!found){

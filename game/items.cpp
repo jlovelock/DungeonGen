@@ -9,7 +9,11 @@ using namespace std;
 //TODO check if item is already equipped, being careful of items with duplicate names (ie equipping a second offhand shortsword is OK)
 bool Game::equip_item(string input){
     Object* o = PC->inventory->get_item(input);
-    return o && PC->equip(o);
+    if(!o){
+        cout << "That item is not in your inventory!" << endl;
+        return false;
+    }
+    return PC->equip(o);
 }
 
 //returns true iff you drank a potion
