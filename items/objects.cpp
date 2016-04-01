@@ -22,6 +22,7 @@ Object::Object(){
 
     _value = 0;
     _weight = 0;
+    quantity = 1;
     identified = true;
     consumable = false;
     _is_weapon = false;
@@ -29,6 +30,27 @@ Object::Object(){
     effect_on_hit = NULL;
     rarity = "mundane";
     _lootable = true;
+}
+
+Object::Object(Object* o){
+    _name = o->_name;
+    _description = o->_description;
+    _id = max_id++;
+
+    _value = o->_value;
+    _weight = o->_weight;
+    identified = o->identified;
+    consumable = o->consumable;
+    _is_weapon = o->_is_weapon;
+    _2h = o->_2h;
+    effect_on_hit = o->effect_on_hit; ///@TODO CONFIRM THIS IS OKAY
+    rarity = o->rarity;
+    _lootable = o->_lootable;
+    quantity = o->quantity;
+}
+
+Object* Object::clone(){
+    return new Object(this);
 }
 
 Object::Object(string name){
@@ -52,7 +74,7 @@ Object::Object(string name){
 }
 
 void Object::identify(){
-    cout << "\t- Your " << get_description();
+    cout << "Your " << get_description();
 
     if(quantity == 1)
         cout << " is a " << name() << " worth " << value() << " gp." << endl;

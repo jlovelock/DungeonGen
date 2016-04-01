@@ -124,6 +124,10 @@ Room::~Room(){
     delete inventory;
 }
 
+///TODO: flag object as visible (non-hidden)
+void Room::add_item(Object* o){
+    inventory->add(o);
+}
 
 void Room::loot(Character* PC){
     PC->inventory->transfer(inventory, purpose_short);

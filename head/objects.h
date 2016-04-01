@@ -11,6 +11,7 @@ class Object{
     public:
         Object(std::string name);
         Object();
+        Object(Object*);
         virtual ~Object();
         std::string name(){ return _name; }
         bool is_two_handed(){ return _2h; }
@@ -25,12 +26,14 @@ class Object{
         bool depleted(){ return quantity == 0; }
         int get_quantity(){ return quantity; }
         void increase_quantity(int x){ quantity += x; }
+        void set_quantity(int x){ quantity = x; }
         std::string type(){ return _type; }
         bool is_lootable(){ return _lootable; }
         void set_lootable(){ _lootable = true; }
         int weight(){ return _weight; }
 
         virtual void identify();
+        virtual Object* clone();
 
     protected:
         std::string _name;

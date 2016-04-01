@@ -12,18 +12,18 @@ using namespace std;
  */
 void PlayerChar::generic_attack(Character* opponent){
     Weapon* w;
-    if(main_hand->is_weapon()) w = (Weapon*)main_hand;
-    else if(off_hand->is_weapon()) w = (Weapon*)off_hand;
-    else w = weapon_select(opponent);
+    if(main_hand && main_hand->is_weapon()) w = (Weapon*)main_hand;
+    else if(off_hand && off_hand->is_weapon()) w = (Weapon*)off_hand;
+    else w = NULL;
 
-    if(!w->is_ranged() && !in_melee_with(opponent)){
+    /// TODO FIXME: should only close as far as you need to get in range of the weapon you want to use.
+    if(!w || (!w->is_ranged() && !in_melee_with(opponent))){
         close_with(opponent);
     }
-    ///@TODO add thrown weapon support
+    if(!w) w = weapon_select(opponent);
+    if(!w || (!w->is_ranged() && !in_melee_with(opponent))) return;
 
-    if(!w->is_ranged() && !in_melee_with(opponent)){
-        weapon_select(opponent);
-    }
+    ///@TODO add thrown weapon support
 
     int atk;
     bool has_advantage = false, has_disadvantage = false;

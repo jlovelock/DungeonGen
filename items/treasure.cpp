@@ -15,6 +15,7 @@ Treasure::Treasure(string _ttype, int num, int gp) : Object() {
     _value = gp;
 }
 
+Treasure::Treasure(Treasure* t) : Object(t) {}
 
 Treasure::~Treasure(){}
 
@@ -41,7 +42,7 @@ Treasure* magic_item_A(){
         else if (x < 91)    return new Scroll(1);
         else if(x < 95)     return new Scroll(2);
         else if(x < 99)     return new Potion("healing", "uncommon");
-        else if(x == 99)    continue; //bag of holding
+        else if(x == 99)    continue; //bag of holding: 500lbs, action to retrieve
         else                continue; //driftglobe
     }
 

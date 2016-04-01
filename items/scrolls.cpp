@@ -21,6 +21,15 @@ void Scroll::use(Character* user, Character* target){
     cout << "The scroll crumbles to dust as the magic leaves it." << endl << endl;
 }
 
+Scroll::Scroll(Scroll* o) : Treasure(o) {
+    spell = o->spell; ///@TODO confirm this is okay too!
+}
+
+Object* Scroll::clone(){
+    return new Scroll(this);
+}
+
+
 void Scroll::identify(){
     cout << quantity << " of your scrolls";
     if(quantity == 1)

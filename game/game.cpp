@@ -3,6 +3,7 @@
 #include <weapon.h>
 #include <pc.h>
 #include <fstream>
+#include <string>
 using namespace std;
 
 ofstream unrecognized_input;
@@ -66,6 +67,9 @@ bool Game::getCommand() {
     } else if(input == "status"){
         PC->print_status();
         return true;
+    } else if(contains(input, "drop")){
+        drop_item(input);
+        return true;
 
     //combat
     } else if(contains(input, "attack") || contains(input, "fight") || contains(input, "shoot") || contains(input, "stab")) {
@@ -111,6 +115,7 @@ bool Game::getCommand() {
     }
 
     PC->end_turn();
+    check_encumbrance();
 
     //moneter's turn to attack
     if(cur_room->has_monsters() && !new_room){
@@ -134,7 +139,71 @@ bool Game::getCommand() {
     return true;
 }
 
+///@TODO: be able to drop coins
+///@TODO: if PC has an item equipped, dropping it should unequip
+void Game::drop_item(string input){
+    Object* o = PC->inventory->get_item(input);
+    if(!o){
+        cout << "Which item?" << endl;
+        read(input);
+    }
+    if(!o) {
+        cout << "You aren't carrying that item." << endl;
+        return;
+    }
+    if(o->get_quantity() > 1){
+        cout << "How many? (" << o->get_quantity() << " in inventory)" << endl;
+        read(input);
 
+        if(contains(input, "all") || atoi(input.c_str()) >= o->get_quantity()){
+            PC->inventory->remove(o);
+            cur_room->add_item(o);
+            cout << "All " << o->get_quantity() << " " << o->get_description() << " dropped." << endl << endl;
+            if(o->is_equipped_to(PC))
+                PC->unequip(o);
+            if(o->is_equipped_to(PC)) // do it twice in case dual wielded!
+                PC->unequip(o);
+
+         //should just be stoi(input), but c++11 string functions aren't working??
+         ///@TODO: sanitize input better here!
+        } else {
+            o->set_quantity( o->get_quantity() - atoi(input.c_str()) );
+            Object* split = o->clone();
+            split->set_quantity( atoi(input.c_str()) );
+            cur_room->add_item(split);
+
+            //niche dual wielding thing, if you're wielding two swords and drop all but one, should unequip one.
+            ///@TODO: what if dual wielding two different weapons?
+            if(o->is_equipped_to(PC) && PC->equipped_weapon_type() == "dual" && o->get_quantity() == 1)
+                PC->unequip(o);
+
+            cout << split->get_quantity() << " " << split->get_description() << " dropped." << endl;
+        }
+    } else {
+        PC->inventory->remove(o);
+        cur_room->add_item(o);
+        if(o->is_equipped_to(PC)) PC->unequip(o);
+        cout << o->get_description() << " dropped." << endl << endl;
+    }
+}
+
+void Game::check_encumbrance(){
+    bool looped = false;
+    string input;
+
+    while(PC->is_overencumbered()){
+        if(!looped){
+            cout << "You are overencumbered [" << PC->inventory->weight() << " of " << PC->attribute_score("STR")*15 << " lbs]! Inventory:" << endl;
+            PC->print_inventory();
+            looped = true;
+        } else {
+            cout << "You are still overencumbered [" << PC->inventory->weight() << " of " << PC->attribute_score("STR")*15 << " lbs]!" << endl;
+        }
+        cout << "Which item to drop?" << endl;
+        read(input);
+        drop_item(input);
+    }
+}
 
 
 void Game::rest(){

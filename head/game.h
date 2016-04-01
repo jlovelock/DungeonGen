@@ -19,15 +19,10 @@ class Game {
     bool parse_open_door(std::string);
     bool can_use_door(Door*);
 
-    //treasure
-    void rollIndividualTreasure(std::string);
-    void rollTreasureHoard();
-    void roll_adjusted_treasure(bool);
-    std::vector<Treasure*> loot, potions, scrolls;
-    int cp, sp, ep, gp, pp;
-
     bool equip_item(std::string);
+    void drop_item(std::string);
     void rest();
+    void check_encumbrance();
     void look(std::string);
     bool searching(std::string);
     bool combat(std::string);
@@ -36,8 +31,6 @@ class Game {
     void identify_items();
     bool cast_spell(std::string);
     Scroll* select_scroll();
-
-    void add(Treasure* item, std::vector<Treasure*>& v);
 
 public:
     Game();

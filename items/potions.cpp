@@ -20,7 +20,15 @@ Potion::Potion(std::string name, std::string _rarity, int num) : Treasure("potio
     }
 }
 
+Potion::Potion(Potion* o) : Treasure(o){
+    is_healing = o->is_healing;
+}
+
 Potion::~Potion(){}
+
+Object* Potion::clone(){
+    return new Potion(this);
+}
 
 void Potion::identify(){
     cout << "Your " << get_description();

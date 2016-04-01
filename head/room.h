@@ -88,6 +88,7 @@ public:
     Room();
     bool has_treasure(){ return !inventory->is_empty(); }
     void loot(Character*);
+    void add_item(Object*);
 
     //baddies!
     Monster* monsters[MAX_MONSTERS];

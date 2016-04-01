@@ -29,6 +29,15 @@ string Character::equipped_weapon_type(){
     } else return "none";
 }
 
+void Character::unequip(Object* o){
+    if(!o) return;
+    if(off_hand && off_hand->name() == o->name()) {
+        off_hand = NULL;
+        if(o->is_two_handed()) main_hand = NULL;
+    } else if(main_hand && main_hand->name() == o->name())
+        main_hand = NULL;
+}
+
 bool Character::equip(Object* o, bool equip_to_offhand){
     string input;
 

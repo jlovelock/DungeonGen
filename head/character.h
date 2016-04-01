@@ -50,11 +50,10 @@ class Character {
         bool train(std::string skill);
         bool is_trained(std::string skill){ return skill_mods[skill] != attribute_mods[base_attribute(skill)]; }
 
-        //Melee attacks
+        //Combat
         int attack_roll(Weapon* w);
         int damage(Weapon* w, std::string mode = "");
         bool in_melee;
-
         int _AC;
         int max_hp, cur_hp, temp_hp;
         int hit_dice, hit_die_size;
@@ -83,20 +82,23 @@ class Character {
         Character(int lvl);
         virtual ~Character();
 
+        /* Stats & Proficiencies */
         int attribute_mod(std::string att){ return attribute_mods[att]; }
+        int attribute_score(std::string att){ return attribute_scores[att]; }
         int proficiency_bonus(){ return prof; }
         int skill_check(std::string skill);
         int attribute_chk(std::string att);
         bool has_fighting_style(std::string);
         bool proficient_with(std::string weapon_type);
 
-        //Combat functions
+        /* Combat */
         virtual void attack(Character*, int, int) {}
         virtual void generic_attack(Character*) {}
         bool is_hit(int attack_roll){ return attack_roll >= AC(); }
         int saving_throw(Spell*);
         int save(std::string stat);
         int AC();
+        virtual void action_on_kill(Character*)=0;
 
         /* HP and Damage */
         void take_damage(int dmg);
@@ -115,25 +117,17 @@ class Character {
         bool in_melee_with(Character* opponent);
         int distance_to(Character* target);
 
+        /* Identifiers */
         virtual std::string name() { return ""; }
         virtual std::string full_name() { return ""; }
-
-        //void cast(Spell* spell, Character* target);
-
-        int get_xp(){ return xp; }
-        virtual void action_on_kill(Character*) {}
+        std::string get_race(){ return race; }
+        bool is_PC(){ return !is_monster; }
 
         /* Conditions */
         void add_condition(Condition*);
         void remove_condition(std::string, bool quiet=false);
         void cause_condition(Condition*);
         bool is(std::string);
-
-        bool is_PC(){ return !is_monster; }
-
-        void start_turn(bool quiet=false);
-        void end_turn(bool quiet=false);
-
 
         /* Items and Equipment */
         Inventory* inventory;
@@ -146,9 +140,7 @@ class Character {
         bool equip(Object*, bool equip_to_offhand=false);
         std::string equipped_weapon_type();
         bool has_free_hand(){ return main_hand == NULL || off_hand == NULL; }
-
-        std::string get_race(){ return race; }
-        int adjusted_speed();
+        void unequip(Object*);
 
         /* Spellcasting */
         int spell_attack();
@@ -157,6 +149,11 @@ class Character {
         void drop_concentration();
         void concentrate_on(Spell* s){ drop_concentration(); concentrating_on = s;}
 
+        /* Misc */
+        void start_turn(bool quiet=false);
+        void end_turn(bool quiet=false);
+        int adjusted_speed();
+        int get_xp(){ return xp; }
 };
 
 

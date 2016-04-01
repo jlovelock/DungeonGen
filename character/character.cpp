@@ -72,28 +72,8 @@ void Character::end_turn(bool quiet){
     if(DEBUG) cout << "EOT: " << name() << "...";
     update_conditions(false, quiet);
 
-    bool looped = false;
-
-    ///TODO: drop on floor of room instead of destroying!
-    while(is_overencumbered()){
-        if(!looped){
-            cout << "You are overencumbered [" << inventory->weight() << " of " << attribute_scores["STR"]*15 << "! Inventory:" << endl;
-            inventory->print(this);
-            looped = true;
-        } else {
-            cout << "You are still overencumbered [" << inventory->weight() << " of " << attribute_scores["STR"]*15 << "!" << endl;
-        }
-        cout << "Which item to destroy?" << endl;
-        string input;
-        read(input);
-        Object* o = inventory->get_item(input);
-        if(!o) continue;
-        cout << o->name() << " destroyed." << endl << endl;
-        inventory->remove(o);
-        delete o;
-    }
-    if(is_heavily_encumbered()) cout << "You are heavily encumbered. You may want to drop some items." << endl;
-    else if(is_encumbered()) cout << "You are encumbered. You may want to drop some items." << endl;
+    if(is_heavily_encumbered() && is_PC()) cout << "You are heavily encumbered. You may want to drop some items." << endl;
+    else if(is_encumbered() && is_PC()) cout << "You are encumbered. You may want to drop some items." << endl;
 
     if(DEBUG) cout << "done" << endl;
 }

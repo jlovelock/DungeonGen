@@ -27,9 +27,8 @@ public:
 
     void set_position_in(Room*);
 
-//    bool search_monster(bool print_err_msgs=false);
     bool was_looted(){ return searched; }
-    void mark_as_looted(){ searched = false; }
+    void mark_as_looted(){ searched = true; }
     bool has(std::string);
 
     std::string name() { return _short_name; }
